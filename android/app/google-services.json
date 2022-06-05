@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "293716326726",
+    "project_id": "tinwork-6a67f",
+    "storage_bucket": "tinwork-6a67f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293716326726:android:a41494809cb1a3b18dcd47",
+        "android_client_info": {
+          "package_name": "com.makeit.tinworkapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "293716326726-9titvjo6re8p9ej3ruhni2mfohl2hjqm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkIYV3sT7AnZnAurD7m3YR-NW9FHpGziI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "293716326726-9titvjo6re8p9ej3ruhni2mfohl2hjqm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "293716326726-e5trj3ljsks181kvovdp5lpr5m4segsp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.makeit.TinWorkApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
