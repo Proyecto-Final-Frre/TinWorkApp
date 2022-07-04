@@ -20,7 +20,7 @@ export default function BotonAptitud({
 
   const btnStyle = {
     height: 40,
-    width: btnSize,
+    //width: btnSize,
     borderRadius: 20,
     paddingHorizontal: 8,
     paddingVertical: 8,
