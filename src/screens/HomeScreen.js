@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Button, View, StyleSheet} from 'react-native';
+import {Text, Button, View, StyleSheet, FlatList} from 'react-native';
 import {authenticationWithGoogle} from '../../AuthService';
 import BotonAptitud from '../components/BotonAptitud';
 

@@ -1,5 +1,3 @@
-import {useState} from 'react';
-
 export const items = [
   {id: 1, name: 'CSS'},
   {id: 2, name: 'JavaScript'},
