@@ -1,50 +1,31 @@
-import * as React from 'react';
-import {useState} from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  FlatList,
-  SectionList,
-  ScrollView,
-  RefreshControl,
-} from 'react-native';
-import {Colors} from './colors';
+import React from 'react';
+import {Button, withTheme} from '@rneui/themed';
+import {Colors} from '../components/colors';
 
-const TYPES = ['blanco', 'azul'];
-
-export default function BotonAptitud({children, onPress, label}) {
-  const [isActive, setIsActive] = useState(false);
-
-  const handleClick = () => {
-    setIsActive(current => !current),
-      isActive
-        ? alert('Se ha quitado la habilidad')
-        : alert('Se ha agregado la habilidad');
-  };
-
-  const btnStyle = StyleSheet.create({
-    button: {
-      //height: 40,
-      //width: 130,
-      borderRadius: 20,
-      borderWidth: 1,
-      borderColor: isActive ? Colors.tinworkAzul : 'black',
-      paddingHorizontal: 15,
-      paddingVertical: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: isActive ? Colors.tinworkAzul : Colors.tinworkBlanco,
-    },
-    buttonText: {
-      color: isActive ? 'white' : 'black',
-    },
-  });
-
+const BotonAptitud = ({title, isActive, onPress}) => {
   return (
-    <TouchableOpacity style={btnStyle.button} onPress={handleClick}>
-      <Text style={btnStyle.buttonText}>{label}</Text>
-    </TouchableOpacity>
+    <Button
+      title={title}
+      buttonStyle={{
+        backgroundColor: isActive ? Colors.tinworkAzul : Colors.tinworkBlanco,
+        borderRadius: 18,
+        borderColor: isActive ? Colors.tinworkAzul : 'black',
+        borderWidth: 1,
+        paddingHorizontal: 20,
+      }}
+      titleStyle={{
+        color: isActive ? Colors.tinworkBlanco : 'black',
+        fontSize: 14,
+        fontFamily: '',
+      }}
+      containerStyle={{
+        marginHorizontal: 5,
+        height: 40,
+        marginVertical: 10,
+      }}
+      onPress={onPress}
+    />
   );
-}
+};
+
+export default withTheme(BotonAptitud, '');

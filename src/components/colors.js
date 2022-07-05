@@ -1,4 +1,4 @@
 export const Colors = {
-  tinworkAzul: '#0061FF',
+  tinworkAzul: '#2E81FB',
   tinworkBlanco: '#FFFFFF',
 };
