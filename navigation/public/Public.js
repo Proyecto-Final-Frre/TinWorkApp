@@ -3,7 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 //Screens
 import HomeScreen from '../../src/screens/HomeScreen';
-import Aptitudes from '../../src/screens/Aptitudes'
+import Aptitudes from '../../src/screens/Aptitudes';
+import LoginScreen from '../../src/screens/LoginScreen';
 
 const StackPublic = createNativeStackNavigator();
 
@@ -14,9 +15,14 @@ export default function Public() {
       //screenOptions={themeApp[modo].fondoBarra}
     >
       <StackPublic.Screen
+        name="Login"
+        component={LoginScreen}
+        // options={{headerShown: false}}
+      />
+      <StackPublic.Screen
         name="Home"
         component={HomeScreen}
-        // options={{headerShown: false}}
+        options={{title: 'TinWork', headerBackVisible: false}}
       />
       <StackPublic.Screen
         name="Aptitudes"

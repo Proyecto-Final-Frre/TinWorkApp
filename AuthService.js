@@ -35,6 +35,12 @@ export const authenticationWithGoogle = async () => {
   return auth().signInWithCredential(googleCredential);
 };
 
+export function singOutGoogle() {
+  auth()
+    .signOut()
+    .then(() => console.log('User signed out!'));
+}
+
 export const authenticationWithEmailAndPass = (email, pass) => {
   return auth()
     .signInWithEmailAndPassword(email, pass)
