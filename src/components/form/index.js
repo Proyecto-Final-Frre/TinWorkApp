@@ -1,24 +1,31 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { FormSection, FormSubmitButton } from '../index';
-import sections from '../../data/sections.json';
-import aptitudes from '../../data/aptitudes.json';
-import { generateFormSchema } from '../../utils/form';
+import React, {useCallback, useMemo, useState, useEffect} from 'react';
+import {FormSection, FormSubmitButton} from '../index';
+import {generateFormSchema} from '../../utils/form';
+import {findAll} from '../../services/AbilityService';
+import {findAllCategories} from '../../services/CategoryService';
 
 const Form = () => {
   const [formData, setFormData] = useState([]);
+  const [abilities, setAbilities] = useState([]);
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    findAll().then(abilities => setAbilities(abilities));
+    findAllCategories().then(categories => setCategories(categories));
+  }, []);
 
   const formSections = useMemo(
-    () => generateFormSchema(sections, aptitudes),
-    [],
+    () => generateFormSchema(categories, abilities),
+    [categories, abilities],
   );
+  console.log(formSections);
 
   const onAptitudePress = useCallback(
-    aptitudeId => {
-      const exists = formData.includes(aptitudeId);
+    aptitudeName => {
+      const exists = formData.includes(aptitudeName);
       setFormData(
         exists
-          ? formData.filter(element => element !== aptitudeId)
-          : [...formData, aptitudeId],
+          ? formData.filter(element => element !== aptitudeName)
+          : [...formData, aptitudeName],
       );
     },
     [formData],
@@ -33,8 +40,8 @@ const Form = () => {
     <>
       {formSections.map(section => (
         <FormSection
-          title={section.title}
-          aptitudes={section.aptitudes}
+          title={section.name}
+          aptitudes={section.abilities}
           key={section.id}
           onAptitudePress={onAptitudePress}
         />

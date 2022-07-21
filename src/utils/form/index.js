@@ -1,5 +1,6 @@
-export const generateFormSchema = (sections, aptitudes) =>
-  sections.map(section => ({
-    ...section,
-    aptitudes: aptitudes.filter(aptitude => aptitude.sectionId === section.id),
+export const generateFormSchema = (categories, abilities) => {
+  return categories.map(category => ({
+    ...category,
+    abilities: abilities.filter(ability => ability.category === category.name),
   }));
+};
