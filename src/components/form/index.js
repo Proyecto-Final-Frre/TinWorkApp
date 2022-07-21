@@ -1,8 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { FormSection, FormSubmitButton } from '../index';
+import React, {useCallback, useMemo, useState} from 'react';
+import {FormSection, FormSubmitButton} from '../index';
 import sections from '../../data/sections.json';
 import aptitudes from '../../data/aptitudes.json';
-import { generateFormSchema } from '../../utils/form';
+import {generateFormSchema} from '../../utils/form';
+import {findUserAuthenticated} from '../../../AuthService';
+import {create} from '../../services/UserService';
 
 const Form = () => {
   const [formData, setFormData] = useState([]);
@@ -25,8 +27,18 @@ const Form = () => {
   );
 
   const onSubmit = useCallback(() => {
+    const userAuthenticated = findUserAuthenticated();
+
+    console.log('user', userAuthenticated);
+
     console.log('hola formData', formData);
-    // Aca haces lo que necesites con la data
+    const user = {
+      name: userAuthenticated.displayName,
+      email: userAuthenticated.email,
+      abilities: formData,
+    };
+
+    create(user);
   }, [formData]);
 
   return (

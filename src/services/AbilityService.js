@@ -1,17 +1,16 @@
 import firestore from '@react-native-firebase/firestore';
 
-export const findAll = () => {
-  firestore()
+export const findAll = async () => {
+  let abilities = [];
+
+  await firestore()
     .collection('Abilities')
     .get()
     .then(querySnapshot => {
-      console.log('Total abilities: ', querySnapshot.size);
       querySnapshot.forEach(documentSnapshot => {
-        console.log(
-          'Ability ID: ',
-          documentSnapshot.id,
-          documentSnapshot.data(),
-        );
+        abilities.push(documentSnapshot.data());
       });
     });
+
+  return abilities;
 };

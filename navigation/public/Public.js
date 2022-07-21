@@ -11,7 +11,7 @@ const StackPublic = createNativeStackNavigator();
 export default function Public() {
   return (
     <StackPublic.Navigator
-      initialRouteName="Home"
+      initialRouteName="Login"
       //screenOptions={themeApp[modo].fondoBarra}
     >
       <StackPublic.Screen
