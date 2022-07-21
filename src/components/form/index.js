@@ -3,6 +3,8 @@ import {FormSection, FormSubmitButton} from '../index';
 import {generateFormSchema} from '../../utils/form';
 import {findAll} from '../../services/AbilityService';
 import {findAllCategories} from '../../services/CategoryService';
+import {findUserAuthenticated} from '../../../AuthService';
+import {create} from '../../services/UserService';
 
 const Form = () => {
   const [formData, setFormData] = useState([]);
@@ -32,8 +34,18 @@ const Form = () => {
   );
 
   const onSubmit = useCallback(() => {
+    const userAuthenticated = findUserAuthenticated();
+
+    console.log('user', userAuthenticated);
+
     console.log('hola formData', formData);
-    // Aca haces lo que necesites con la data
+    const user = {
+      name: userAuthenticated.displayName,
+      email: userAuthenticated.email,
+      abilities: formData,
+    };
+
+    create(user);
   }, [formData]);
 
   return (

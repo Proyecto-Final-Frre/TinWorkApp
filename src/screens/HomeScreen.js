@@ -11,7 +11,9 @@ async function onGoogleButtonPress() {
 }
 
 const abilities = () => {
-  findAll();
+  const abilties = findAll();
+
+  console.log('abilities', abilties);
 };
 
 const categories = () => {

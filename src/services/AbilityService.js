@@ -16,4 +16,6 @@ export const findAll = () => {
       });
       return abilities;
     });
+
+  return abilities;
 };
