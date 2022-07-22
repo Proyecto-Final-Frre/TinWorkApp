@@ -6,10 +6,17 @@ export const create = async user => {
     .where('uid', '==', user.uid)
     .get()
     .then(response => {
-      response.data.forEach(doc => console.log(doc));
+      if (response.docs.length > 0) {
+        response.docs.forEach(doc =>
+          doc.ref.update({
+            abilities: user.abilities,
+          }),
+        );
+        return true;
+      }
+      return false;
     });
-  if (userExists) {
-  } else {
+  if (!userExists) {
     firestore()
       .collection('Users')
       .add({
