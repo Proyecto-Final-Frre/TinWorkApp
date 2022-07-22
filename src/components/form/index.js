@@ -19,7 +19,6 @@ const Form = () => {
     () => generateFormSchema(categories, abilities),
     [categories, abilities],
   );
-  console.log(formSections);
 
   const onAptitudePress = useCallback(
     aptitudeName => {
@@ -35,13 +34,11 @@ const Form = () => {
 
   const onSubmit = useCallback(() => {
     const userAuthenticated = findUserAuthenticated();
-
     console.log('user', userAuthenticated);
-
-    console.log('hola formData', formData);
     const user = {
       name: userAuthenticated.displayName,
       email: userAuthenticated.email,
+      uid: userAuthenticated.uid,
       abilities: formData,
     };
 
