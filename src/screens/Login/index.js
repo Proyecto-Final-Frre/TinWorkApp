@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import {authenticationWithGoogle, singOutGoogle} from '../../AuthService';
-import {Button} from '../components';
+import {authenticationWithGoogle, singOutGoogle} from '../../../AuthService';
+import {Button} from '../../components';
 
 function onGoogleButtonPress() {
   return authenticationWithGoogle();
@@ -15,7 +15,7 @@ export default function LoginScreen({navigation}) {
           title={'Ingresar'}
           onPress={() =>
             onGoogleButtonPress()
-              .then(() => navigation.navigate('Aptitudes'))
+              .then(() => navigation.navigate('Offer'))
               .catch(err => console.log('error', err))
           }
         />

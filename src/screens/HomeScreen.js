@@ -1,14 +1,8 @@
 import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
-import {authenticationWithGoogle} from '../../AuthService';
 import {findAll} from '../services/AbilityService';
 import {findAllCategories} from '../services/CategoryService';
 import {useNavigation} from '@react-navigation/native';
-
-async function onGoogleButtonPress() {
-  const auth = await authenticationWithGoogle();
-  console.log('autenticado', auth);
-}
 
 const abilities = () => {
   const abilties = findAll();
