@@ -1,4 +1,5 @@
 import React from 'react';
+import {Image} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 //Screens
@@ -17,7 +18,7 @@ export default function Public() {
       <StackPublic.Screen
         name="Login"
         component={LoginScreen}
-        // options={{headerShown: false}}
+        options={{headerShown: false}}
       />
       <StackPublic.Screen
         name="Home"
@@ -27,7 +28,16 @@ export default function Public() {
       <StackPublic.Screen
         name="Aptitudes"
         component={Aptitudes}
-        // options={{headerShown: false}}
+        options={{
+          headerLeft: () => (
+            <Image
+              style={{width: 55, height: 55, margin: 2}}
+              source={require('../../src/images/CuatroDeCuatro.png')}
+            />
+          ),
+          headerBackVisible: false,
+          headerTitleAlign: 'center',
+        }}
       />
     </StackPublic.Navigator>
   );
