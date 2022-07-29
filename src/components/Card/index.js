@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Animated, Image, Text, View} from 'react-native';
 import Choise from '../Choise';
 import {ACTION_OFFSET} from '../../utils/constants';
+import AptitudeOffer from '../aptitudeOffer';
 
 import {styles} from './style';
 
@@ -9,6 +10,7 @@ export default function Card({
   title,
   description,
   descriptionShort,
+  abilities,
   source,
   isFirst,
   swipe,
@@ -61,6 +63,8 @@ export default function Card({
     );
   }, []);
 
+  console.log(abilities);
+
   return (
     <Animated.View
       style={[styles.container, isFirst && animatedCardStyle]}
@@ -87,6 +91,11 @@ export default function Card({
                 onPress={() => setExpand(true)}>
                 Ver más
               </Text>
+              <View style={styles.buttonsContainer}>
+                {abilities.map(ability => (
+                  <AptitudeOffer title={ability} key={ability.id} />
+                ))}
+              </View>
             </View>
           </View>
         ) : (

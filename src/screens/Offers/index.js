@@ -83,7 +83,7 @@ export default function OfferScreen() {
         <Text>Cargando</Text>
       ) : (
         offers
-          .map(({title, source, description}, index) => {
+          .map(({title, source, description, abilities}, index) => {
             let longitud = description.length;
             let fin = 0;
             if (longitud > 300) {
@@ -96,6 +96,7 @@ export default function OfferScreen() {
               <Card
                 key={title}
                 title={title}
+                abilities={abilities}
                 description={description}
                 descriptionShort={descriptionShort}
                 source={source}

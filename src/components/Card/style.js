@@ -44,4 +44,8 @@ export const styles = StyleSheet.create({
   },
   likeContainer: {left: 45},
   nopeContainer: {right: 45, transform: [{rotate: '30deg'}]},
+  buttonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
 });
