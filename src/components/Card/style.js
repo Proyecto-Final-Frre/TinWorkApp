@@ -1,4 +1,6 @@
+import {CurrentRenderContext} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
+import {colors} from '../../constants/colors';
 import {CARD, FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
 
 export const styles = StyleSheet.create({
@@ -47,5 +49,11 @@ export const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginVertical: 15,
+  },
+  botoncito: {
+    marginTop: 20,
+    display: 'flex',
+    alignContent: 'flex-end',
   },
 });

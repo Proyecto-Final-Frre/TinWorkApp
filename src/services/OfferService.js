@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 export const findByAbilities = abilities => {
   return firestore()
     .collection('Offers')
-    .where('abilities', 'array-contains-any', abilities)
+    .where('requiredAbilities', 'array-contains-any', abilities)
     .get()
     .then(querySnapshot => {
       let offers = [];

@@ -14,14 +14,14 @@ export default function OfferScreen() {
   const tiltSign = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    findByAbilities(['scrum']).then(offersResponse => {
+    findByAbilities(['REACT']).then(offersResponse => {
       setOffers(offersResponse);
     });
   }, []);
 
   useEffect(() => {
     if (!offers.length) {
-      findByAbilities(['scrum']).then(offersResponse => {
+      findByAbilities(['REACT']).then(offersResponse => {
         setOffers(offersResponse);
       });
     }
@@ -83,30 +83,36 @@ export default function OfferScreen() {
         <Text>Cargando</Text>
       ) : (
         offers
-          .map(({title, source, description, abilities}, index) => {
-            let longitud = description.length;
-            let fin = 0;
-            if (longitud > 300) {
-              fin = (longitud - 300) * -1;
-            }
-            let descriptionShort = description.slice(0, fin);
-            const isFirst = index === 0;
-            const dragHandlers = isFirst ? panResponser.panHandlers : {};
-            return (
-              <Card
-                key={title}
-                title={title}
-                abilities={abilities}
-                description={description}
-                descriptionShort={descriptionShort}
-                source={source}
-                swipe={swipe}
-                tiltSign={tiltSign}
-                isFirst={isFirst}
-                {...dragHandlers}
-              />
-            );
-          })
+          .map(
+            (
+              {title, source, description, requiredAbilities, desiredAbilities},
+              index,
+            ) => {
+              let longitud = description.length;
+              let fin = 0;
+              if (longitud > 300) {
+                fin = (longitud - 300) * -1;
+              }
+              let descriptionShort = description.slice(0, fin);
+              const isFirst = index === 0;
+              const dragHandlers = isFirst ? panResponser.panHandlers : {};
+              return (
+                <Card
+                  key={title}
+                  title={title}
+                  requiredAbilities={requiredAbilities}
+                  desiredAbilities={desiredAbilities}
+                  description={description}
+                  descriptionShort={descriptionShort}
+                  source={source}
+                  swipe={swipe}
+                  tiltSign={tiltSign}
+                  isFirst={isFirst}
+                  {...dragHandlers}
+                />
+              );
+            },
+          )
           .reverse()
       )}
       <Footer handleChoice={handleChoice} />

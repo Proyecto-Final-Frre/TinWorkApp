@@ -3,6 +3,7 @@ import {Animated, Image, Text, View} from 'react-native';
 import Choise from '../Choise';
 import {ACTION_OFFSET} from '../../utils/constants';
 import AptitudeOffer from '../aptitudeOffer';
+import ButtonMoreAbilities from '../buttonMoreAbilities';
 
 import {styles} from './style';
 
@@ -10,7 +11,8 @@ export default function Card({
   title,
   description,
   descriptionShort,
-  abilities,
+  requiredAbilities,
+  desiredAbilities,
   source,
   isFirst,
   swipe,
@@ -18,6 +20,7 @@ export default function Card({
   ...rest
 }) {
   const [expand, setExpand] = useState(false);
+  const [expandAptitude, setExpandAptitude] = useState(false);
 
   const rotate = Animated.multiply(swipe.x, tiltSign).interpolate({
     inputRange: [-ACTION_OFFSET, 0, ACTION_OFFSET],
@@ -63,14 +66,12 @@ export default function Card({
     );
   }, []);
 
-  console.log(abilities);
-
   return (
     <Animated.View
       style={[styles.container, isFirst && animatedCardStyle]}
       {...rest}>
       <View style={styles.shadow}>
-        {!expand ? (
+        {!expand && !expandAptitude ? (
           <View style={styles.card}>
             <Image style={[styles.image]} source={{uri: source}} />
             <View style={{flex: 1, paddingHorizontal: '5%'}}>
@@ -92,13 +93,19 @@ export default function Card({
                 Ver más
               </Text>
               <View style={styles.buttonsContainer}>
-                {abilities.map(ability => (
+                {requiredAbilities.map(ability => (
                   <AptitudeOffer title={ability} key={ability.id} />
                 ))}
+                <ButtonMoreAbilities
+                  buttonStyle={false}
+                  titleStyle={false}
+                  title={'Ver Mas'}
+                  onPress={() => setExpandAptitude(true)}
+                />
               </View>
             </View>
           </View>
-        ) : (
+        ) : expand && !expandAptitude ? (
           <View style={styles.card}>
             <View style={{flex: 1, paddingHorizontal: '5%'}}>
               <Text
@@ -115,6 +122,37 @@ export default function Card({
                 onPress={() => setExpand(false)}>
                 Ver menos
               </Text>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.card}>
+            <View style={{flex: 1, paddingHorizontal: '5%'}}>
+              <Text
+                style={[styles.title, {paddingBottom: '2%', paddingTop: '5%'}]}>
+                Habilidades Requeridas
+              </Text>
+              <View style={styles.buttonsContainer}>
+                {requiredAbilities.map(ability => (
+                  <AptitudeOffer title={ability} key={ability.id} />
+                ))}
+              </View>
+              <Text
+                style={[styles.title, {paddingBottom: '2%', paddingTop: '5%'}]}>
+                Habilidades Secundarias
+              </Text>
+              <View style={styles.buttonsContainer}>
+                {desiredAbilities.map(ability => (
+                  <AptitudeOffer title={ability} key={ability.id} />
+                ))}
+              </View>
+              <View style={styles.botoncito}>
+                <ButtonMoreAbilities
+                  title={'Volver a la pantalla principal'}
+                  buttonStyle={true}
+                  titleStyle={true}
+                  onPress={() => setExpandAptitude(false)}
+                />
+              </View>
             </View>
           </View>
         )}
