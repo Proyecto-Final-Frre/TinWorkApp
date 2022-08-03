@@ -22,6 +22,8 @@ export default function Card({
   const [expand, setExpand] = useState(false);
   const [expandAptitude, setExpandAptitude] = useState(false);
 
+  let moreAbilities = requiredAbilities.length - 5;
+
   const rotate = Animated.multiply(swipe.x, tiltSign).interpolate({
     inputRange: [-ACTION_OFFSET, 0, ACTION_OFFSET],
     outputRange: ['8deg', '0deg', '-8deg'],
@@ -93,15 +95,17 @@ export default function Card({
                 Ver más
               </Text>
               <View style={styles.buttonsContainer}>
-                {requiredAbilities.map(ability => (
+                {requiredAbilities.slice(0, 5).map(ability => (
                   <AptitudeOffer title={ability} key={ability.id} />
                 ))}
-                <ButtonMoreAbilities
-                  buttonStyle={false}
-                  titleStyle={false}
-                  title={'Ver Mas'}
-                  onPress={() => setExpandAptitude(true)}
-                />
+                {requiredAbilities.length > 5 && (
+                  <ButtonMoreAbilities
+                    buttonStyle={false}
+                    titleStyle={false}
+                    title={`+${moreAbilities}`}
+                    onPress={() => setExpandAptitude(true)}
+                  />
+                )}
               </View>
             </View>
           </View>
@@ -128,7 +132,7 @@ export default function Card({
           <View style={styles.card}>
             <View style={{flex: 1, paddingHorizontal: '5%'}}>
               <Text
-                style={[styles.title, {paddingBottom: '2%', paddingTop: '5%'}]}>
+                style={[styles.title, {paddingBottom: '0%', paddingTop: '3%'}]}>
                 Habilidades Requeridas
               </Text>
               <View style={styles.buttonsContainer}>
@@ -137,7 +141,7 @@ export default function Card({
                 ))}
               </View>
               <Text
-                style={[styles.title, {paddingBottom: '2%', paddingTop: '5%'}]}>
+                style={[styles.title, {paddingBottom: '0%', paddingTop: '0%'}]}>
                 Habilidades Secundarias
               </Text>
               <View style={styles.buttonsContainer}>
