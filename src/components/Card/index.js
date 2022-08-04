@@ -117,16 +117,17 @@ export default function Card({
                 {title}
               </Text>
               <Text style={styles.description}>{description}</Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  paddingTop: '5%',
-                  color: '#2E81FB',
-                }}
-                onPress={() => setExpand(false)}>
-                Ver menos
-              </Text>
             </View>
+            <Text
+              style={{
+                textAlign: 'center',
+                justifyContent: 'center',
+                color: '#2E81FB',
+                marginBottom: 10,
+              }}
+              onPress={() => setExpand(false)}>
+              Ver menos
+            </Text>
           </View>
         ) : (
           <View style={styles.card}>
