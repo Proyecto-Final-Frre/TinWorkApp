@@ -56,4 +56,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignContent: 'flex-end',
   },
+  cardLocation: {
+    margin: 10,
+    padding: '1%',
+    display: 'grid',
+    gap: '3%',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+  },
 });

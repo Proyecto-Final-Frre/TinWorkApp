@@ -20,6 +20,7 @@
     "@rneui/base": "^4.0.0-rc.5",
     "@rneui/themed": "^4.0.0-rc.5",
     "react": "17.0.2",
+    "react-icons": "^4.4.0",
     "react-native": "0.68.2",
     "react-native-dotenv": "^3.3.0",
     "react-native-responsive-screen": "^1.4.2",

@@ -78,9 +78,20 @@ export default function Card({
             <Image style={[styles.image]} source={{uri: source}} />
             <View style={{flex: 1, paddingHorizontal: '5%'}}>
               <Text
-                style={[styles.title, {paddingBottom: '2%', paddingTop: '5%'}]}>
+                style={[styles.title, {paddingBottom: '0%', paddingTop: '5%'}]}>
                 {title}
               </Text>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}>
+                <Text style={{flexGrow: 5}}>Ubicacion</Text>
+                <Text style={{flexGrow: 2}}>Media Jornada</Text>
+              </View>
+              <View style={{paddingBottom: '5%'}}>
+                <Text style={{flexGrow: 5}}>Tiempo</Text>
+              </View>
               <Text style={styles.description}>
                 {descriptionShort}
                 {description.length > descriptionShort.length ? '. . .' : '.'}
@@ -116,6 +127,17 @@ export default function Card({
                 style={[styles.title, {paddingBottom: '2%', paddingTop: '5%'}]}>
                 {title}
               </Text>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}>
+                <Text style={{flexGrow: 5}}>Ubicacion</Text>
+                <Text style={{flexGrow: 2}}>Media Jornada</Text>
+              </View>
+              <View style={{paddingBottom: '5%'}}>
+                <Text style={{flexGrow: 5}}>Tiempo</Text>
+              </View>
               <Text style={styles.description}>{description}</Text>
             </View>
             <Text
