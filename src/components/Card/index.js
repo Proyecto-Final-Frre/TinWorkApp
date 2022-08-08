@@ -4,6 +4,7 @@ import Choise from '../Choise';
 import {ACTION_OFFSET} from '../../utils/constants';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
+import Icon from 'react-native-vector-icons/Entypo';
 
 import {styles} from './style';
 
@@ -86,11 +87,19 @@ export default function Card({
                   display: 'flex',
                   flexDirection: 'row',
                 }}>
+                <Icon name={'location-pin'} size={17} />
                 <Text style={{flexGrow: 5}}>Ubicacion</Text>
-                <Text style={{flexGrow: 2}}>Media Jornada</Text>
+                <Icon name={'briefcase'} size={17} />
+                <Text style={{flexGrow: 2, marginLeft: 1}}>Media Jornada</Text>
               </View>
-              <View style={{paddingBottom: '5%'}}>
-                <Text style={{flexGrow: 5}}>Tiempo</Text>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  paddingBottom: '5%',
+                }}>
+                <Icon name={'calendar'} size={17} />
+                <Text style={{flexGrow: 5, marginLeft: 1}}>Tiempo</Text>
               </View>
               <Text style={styles.description}>
                 {descriptionShort}
@@ -132,11 +141,19 @@ export default function Card({
                   display: 'flex',
                   flexDirection: 'row',
                 }}>
+                <Icon name={'location-pin'} size={17} />
                 <Text style={{flexGrow: 5}}>Ubicacion</Text>
-                <Text style={{flexGrow: 2}}>Media Jornada</Text>
+                <Icon name={'briefcase'} size={17} />
+                <Text style={{flexGrow: 2, marginLeft: 1}}>Media Jornada</Text>
               </View>
-              <View style={{paddingBottom: '5%'}}>
-                <Text style={{flexGrow: 5}}>Tiempo</Text>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  paddingBottom: '5%',
+                }}>
+                <Icon name={'calendar'} size={17} />
+                <Text style={{flexGrow: 5, marginLeft: 1}}>Tiempo</Text>
               </View>
               <Text style={styles.description}>{description}</Text>
             </View>
