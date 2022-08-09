@@ -85,7 +85,15 @@ export default function OfferScreen() {
         offers
           .map(
             (
-              {title, source, description, requiredAbilities, desiredAbilities},
+              {
+                title,
+                source,
+                description,
+                requiredAbilities,
+                desiredAbilities,
+                province,
+                workDay,
+              },
               index,
             ) => {
               let longitud = description.length;
@@ -104,6 +112,8 @@ export default function OfferScreen() {
                   desiredAbilities={desiredAbilities}
                   description={description}
                   descriptionShort={descriptionShort}
+                  province={province}
+                  workDay={workDay}
                   source={source}
                   swipe={swipe}
                   tiltSign={tiltSign}

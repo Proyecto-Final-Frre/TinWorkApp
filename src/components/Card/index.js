@@ -12,6 +12,8 @@ export default function Card({
   title,
   description,
   descriptionShort,
+  province,
+  workDay,
   requiredAbilities,
   desiredAbilities,
   source,
@@ -88,9 +90,9 @@ export default function Card({
                   flexDirection: 'row',
                 }}>
                 <Icon name={'location-pin'} size={17} />
-                <Text style={{flexGrow: 5}}>Ubicacion</Text>
+                <Text style={{flexGrow: 5}}>{province}</Text>
                 <Icon name={'briefcase'} size={17} />
-                <Text style={{flexGrow: 2, marginLeft: 1}}>Media Jornada</Text>
+                <Text style={{flexGrow: 2, marginLeft: 1}}>{workDay}</Text>
               </View>
               <View
                 style={{
