@@ -34,7 +34,6 @@ const Form = () => {
 
   const onSubmit = useCallback(() => {
     const userAuthenticated = findUserAuthenticated();
-    console.log('user', userAuthenticated);
     const user = {
       name: userAuthenticated.displayName,
       email: userAuthenticated.email,

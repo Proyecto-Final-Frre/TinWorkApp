@@ -1,31 +1,42 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Animated, Button, PanResponder, Text, View} from 'react-native';
+import {Animated, PanResponder, Text, View} from 'react-native';
 import Card from '../../components/Card';
-
-import {pets as petsArray} from '../../utils/data';
 import Footer from '../../components/Footer';
 import {styles} from './style';
 import {ACTION_OFFSET, CARD} from '../../utils/constants';
 import {findByAbilities} from '../../services/OfferService';
+import {findUserAuthenticated} from '../../../AuthService';
+import {findByUid} from '../../services/UserService';
 export default function OfferScreen() {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userAuth, setUserAuth] = useState();
   const swipe = useRef(new Animated.ValueXY()).current;
   const tiltSign = useRef(new Animated.Value(1)).current;
 
-  useEffect(() => {
-    findByAbilities(['REACT']).then(offersResponse => {
-      setOffers(offersResponse);
-    });
-  }, []);
+  const getAbilitiesByUidUser = async () => {
+    let userAuthenticated = await findUserAuthenticated();
+    let user = await findByUid(userAuthenticated.uid);
+    setUserAuth(user);
+  };
 
   useEffect(() => {
-    if (!offers.length) {
-      findByAbilities(['REACT']).then(offersResponse => {
+    getAbilitiesByUidUser();
+  }, []);
+
+  useCallback(() => {
+    findByAbilities(userAuth.abilities).then(offersResponse => {
+      setOffers(offersResponse);
+    });
+  }, [userAuth]);
+
+  useEffect(() => {
+    if (userAuth && !offers.length) {
+      findByAbilities(userAuth.abilities).then(offersResponse => {
         setOffers(offersResponse);
       });
     }
-  }, [offers.length]);
+  }, [userAuth, offers.length]);
 
   useEffect(() => setLoading(false), [offers]);
 
@@ -106,7 +117,7 @@ export default function OfferScreen() {
               const dragHandlers = isFirst ? panResponser.panHandlers : {};
               return (
                 <Card
-                  key={title}
+                  key={index}
                   title={title}
                   requiredAbilities={requiredAbilities}
                   desiredAbilities={desiredAbilities}

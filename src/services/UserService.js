@@ -30,3 +30,11 @@ export const create = async user => {
       });
   }
 };
+
+export const findByUid = async uid => {
+  return await firestore()
+    .collection('Users')
+    .where('uid', '==', uid)
+    .get()
+    .then(response => response.docs[0].data());
+};
