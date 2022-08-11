@@ -6,8 +6,6 @@ import {useNavigation} from '@react-navigation/native';
 
 const abilities = () => {
   const abilties = findAll();
-
-  console.log('abilities', abilties);
 };
 
 const categories = () => {
