@@ -178,8 +178,8 @@ export default function Card({
                 Habilidades Requeridas
               </Text>
               <View style={styles.buttonsContainer}>
-                {requiredAbilities.map(ability => (
-                  <AptitudeOffer title={ability} key={ability.id} />
+                {requiredAbilities.map(required => (
+                  <AptitudeOffer title={required} key={required.id} />
                 ))}
               </View>
               <Text
@@ -187,8 +187,8 @@ export default function Card({
                 Habilidades Secundarias
               </Text>
               <View style={styles.buttonsContainer}>
-                {desiredAbilities.map(ability => (
-                  <AptitudeOffer title={ability} key={ability.id} />
+                {desiredAbilities.map(desired => (
+                  <AptitudeOffer title={desired} key={desired.id} />
                 ))}
               </View>
               <View style={styles.botoncito}>
