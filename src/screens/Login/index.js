@@ -15,7 +15,7 @@ export default function LoginScreen({navigation}) {
           title={'Ingresar'}
           onPress={() =>
             onGoogleButtonPress()
-              .then(() => navigation.navigate('Habilidades'))
+              .then(() => navigation.navigate('Offer'))
               .catch(err => console.log('error', err))
           }
         />

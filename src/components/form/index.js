@@ -11,7 +11,6 @@ const Form = () => {
   const [formData, setFormData] = useState([]);
   const [abilities, setAbilities] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [enable, setEnable] = useState(false);
   useEffect(() => {
     findAll().then(abilities => setAbilities(abilities));
     findAllCategories().then(categories => setCategories(categories));
