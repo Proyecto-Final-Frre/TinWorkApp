@@ -26,6 +26,8 @@ export const create = async user => {
         email: user.email,
         uid: user.uid,
         abilities: user.abilities,
+        interestingOffers: [],
+        uninterestingOffers: [],
       })
       .then(() => {
         console.log('User added!');

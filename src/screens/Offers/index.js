@@ -4,10 +4,9 @@ import Card from '../../components/Card';
 import Footer from '../../components/Footer';
 import {styles} from './style';
 import {ACTION_OFFSET, CARD} from '../../utils/constants';
-import {findByAbilities} from '../../services/OfferService';
+import {findByAbilities, update} from '../../services/OfferService';
 import {findUserAuthenticated} from '../../../AuthService';
 import {create, findByUid} from '../../services/UserService';
-import Button from '../../components/buttonOffer';
 import {FormSubmitButton} from '../../components';
 export default function OfferScreen() {
   const [offers, setOffers] = useState([]);
@@ -117,6 +116,7 @@ export default function OfferScreen() {
   const addInterested = offer => {
     userAuth.interestingOffers.push(offer.id);
     create(userAuth);
+    update(offer, userAuth.uid);
     setInterested(undefined);
   };
 
