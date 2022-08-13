@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import BaseButton from '../button';
 
-const FormSubmitButton = ({onSubmit, disabled}) => (
+const FormSubmitButton = ({onSubmit, disabled, title = 'Aceptar'}) => (
   <BaseButton
-    title="Aceptar"
+    title={title}
     buttonStyle={styles.container}
     onPress={onSubmit}
     disabled={disabled}

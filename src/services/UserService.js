@@ -10,6 +10,8 @@ export const create = async user => {
         response.docs.forEach(doc =>
           doc.ref.update({
             abilities: user.abilities,
+            interestingOffers: user.interestingOffers,
+            uninterestingOffers: user.uninterestingOffers,
           }),
         );
         return true;
@@ -24,6 +26,8 @@ export const create = async user => {
         email: user.email,
         uid: user.uid,
         abilities: user.abilities,
+        interestingOffers: [],
+        uninterestingOffers: [],
       })
       .then(() => {
         console.log('User added!');

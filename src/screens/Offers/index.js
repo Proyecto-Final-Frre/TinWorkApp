@@ -4,13 +4,15 @@ import Card from '../../components/Card';
 import Footer from '../../components/Footer';
 import {styles} from './style';
 import {ACTION_OFFSET, CARD} from '../../utils/constants';
-import {findByAbilities} from '../../services/OfferService';
+import {findByAbilities, update} from '../../services/OfferService';
 import {findUserAuthenticated} from '../../../AuthService';
-import {findByUid} from '../../services/UserService';
+import {create, findByUid} from '../../services/UserService';
+import {FormSubmitButton} from '../../components';
 export default function OfferScreen() {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userAuth, setUserAuth] = useState();
+  const [interested, setInterested] = useState();
   const swipe = useRef(new Animated.ValueXY()).current;
   const tiltSign = useRef(new Animated.Value(1)).current;
 
@@ -20,21 +22,23 @@ export default function OfferScreen() {
     setUserAuth(user);
   };
 
+  const findOffersByAbilities = () => {
+    findByAbilities(
+      userAuth.abilities,
+      userAuth.interestingOffers,
+      userAuth.uninterestingOffers,
+    ).then(offersResponse => {
+      setOffers(offersResponse);
+    });
+  };
+
   useEffect(() => {
     getAbilitiesByUidUser();
   }, []);
 
-  useCallback(() => {
-    findByAbilities(userAuth.abilities).then(offersResponse => {
-      setOffers(offersResponse);
-    });
-  }, [userAuth]);
-
   useEffect(() => {
-    if (userAuth && !offers.length) {
-      findByAbilities(userAuth.abilities).then(offersResponse => {
-        setOffers(offersResponse);
-      });
+    if (userAuth && (!offers.length || offers.length < 1)) {
+      findOffersByAbilities();
     }
   }, [userAuth, offers.length]);
 
@@ -51,6 +55,7 @@ export default function OfferScreen() {
       const isActionActive = Math.abs(dx) > ACTION_OFFSET;
 
       if (isActionActive) {
+        handleDirection(direction);
         Animated.timing(swipe, {
           duration: 200,
           toValue: {
@@ -79,6 +84,7 @@ export default function OfferScreen() {
 
   const handleChoice = useCallback(
     direction => {
+      handleDirection(direction);
       Animated.timing(swipe.x, {
         toValue: direction * CARD.OUT_OF_SCREEN,
         duration: 400,
@@ -88,8 +94,47 @@ export default function OfferScreen() {
     [removeTopCard, swipe.x],
   );
 
+  const handleDirection = direction => {
+    if (direction > 0) {
+      setInterested(true);
+    } else {
+      setInterested(false);
+    }
+  };
+
+  useEffect(() => {
+    if (interested !== undefined) {
+      let offer = offers[0];
+      if (interested) {
+        addInterested(offer);
+      } else {
+        addNotInterested(offer);
+      }
+    }
+  }, [interested]);
+
+  const addInterested = offer => {
+    userAuth.interestingOffers.push(offer.id);
+    create(userAuth);
+    update(offer, userAuth.uid);
+    setInterested(undefined);
+  };
+
+  const addNotInterested = offer => {
+    userAuth.uninterestingOffers.push(offer.id);
+    create(userAuth);
+    setInterested(undefined);
+  };
+
   return (
     <View style={styles.container}>
+      {offers.length < 1 && (
+        <FormSubmitButton
+          title={'Cargar más'}
+          buttonStyle={{marginHorizontal: 15, marginVertical: 15}}
+          onSubmit={() => findOffersByAbilities()}
+        />
+      )}
       {loading ? (
         <Text>Cargando</Text>
       ) : (
