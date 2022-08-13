@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button as BaseButton } from '@rneui/base';
+import {Button as BaseButton} from '@rneui/base';
 
 const Button = ({
   title,
@@ -7,6 +7,7 @@ const Button = ({
   buttonStyle = {},
   onPress,
   titleStyle = {},
+  disabled,
 }) => (
   <BaseButton
     title={title}
@@ -14,6 +15,7 @@ const Button = ({
     buttonStyle={buttonStyle}
     titleStyle={titleStyle}
     onPress={onPress}
+    disabled={disabled}
   />
 );
 
