@@ -10,6 +10,8 @@ export const create = async user => {
         response.docs.forEach(doc =>
           doc.ref.update({
             abilities: user.abilities,
+            interestingOffers: user.interestingOffers,
+            uninterestingOffers: user.uninterestingOffers,
           }),
         );
         return true;
