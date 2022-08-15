@@ -12,14 +12,22 @@ export default function LoginScreen({navigation}) {
     <>
       <View>
         <Button
-          title={'Ingresar'}
+          title={'Ir a Aptitudes'}
+          onPress={() =>
+            onGoogleButtonPress()
+              .then(() => navigation.navigate('Habilidades'))
+              .catch(err => console.log('error', err))
+          }
+        />
+        <Button
+          title={'Ir a Ofertas'}
           onPress={() =>
             onGoogleButtonPress()
               .then(() => navigation.navigate('Offer'))
               .catch(err => console.log('error', err))
           }
         />
-        <Button title={'Cerrar Sesion'} onPress={singOutGoogle} />
+        {/*<Button title={'Cerrar Sesion'} onPress={singOutGoogle} />*/}
       </View>
     </>
   );
