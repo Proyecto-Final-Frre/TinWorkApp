@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {StyleSheet} from 'react-native';
 import BaseButton from '../button';
-import { colors } from '../../constants/colors';
+import {colors} from '../../constants/colors';
 
-const Aptitude = ({ title, onAptitudePress }) => {
+const Aptitude = ({title, onAptitudePress}) => {
   const [isSelected, setIsSelected] = useState(false);
 
   const onPress = useCallback(() => {

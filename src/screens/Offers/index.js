@@ -8,6 +8,7 @@ import {findByAbilities, update} from '../../services/OfferService';
 import {findUserAuthenticated} from '../../../AuthService';
 import {create, findByUid} from '../../services/UserService';
 import {FormSubmitButton} from '../../components';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 export default function OfferScreen() {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -132,7 +133,13 @@ export default function OfferScreen() {
         <FormSubmitButton
           title={'Cargar más'}
           buttonStyle={{marginHorizontal: 15, marginVertical: 15}}
-          onSubmit={() => findOffersByAbilities()}
+          onSubmit={() => {
+            findOffersByAbilities();
+            showMessage({
+              message: 'Ofertas Cargadas',
+              type: 'success',
+            });
+          }}
         />
       )}
       {loading ? (

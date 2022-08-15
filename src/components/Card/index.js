@@ -109,7 +109,7 @@ export default function Card({
                 <Text style={{flexGrow: 5, marginLeft: 1}}>Tiempo</Text>
               </View>
               <Text style={styles.description}>
-                {descriptionShort ? descriptionShort + '. . .' : description}
+                {descriptionShort ? descriptionShort + '...' : description}
               </Text>
               {descriptionShort && (
                 <Text
