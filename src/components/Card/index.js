@@ -78,7 +78,12 @@ export default function Card({
       <View style={styles.shadow}>
         {!expand && !expandAptitude ? (
           <View style={styles.card}>
-            <Image style={[styles.image]} source={{uri: source}} />
+            <Image
+              style={[styles.image]}
+              source={{
+                uri: 'https://firebasestorage.googleapis.com/v0/b/tinwork-6a67f.appspot.com/o/image_tinwork.png?alt=media&token=f6439911-dcda-4211-b920-465680990a38',
+              }}
+            />
             <View style={{flex: 1, paddingHorizontal: '5%'}}>
               <Text
                 style={[styles.title, {paddingBottom: '0%', paddingTop: '5%'}]}>
