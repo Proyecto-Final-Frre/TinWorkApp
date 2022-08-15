@@ -153,9 +153,9 @@ export default function OfferScreen() {
               index,
             ) => {
               let longitud = description.length;
-              let fin = 0;
-              if (longitud > 300) {
-                fin = (longitud - 300) * -1;
+              let fin = 131;
+              if (longitud > 131) {
+                fin = (longitud - 131) * -1;
               }
               let descriptionShort = description.slice(0, fin);
               const isFirst = index === 0;
@@ -167,7 +167,9 @@ export default function OfferScreen() {
                   requiredAbilities={requiredAbilities}
                   desiredAbilities={desiredAbilities}
                   description={description}
-                  descriptionShort={descriptionShort}
+                  descriptionShort={
+                    description.length > 131 ? descriptionShort : null
+                  }
                   province={province}
                   workDay={workDay}
                   source={source}

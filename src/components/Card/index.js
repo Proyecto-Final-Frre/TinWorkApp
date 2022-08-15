@@ -104,18 +104,19 @@ export default function Card({
                 <Text style={{flexGrow: 5, marginLeft: 1}}>Tiempo</Text>
               </View>
               <Text style={styles.description}>
-                {descriptionShort}
-                {description.length > descriptionShort.length ? '. . .' : '.'}
+                {descriptionShort ? descriptionShort + '. . .' : description}
               </Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  paddingTop: '5%',
-                  color: '#2E81FB',
-                }}
-                onPress={() => setExpand(true)}>
-                Ver más
-              </Text>
+              {descriptionShort && (
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    paddingTop: '5%',
+                    color: '#2E81FB',
+                  }}
+                  onPress={() => setExpand(true)}>
+                  Ver más
+                </Text>
+              )}
               <View style={styles.buttonsContainer}>
                 {requiredAbilities.slice(0, 5).map((ability, index) => (
                   <AptitudeOffer title={ability} key={index} />
