@@ -48,6 +48,9 @@ export default function Card({
     extrapolate: 'clamp',
   });
 
+  console.log(description.length);
+  console.log(descriptionShort.length);
+
   const renderChoise = useCallback(() => {
     return (
       <>
@@ -105,17 +108,21 @@ export default function Card({
               </View>
               <Text style={styles.description}>
                 {descriptionShort}
-                {description.length > descriptionShort.length ? '. . .' : '.'}
+                {description.length > descriptionShort.length ? '. . .' : ''}
               </Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  paddingTop: '5%',
-                  color: '#2E81FB',
-                }}
-                onPress={() => setExpand(true)}>
-                Ver más
-              </Text>
+              {descriptionShort.length > 175 ? (
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    paddingTop: '5%',
+                    color: '#2E81FB',
+                  }}
+                  onPress={() => setExpand(true)}>
+                  Ver más
+                </Text>
+              ) : (
+                <Text></Text>
+              )}
               <View style={styles.buttonsContainer}>
                 {requiredAbilities.slice(0, 5).map((ability, index) => (
                   <AptitudeOffer title={ability} key={index} />

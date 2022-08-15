@@ -107,12 +107,7 @@ export default function OfferScreen() {
               },
               index,
             ) => {
-              let longitud = description.length;
-              let fin = 0;
-              if (longitud > 300) {
-                fin = (longitud - 300) * -1;
-              }
-              let descriptionShort = description.slice(0, fin);
+              let descriptionShort = description.substring(0, 175);
               const isFirst = index === 0;
               const dragHandlers = isFirst ? panResponser.panHandlers : {};
               return (
