@@ -107,10 +107,9 @@ export default function Card({
                 <Text style={{flexGrow: 5, marginLeft: 1}}>Tiempo</Text>
               </View>
               <Text style={styles.description}>
-                {descriptionShort}
-                {description.length > descriptionShort.length ? '. . .' : ''}
+                {descriptionShort ? descriptionShort + '. . .' : description}
               </Text>
-              {descriptionShort.length > 175 ? (
+              {descriptionShort && (
                 <Text
                   style={{
                     textAlign: 'center',
@@ -120,8 +119,6 @@ export default function Card({
                   onPress={() => setExpand(true)}>
                   Ver más
                 </Text>
-              ) : (
-                <Text></Text>
               )}
               <View style={styles.buttonsContainer}>
                 {requiredAbilities.slice(0, 5).map((ability, index) => (
