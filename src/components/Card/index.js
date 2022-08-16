@@ -29,7 +29,7 @@ export default function Card({
 
   let calculateDate = '';
   let totalAbilities = [...requiredAbilities, ...desiredAbilities];
-  let moreAbilities = totalAbilities.length - 5;
+  let moreAbilities = totalAbilities.length - requiredAbilities.length;
 
   console.log(totalAbilities);
 
@@ -139,10 +139,10 @@ export default function Card({
                 </Text>
               )}
               <View style={styles.buttonsContainer}>
-                {totalAbilities.slice(0, 5).map((ability, index) => (
+                {requiredAbilities.slice(0, 5).map((ability, index) => (
                   <AptitudeOffer title={ability} key={index} />
                 ))}
-                {totalAbilities.length > 5 && (
+                {totalAbilities.length > requiredAbilities.length && (
                   <ButtonMoreAbilities
                     buttonStyle={false}
                     titleStyle={false}
