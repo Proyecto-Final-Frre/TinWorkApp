@@ -13,11 +13,11 @@ const StackPublic = createNativeStackNavigator();
 export default function Public() {
   return (
     <StackPublic.Navigator
-      initialRouteName="Login"
+      initialRouteName="Tinwork"
       //screenOptions={themeApp[modo].fondoBarra}
     >
       <StackPublic.Screen
-        name="Login"
+        name="Tinwork"
         component={LoginScreen}
         // options={{headerShown: false}}
       />
