@@ -7,6 +7,7 @@ import {Aptitude} from '../index';
 
 const FormSection = ({aptitudes = [], title, onAptitudePress}) => {
   const [userAuth, setUserAuth] = useState();
+  const [userAbilities, setUserAbilities] = useState([]);
 
   const getAbilitiesByUidUser = async () => {
     let userAuthenticated = await findUserAuthenticated();
@@ -18,6 +19,12 @@ const FormSection = ({aptitudes = [], title, onAptitudePress}) => {
     getAbilitiesByUidUser();
   }, []);
 
+  useEffect(() => {
+    if (userAuth !== undefined) {
+      setUserAbilities(userAuth.abilities);
+    }
+  }, [userAuth]);
+
   return (
     <Card>
       <Card.Title>{title}</Card.Title>
@@ -27,6 +34,7 @@ const FormSection = ({aptitudes = [], title, onAptitudePress}) => {
           <Aptitude
             title={aptitude.title}
             key={aptitude.id}
+            userAptitude={userAbilities.includes(aptitude.title) ? true : false}
             onAptitudePress={() => onAptitudePress(aptitude.title)}
           />
         ))}
