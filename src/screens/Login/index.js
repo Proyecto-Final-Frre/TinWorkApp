@@ -12,7 +12,7 @@ export default function LoginScreen({navigation}) {
     <>
       <View>
         <Button
-          title={'Ir a Aptitudes'}
+          title={'Ir a Habilidades'}
           onPress={() =>
             onGoogleButtonPress()
               .then(() => navigation.navigate('Habilidades'))

@@ -42,7 +42,7 @@ const Form = () => {
       abilities: formData,
     };
     showMessage({
-      message: 'Aptitudes Actualizadas',
+      message: 'Habilidades Actualizadas',
       type: 'success',
     });
     create(user);
