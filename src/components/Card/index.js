@@ -4,7 +4,7 @@ import Choise from '../Choise';
 import {ACTION_OFFSET} from '../../utils/constants';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
-import { getCurrentDate } from '../../services/DateService'
+import {getCurrentDate} from '../../services/DateService';
 import Icon from 'react-native-vector-icons/Entypo';
 
 import {styles} from './style';
@@ -27,8 +27,11 @@ export default function Card({
   const [expand, setExpand] = useState(false);
   const [expandAptitude, setExpandAptitude] = useState(false);
 
-  let moreAbilities = requiredAbilities.length - 5;
-  let calculateDate = "";
+  let calculateDate = '';
+  let totalAbilities = [...requiredAbilities, ...desiredAbilities];
+  let moreAbilities = totalAbilities.length - 5;
+
+  console.log(totalAbilities);
 
   const rotate = Animated.multiply(swipe.x, tiltSign).interpolate({
     inputRange: [-ACTION_OFFSET, 0, ACTION_OFFSET],
@@ -51,8 +54,8 @@ export default function Card({
     extrapolate: 'clamp',
   });
 
-  const calculateDateOffer = (dateOffer) => {
-    calculateDate = getCurrentDate("") - dateOffer;
+  const calculateDateOffer = dateOffer => {
+    calculateDate = getCurrentDate('') - dateOffer;
     return calculateDate;
   };
 
@@ -116,7 +119,10 @@ export default function Card({
                   paddingBottom: '5%',
                 }}>
                 <Icon name={'calendar'} size={17} />
-                <Text style={{flexGrow: 5, marginLeft: 1}}> {calculateDate} dias</Text>
+                <Text style={{flexGrow: 5, marginLeft: 1}}>
+                  {' '}
+                  {calculateDate} dias
+                </Text>
               </View>
               <Text style={styles.description}>
                 {descriptionShort ? descriptionShort + '...' : description}
@@ -133,10 +139,10 @@ export default function Card({
                 </Text>
               )}
               <View style={styles.buttonsContainer}>
-                {requiredAbilities.slice(0, 5).map((ability, index) => (
+                {totalAbilities.slice(0, 5).map((ability, index) => (
                   <AptitudeOffer title={ability} key={index} />
                 ))}
-                {requiredAbilities.length > 5 && (
+                {totalAbilities.length > 5 && (
                   <ButtonMoreAbilities
                     buttonStyle={false}
                     titleStyle={false}
