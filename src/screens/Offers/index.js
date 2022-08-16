@@ -156,6 +156,7 @@ export default function OfferScreen() {
                 desiredAbilities,
                 province,
                 workDay,
+                dateOffer,
               },
               index,
             ) => {
@@ -179,6 +180,7 @@ export default function OfferScreen() {
                   }
                   province={province}
                   workDay={workDay}
+                  dateOffer={dateOffer}
                   source={source}
                   swipe={swipe}
                   tiltSign={tiltSign}
@@ -190,7 +192,10 @@ export default function OfferScreen() {
           )
           .reverse()
       )}
-      <Footer handleChoice={handleChoice} />
+      {offers.length > 0 && (
+        <Footer handleChoice={handleChoice} />
+      )
+      }
     </View>
   );
 }

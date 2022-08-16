@@ -4,6 +4,7 @@ import Choise from '../Choise';
 import {ACTION_OFFSET} from '../../utils/constants';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
+import { getCurrentDate } from '../../services/DateService'
 import Icon from 'react-native-vector-icons/Entypo';
 
 import {styles} from './style';
@@ -14,6 +15,7 @@ export default function Card({
   descriptionShort,
   province,
   workDay,
+  dateOffer,
   requiredAbilities,
   desiredAbilities,
   source,
@@ -26,6 +28,7 @@ export default function Card({
   const [expandAptitude, setExpandAptitude] = useState(false);
 
   let moreAbilities = requiredAbilities.length - 5;
+  let calculateDate = "";
 
   const rotate = Animated.multiply(swipe.x, tiltSign).interpolate({
     inputRange: [-ACTION_OFFSET, 0, ACTION_OFFSET],
@@ -47,6 +50,13 @@ export default function Card({
     outputRange: [1, 0],
     extrapolate: 'clamp',
   });
+
+  const calculateDateOffer = (dateOffer) => {
+    calculateDate = getCurrentDate("") - dateOffer;
+    return calculateDate;
+  };
+
+  calculateDateOffer(dateOffer);
 
   const renderChoise = useCallback(() => {
     return (
@@ -97,7 +107,7 @@ export default function Card({
                 <Icon name={'location-pin'} size={17} />
                 <Text style={{flexGrow: 5}}>{province}</Text>
                 <Icon name={'briefcase'} size={17} />
-                <Text style={{flexGrow: 2, marginLeft: 1}}>{workDay}</Text>
+                <Text style={{flexGrow: 2, marginLeft: 1}}> {workDay}</Text>
               </View>
               <View
                 style={{
@@ -106,7 +116,7 @@ export default function Card({
                   paddingBottom: '5%',
                 }}>
                 <Icon name={'calendar'} size={17} />
-                <Text style={{flexGrow: 5, marginLeft: 1}}>Tiempo</Text>
+                <Text style={{flexGrow: 5, marginLeft: 1}}> {calculateDate} dias</Text>
               </View>
               <Text style={styles.description}>
                 {descriptionShort ? descriptionShort + '...' : description}
