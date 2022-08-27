@@ -1,0 +1,18 @@
+[
+  {
+    "id": "web",
+    "title": "Programacion WEB"
+  },
+  {
+    "id": "mobile",
+    "title": "Programacion Mobile"
+  },
+  {
+    "id": "backend",
+    "title": "Programacion BE"
+  },
+  {
+    "id": "agile",
+    "title": "Agilidad"
+  }
+]
