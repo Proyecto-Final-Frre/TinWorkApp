@@ -1,6 +1,6 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
-import { Form } from '../../components';
+import {ScrollView} from 'react-native';
+import {Form} from '../components';
 
 const Aptitudes = () => {
   return (

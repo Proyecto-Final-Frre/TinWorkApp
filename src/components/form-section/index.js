@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Card } from '@rneui/themed';
-import { Aptitude } from '../index';
+import {StyleSheet, View} from 'react-native';
+import {Card} from '@rneui/themed';
+import {Aptitude} from '../index';
 
-const FormSection = ({ aptitudes = [], title, onAptitudePress }) => (
+const FormSection = ({aptitudes = [], title, onAptitudePress}) => (
   <Card>
     <Card.Title>{title}</Card.Title>
     <Card.Divider />
@@ -12,7 +12,7 @@ const FormSection = ({ aptitudes = [], title, onAptitudePress }) => (
         <Aptitude
           title={aptitude.title}
           key={aptitude.id}
-          onAptitudePress={() => onAptitudePress(aptitude.id)}
+          onAptitudePress={() => onAptitudePress(aptitude.title)}
         />
       ))}
     </View>
