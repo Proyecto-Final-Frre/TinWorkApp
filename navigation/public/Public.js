@@ -4,19 +4,21 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 //Screens
 import HomeScreen from '../../src/screens/HomeScreen';
-import Aptitudes from '../../src/screens/Aptitudes';
-import LoginScreen from '../../src/screens/LoginScreen';
+import AbilitiesScreen from '../../src/screens/Abilities';
+import LoginScreen from '../../src/screens/Login';
+import OffersScreen from '../../src/screens/OffersScreen';
+import OfferScreen from '../../src/screens/Offers';
 
 const StackPublic = createNativeStackNavigator();
 
 export default function Public() {
   return (
     <StackPublic.Navigator
-      initialRouteName="Login"
+      initialRouteName="Tinwork"
       //screenOptions={themeApp[modo].fondoBarra}
     >
       <StackPublic.Screen
-        name="Login"
+        name="Tinwork"
         component={LoginScreen}
         options={{headerShown: false}}
       />
@@ -26,8 +28,8 @@ export default function Public() {
         options={{title: 'TinWork', headerBackVisible: false}}
       />
       <StackPublic.Screen
-        name="Aptitudes"
-        component={Aptitudes}
+        name="Habilidades"
+        component={AbilitiesScreen}
         options={{
           headerLeft: () => (
             <Image
@@ -38,6 +40,16 @@ export default function Public() {
           headerBackVisible: false,
           headerTitleAlign: 'center',
         }}
+      />
+      <StackPublic.Screen
+        name="Offers"
+        component={OffersScreen}
+        // options={{headerShown: false}}
+      />
+      <StackPublic.Screen
+        name="Offer"
+        component={OfferScreen}
+        options={{headerShown: false}}
       />
     </StackPublic.Navigator>
   );

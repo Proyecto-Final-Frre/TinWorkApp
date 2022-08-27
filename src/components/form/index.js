@@ -5,6 +5,7 @@ import {findAll} from '../../services/AbilityService';
 import {findAllCategories} from '../../services/CategoryService';
 import {findUserAuthenticated} from '../../../AuthService';
 import {create} from '../../services/UserService';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const Form = () => {
   const [formData, setFormData] = useState([]);
@@ -34,14 +35,16 @@ const Form = () => {
 
   const onSubmit = useCallback(() => {
     const userAuthenticated = findUserAuthenticated();
-    console.log('user', userAuthenticated);
     const user = {
       name: userAuthenticated.displayName,
       email: userAuthenticated.email,
       uid: userAuthenticated.uid,
       abilities: formData,
     };
-
+    showMessage({
+      message: 'Habilidades Actualizadas',
+      type: 'success',
+    });
     create(user);
   }, [formData]);
 
@@ -55,7 +58,10 @@ const Form = () => {
           onAptitudePress={onAptitudePress}
         />
       ))}
-      <FormSubmitButton onSubmit={onSubmit} />
+      <FormSubmitButton
+        onSubmit={onSubmit}
+        disabled={formData.length > 0 ? false : true}
+      />
     </>
   );
 };

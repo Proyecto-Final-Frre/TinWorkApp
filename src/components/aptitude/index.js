@@ -1,10 +1,16 @@
-import React, { useState, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {useState, useCallback, useEffect} from 'react';
+import {StyleSheet} from 'react-native';
 import BaseButton from '../button';
-import { colors } from '../../constants/colors';
+import {colors} from '../../constants/colors';
 
-const Aptitude = ({ title, onAptitudePress }) => {
+const Aptitude = ({title, onAptitudePress, userAptitude}) => {
   const [isSelected, setIsSelected] = useState(false);
+
+  /*console.log(userAptitude);
+
+  useEffect(() => {
+    userAptitude && setIsSelected(!isSelected);
+  }, [userAptitude]);*/
 
   const onPress = useCallback(() => {
     setIsSelected(!isSelected);
