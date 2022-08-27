@@ -9,7 +9,6 @@ export const findAll = () => {
       querySnapshot.forEach(documentSnapshot => {
         abilities.push({
           id: documentSnapshot.id,
-          /*data: documentSnapshot.data(),*/
           category: documentSnapshot.data().category,
           title: documentSnapshot.data().title,
         });

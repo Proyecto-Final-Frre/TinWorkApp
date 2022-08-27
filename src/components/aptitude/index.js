@@ -6,12 +6,6 @@ import {colors} from '../../constants/colors';
 const Aptitude = ({title, onAptitudePress, userAptitude}) => {
   const [isSelected, setIsSelected] = useState(false);
 
-  /*console.log(userAptitude);
-
-  useEffect(() => {
-    userAptitude && setIsSelected(!isSelected);
-  }, [userAptitude]);*/
-
   const onPress = useCallback(() => {
     setIsSelected(!isSelected);
     onAptitudePress();
