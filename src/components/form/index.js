@@ -4,16 +4,27 @@ import {generateFormSchema} from '../../utils/form';
 import {findAll} from '../../services/AbilityService';
 import {findAllCategories} from '../../services/CategoryService';
 import {findUserAuthenticated} from '../../../AuthService';
-import {create} from '../../services/UserService';
+import {create, findByUid} from '../../services/UserService';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const Form = () => {
   const [formData, setFormData] = useState([]);
   const [abilities, setAbilities] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [userAbilities, setUserAbilities] = useState([]);
   useEffect(() => {
     findAll().then(abilities => setAbilities(abilities));
     findAllCategories().then(categories => setCategories(categories));
+  }, []);
+
+  useEffect(() => {
+    const userAbilitiesFunc = async () => {
+      let userAuthenticated = await findUserAuthenticated();
+      let user = await findByUid(userAuthenticated.uid);
+      setUserAbilities(user.abilities);
+      setFormData(user.abilities);
+    };
+    userAbilitiesFunc();
   }, []);
 
   const formSections = useMemo(
@@ -56,6 +67,7 @@ const Form = () => {
           aptitudes={section.abilities}
           key={section.id}
           onAptitudePress={onAptitudePress}
+          userAbilities={userAbilities}
         />
       ))}
       <FormSubmitButton

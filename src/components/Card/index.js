@@ -31,8 +31,6 @@ export default function Card({
   let totalAbilities = [...requiredAbilities, ...desiredAbilities];
   let moreAbilities = totalAbilities.length - requiredAbilities.length;
 
-  console.log(totalAbilities);
-
   const rotate = Animated.multiply(swipe.x, tiltSign).interpolate({
     inputRange: [-ACTION_OFFSET, 0, ACTION_OFFSET],
     outputRange: ['8deg', '0deg', '-8deg'],
