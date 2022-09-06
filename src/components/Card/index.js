@@ -4,8 +4,8 @@ import Choise from '../Choise';
 import {ACTION_OFFSET} from '../../utils/constants';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
-import { formatDistance } from "date-fns";
-import esLocale from 'date-fns/locale/es'
+import {formatDistance} from 'date-fns';
+import esLocale from 'date-fns/locale/es';
 import Icon from 'react-native-vector-icons/Entypo';
 
 import {styles} from './style';
@@ -52,20 +52,9 @@ export default function Card({
     extrapolate: 'clamp',
   });
 
-  var year        = dateOffer.substring(0,4);
-  var month       = dateOffer.substring(4,6);
-  var day         = dateOffer.substring(6,8);
-
-  var fechaaaa        = new Date(year, month-1, day);
-  var currentDate = new Date();
-
-  const dataOffer = formatDistance(
-    fechaaaa,
-    currentDate,
-    { locale: esLocale }
-  );
-
-  
+  const dataOffer = formatDistance(dateOffer.toDate(), new Date(), {
+    locale: esLocale,
+  });
 
   const renderChoise = useCallback(() => {
     return (

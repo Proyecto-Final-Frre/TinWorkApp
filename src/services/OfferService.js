@@ -1,7 +1,13 @@
 import firestore from '@react-native-firebase/firestore';
 
-export const update = (offer, userId) => {
-  offer.interestedUsers.push(userId);
+export const update = (offer, user) => {
+  let userSave = {
+    abilities: user.abilities,
+    uid: user.uid,
+    name: user.name,
+    status: 'wait',
+  };
+  offer.interestedUsers.push(userSave);
   firestore()
     .collection('Offers')
     .doc(offer.id)
