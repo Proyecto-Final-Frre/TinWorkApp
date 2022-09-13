@@ -32,7 +32,7 @@ export const authenticationWithGoogle = async () => {
 
   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-  return auth().signInWithCredential(googleCredential);
+  return await auth().signInWithCredential(googleCredential);
 };
 
 export function singOutGoogle() {
