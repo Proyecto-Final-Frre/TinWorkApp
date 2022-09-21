@@ -8,6 +8,7 @@ import AbilitiesScreen from '../../src/screens/Abilities';
 import LoginScreen from '../../src/screens/Login';
 import OffersScreen from '../../src/screens/OffersScreen';
 import OfferScreen from '../../src/screens/Offers';
+import Registration from '../../src/screens/Registration';
 
 const StackPublic = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ export default function Public() {
         name="Home"
         component={HomeScreen}
         options={{title: 'TinWork', headerBackVisible: false}}
+      />
+      <StackPublic.Screen
+        name="Registro"
+        component={Registration}
+        options={{title: 'Registro', headerBackVisible: false}}
       />
       <StackPublic.Screen
         name="Habilidades"

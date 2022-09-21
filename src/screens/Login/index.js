@@ -41,6 +41,14 @@ export default function LoginScreen({navigation}) {
               .catch(err => console.log('error', err))
           }
         />
+        <Button
+          title={'Ir a Registro'}
+          onPress={() =>
+            onGoogleButtonPress()
+              .then(() => navigation.navigate('Registro'))
+              .catch(err => console.log('error', err))
+          }
+        />
         <Button title={'Cerrar Sesion'} onPress={singOutGoogle} />
       </View>
     </>
