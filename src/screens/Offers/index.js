@@ -104,6 +104,7 @@ export default function OfferScreen() {
   };
 
   useEffect(() => {
+    console.log('interested', interested);
     if (interested !== undefined) {
       let offer = offers[0];
       if (interested) {
@@ -117,7 +118,7 @@ export default function OfferScreen() {
   const addInterested = offer => {
     userAuth.interestingOffers.push(offer.id);
     create(userAuth);
-    update(offer, userAuth.uid);
+    update(offer, userAuth);
     setInterested(undefined);
   };
 
@@ -192,10 +193,7 @@ export default function OfferScreen() {
           )
           .reverse()
       )}
-      {offers.length > 0 && (
-        <Footer handleChoice={handleChoice} />
-      )
-      }
+      {offers.length > 0 && <Footer handleChoice={handleChoice} />}
     </View>
   );
 }

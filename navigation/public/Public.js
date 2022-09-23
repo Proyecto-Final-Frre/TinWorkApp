@@ -20,7 +20,7 @@ export default function Public() {
       <StackPublic.Screen
         name="Tinwork"
         component={LoginScreen}
-        options={{headerShown: false}}
+        options={{headerShown: true}}
       />
       <StackPublic.Screen
         name="Home"

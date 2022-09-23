@@ -1,30 +1,16 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {findUserAuthenticated} from '../../../AuthService';
 import {findByUid} from '../../services/UserService';
 import {Card} from '@rneui/themed';
 import {Aptitude} from '../index';
 
-const FormSection = ({aptitudes = [], title, onAptitudePress}) => {
-  const [userAuth, setUserAuth] = useState();
-  const [userAbilities, setUserAbilities] = useState([]);
-
-  const getAbilitiesByUidUser = async () => {
-    let userAuthenticated = await findUserAuthenticated();
-    let user = await findByUid(userAuthenticated.uid);
-    setUserAuth(user);
-  };
-
-  useEffect(() => {
-    getAbilitiesByUidUser();
-  }, []);
-
-  useEffect(() => {
-    if (userAuth !== undefined) {
-      setUserAbilities(userAuth.abilities);
-    }
-  }, [userAuth]);
-
+const FormSection = ({
+  aptitudes = [],
+  title,
+  onAptitudePress,
+  userAbilities,
+}) => {
   return (
     <Card>
       <Card.Title>{title}</Card.Title>
@@ -34,7 +20,7 @@ const FormSection = ({aptitudes = [], title, onAptitudePress}) => {
           <Aptitude
             title={aptitude.title}
             key={aptitude.id}
-            userAptitude={userAbilities.includes(aptitude.title) ? true : false}
+            userAptitude={userAbilities.includes(aptitude.title)}
             onAptitudePress={() => onAptitudePress(aptitude.title)}
           />
         ))}
