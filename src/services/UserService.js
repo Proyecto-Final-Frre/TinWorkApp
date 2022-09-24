@@ -1,21 +1,14 @@
 import firestore from '@react-native-firebase/firestore';
 
-export const create = async ({
-  uid,
-  name,
-  email,
-  abilities,
-  interestingOffers = [],
-  uninterestingOffers = [],
-  token,
-}) => {
+export const create = async ({uid, name, email, token}) => {
   firestore()
     .collection('Users')
     .add({
       name: name,
       email: email,
       uid: uid,
-      abilities: abilities,
+      token: token,
+      abilities: [],
       interestingOffers: [],
       uninterestingOffers: [],
     })
@@ -41,5 +34,7 @@ export const findByUid = async uid => {
     .collection('Users')
     .where('uid', '==', uid)
     .get()
-    .then(response => response.docs[0].data());
+    .then(response =>
+      response.docs.length > 0 ? response.docs[0].data() : null,
+    );
 };
