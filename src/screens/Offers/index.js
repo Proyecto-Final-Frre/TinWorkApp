@@ -6,7 +6,7 @@ import {styles} from './style';
 import {ACTION_OFFSET, CARD} from '../../utils/constants';
 import {findByAbilities, update} from '../../services/OfferService';
 import {findUserAuthenticated} from '../../../AuthService';
-import {create, findByUid} from '../../services/UserService';
+import {create, findByUid, updateUser} from '../../services/UserService';
 import {FormSubmitButton} from '../../components';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 export default function OfferScreen() {
@@ -104,27 +104,38 @@ export default function OfferScreen() {
   };
 
   useEffect(() => {
-    console.log('interested', interested);
     if (interested !== undefined) {
-      let offer = offers[0];
-      if (interested) {
-        addInterested(offer);
-      } else {
-        addNotInterested(offer);
+      if (offers.length > 0) {
+        let offer = offers[0];
+        if (interested) {
+          addInterested(offer);
+        } else {
+          addNotInterested(offer);
+        }
       }
     }
   }, [interested]);
 
   const addInterested = offer => {
     userAuth.interestingOffers.push(offer.id);
-    create(userAuth);
+
+    const userUpdate = {
+      uid: userAuth.uid,
+      interestingOffers: userAuth.interestingOffers,
+    };
+
+    updateUser(userUpdate);
     update(offer, userAuth);
     setInterested(undefined);
   };
 
   const addNotInterested = offer => {
     userAuth.uninterestingOffers.push(offer.id);
-    create(userAuth);
+    const userUpdate = {
+      uid: userAuth.uid,
+      uninterestingOffers: userAuth.uninterestingOffers,
+    };
+    updateUser(userUpdate);
     setInterested(undefined);
   };
 
@@ -146,6 +157,7 @@ export default function OfferScreen() {
       {loading ? (
         <Text>Cargando</Text>
       ) : (
+        offers.length > 0 &&
         offers
           .map(
             (

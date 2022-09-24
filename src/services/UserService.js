@@ -9,39 +9,31 @@ export const create = async ({
   uninterestingOffers = [],
   token,
 }) => {
-  let userExists = await firestore()
+  firestore()
     .collection('Users')
-    .where('uid', '==', uid)
+    .add({
+      name: name,
+      email: email,
+      uid: uid,
+      abilities: abilities,
+      interestingOffers: [],
+      uninterestingOffers: [],
+    })
+    .then(() => {
+      console.log('User added!');
+    });
+};
+
+export const updateUser = async user => {
+  await firestore()
+    .collection('Users')
+    .where('uid', '==', user.uid)
     .get()
     .then(response => {
       if (response.docs.length > 0) {
-        response.docs.forEach(doc =>
-          doc.ref.update({
-            abilities: abilities,
-            interestingOffers: interestingOffers,
-            uninterestingOffers: uninterestingOffers,
-            tokenNotification: token,
-          }),
-        );
-        return true;
+        response.docs.forEach(doc => doc.ref.update(user));
       }
-      return false;
     });
-  if (!userExists) {
-    firestore()
-      .collection('Users')
-      .add({
-        name: name,
-        email: email,
-        uid: uid,
-        abilities: abilities,
-        interestingOffers: [],
-        uninterestingOffers: [],
-      })
-      .then(() => {
-        console.log('User added!');
-      });
-  }
 };
 
 export const findByUid = async uid => {

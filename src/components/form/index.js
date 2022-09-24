@@ -4,7 +4,7 @@ import {generateFormSchema} from '../../utils/form';
 import {findAll} from '../../services/AbilityService';
 import {findAllCategories} from '../../services/CategoryService';
 import {findUserAuthenticated} from '../../../AuthService';
-import {create, findByUid} from '../../services/UserService';
+import {create, findByUid, updateUser} from '../../services/UserService';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const Form = () => {
@@ -47,16 +47,14 @@ const Form = () => {
   const onSubmit = useCallback(() => {
     const userAuthenticated = findUserAuthenticated();
     const user = {
-      name: userAuthenticated.displayName,
-      email: userAuthenticated.email,
       uid: userAuthenticated.uid,
       abilities: formData,
     };
+    updateUser(user);
     showMessage({
       message: 'Habilidades Actualizadas',
       type: 'success',
     });
-    create(user);
   }, [formData]);
 
   return (

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {authenticationWithGoogle, singOutGoogle} from '../../../AuthService';
 import {Button} from '../../components';
-import {create, findByUid} from '../../services/UserService';
+import {findByUid, updateUser} from '../../services/UserService';
 import messaging from '@react-native-firebase/messaging';
 
 function onGoogleButtonPress() {
@@ -10,11 +10,8 @@ function onGoogleButtonPress() {
     return findByUid(response.user.uid).then(async user => {
       const token = await messaging().getToken();
 
-      return await create({
+      return await updateUser({
         uid: user.uid,
-        abilities: user.abilities,
-        name: user.name,
-        email: user.email,
         token: token,
       });
     });

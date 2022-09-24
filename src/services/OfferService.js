@@ -15,7 +15,7 @@ export const update = (offer, user) => {
       interestedUsers: offer.interestedUsers,
     })
     .then(() => {
-      console.log('User updated!');
+      console.log('Offer updated!');
     });
 };
 
