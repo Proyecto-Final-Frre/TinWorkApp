@@ -4,16 +4,27 @@ import {generateFormSchema} from '../../utils/form';
 import {findAll} from '../../services/AbilityService';
 import {findAllCategories} from '../../services/CategoryService';
 import {findUserAuthenticated} from '../../../AuthService';
-import {create} from '../../services/UserService';
+import {create, findByUid, updateUser} from '../../services/UserService';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const Form = () => {
   const [formData, setFormData] = useState([]);
   const [abilities, setAbilities] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [userAbilities, setUserAbilities] = useState([]);
   useEffect(() => {
     findAll().then(abilities => setAbilities(abilities));
     findAllCategories().then(categories => setCategories(categories));
+  }, []);
+
+  useEffect(() => {
+    const userAbilitiesFunc = async () => {
+      let userAuthenticated = await findUserAuthenticated();
+      let user = await findByUid(userAuthenticated.uid);
+      setUserAbilities(user.abilities);
+      setFormData(user.abilities);
+    };
+    userAbilitiesFunc();
   }, []);
 
   const formSections = useMemo(
@@ -36,16 +47,14 @@ const Form = () => {
   const onSubmit = useCallback(() => {
     const userAuthenticated = findUserAuthenticated();
     const user = {
-      name: userAuthenticated.displayName,
-      email: userAuthenticated.email,
       uid: userAuthenticated.uid,
       abilities: formData,
     };
+    updateUser(user);
     showMessage({
       message: 'Habilidades Actualizadas',
       type: 'success',
     });
-    create(user);
   }, [formData]);
 
   return (
@@ -56,6 +65,7 @@ const Form = () => {
           aptitudes={section.abilities}
           key={section.id}
           onAptitudePress={onAptitudePress}
+          userAbilities={userAbilities}
         />
       ))}
       <FormSubmitButton

@@ -4,7 +4,8 @@ import Choise from '../Choise';
 import {ACTION_OFFSET} from '../../utils/constants';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
-import {getCurrentDate} from '../../services/DateService';
+import {formatDistance} from 'date-fns';
+import esLocale from 'date-fns/locale/es';
 import Icon from 'react-native-vector-icons/Entypo';
 
 import {styles} from './style';
@@ -27,11 +28,8 @@ export default function Card({
   const [expand, setExpand] = useState(false);
   const [expandAptitude, setExpandAptitude] = useState(false);
 
-  let calculateDate = '';
   let totalAbilities = [...requiredAbilities, ...desiredAbilities];
   let moreAbilities = totalAbilities.length - requiredAbilities.length;
-
-  console.log(totalAbilities);
 
   const rotate = Animated.multiply(swipe.x, tiltSign).interpolate({
     inputRange: [-ACTION_OFFSET, 0, ACTION_OFFSET],
@@ -54,12 +52,9 @@ export default function Card({
     extrapolate: 'clamp',
   });
 
-  const calculateDateOffer = dateOffer => {
-    calculateDate = getCurrentDate('') - dateOffer;
-    return calculateDate;
-  };
-
-  calculateDateOffer(dateOffer);
+  const dataOffer = formatDistance(dateOffer.toDate(), new Date(), {
+    locale: esLocale,
+  });
 
   const renderChoise = useCallback(() => {
     return (
@@ -121,7 +116,7 @@ export default function Card({
                 <Icon name={'calendar'} size={17} />
                 <Text style={{flexGrow: 5, marginLeft: 1}}>
                   {' '}
-                  {calculateDate} dias
+                  Hace {dataOffer}
                 </Text>
               </View>
               <Text style={styles.description}>
@@ -166,9 +161,9 @@ export default function Card({
                   flexDirection: 'row',
                 }}>
                 <Icon name={'location-pin'} size={17} />
-                <Text style={{flexGrow: 5}}>Ubicacion</Text>
+                <Text style={{flexGrow: 5}}>{province}</Text>
                 <Icon name={'briefcase'} size={17} />
-                <Text style={{flexGrow: 2, marginLeft: 1}}>Media Jornada</Text>
+                <Text style={{flexGrow: 2, marginLeft: 1}}>{workDay}</Text>
               </View>
               <View
                 style={{
@@ -177,7 +172,10 @@ export default function Card({
                   paddingBottom: '5%',
                 }}>
                 <Icon name={'calendar'} size={17} />
-                <Text style={{flexGrow: 5, marginLeft: 1}}>Tiempo</Text>
+                <Text style={{flexGrow: 5, marginLeft: 1}}>
+                  {' '}
+                  Hace {dataOffer}
+                </Text>
               </View>
               <Text style={styles.description}>{description}</Text>
             </View>

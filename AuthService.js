@@ -13,7 +13,6 @@ export const createUser = (user, pass) => {
   auth()
     .createUserWithEmailAndPassword(user.email, pass)
     .then(result => {
-      console.log(result);
       updateProfileUser(user.name);
       saveUser(user);
     })
