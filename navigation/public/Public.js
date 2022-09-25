@@ -31,7 +31,11 @@ export default function Public() {
       <StackPublic.Screen
         name="Registro"
         component={Registration}
-        options={{title: 'Registro', headerBackVisible: false}}
+        options={{
+          title: 'Registro',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
       />
       <StackPublic.Screen
         name="Habilidades"
