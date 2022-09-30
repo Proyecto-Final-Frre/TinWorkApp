@@ -21,6 +21,7 @@
     "@rneui/base": "^4.0.0-rc.5",
     "@rneui/themed": "^4.0.0-rc.5",
     "date-fns": "^2.29.2",
+    "lodash": "^4.17.21",
     "react": "17.0.2",
     "react-icons": "^4.4.0",
     "react-native": "0.68.2",
