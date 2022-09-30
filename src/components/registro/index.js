@@ -26,7 +26,7 @@ export default function Registro() {
     if (!validateData()) {
       return;
     }
-    console.log('Capoooo');
+    console.log(formData);
   };
 
   const tiene_numeros = texto => {
