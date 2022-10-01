@@ -1,19 +1,28 @@
 import firestore from '@react-native-firebase/firestore';
+import {createUser as create} from '../../AuthService';
+import messaging from '@react-native-firebase/messaging';
 
-export const create = async ({uid, name, email, token}) => {
-  firestore()
+export const createUser = async ({name, email, pass}) => {
+  const auth = await create(name, email, pass);
+  const token = await messaging().getToken();
+  return firestore()
     .collection('Users')
     .add({
       name: name,
       email: email,
-      uid: uid,
+      uid: auth.user.uid,
       token: token,
       abilities: [],
       interestingOffers: [],
       uninterestingOffers: [],
     })
-    .then(() => {
+    .then(result => {
       console.log('User added!');
+      return result;
+    })
+    .catch(err => {
+      console.log('Error', err);
+      throw err;
     });
 };
 

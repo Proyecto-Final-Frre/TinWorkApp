@@ -2,10 +2,10 @@ import React from 'react';
 import {ScrollView} from 'react-native';
 import {Form} from '../../components';
 
-const Aptitudes = () => {
+const Aptitudes = ({navigation}) => {
   return (
     <ScrollView>
-      <Form />
+      <Form navigation={navigation} />
     </ScrollView>
   );
 };

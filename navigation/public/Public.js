@@ -8,24 +8,34 @@ import AbilitiesScreen from '../../src/screens/Abilities';
 import LoginScreen from '../../src/screens/Login';
 import OffersScreen from '../../src/screens/OffersScreen';
 import OfferScreen from '../../src/screens/Offers';
+import Registration from '../../src/screens/Registration';
 
 const StackPublic = createNativeStackNavigator();
 
 export default function Public() {
   return (
     <StackPublic.Navigator
-      initialRouteName="Tinwork"
+      initialRouteName="Login"
       //screenOptions={themeApp[modo].fondoBarra}
     >
       <StackPublic.Screen
-        name="Tinwork"
+        name="Login"
         component={LoginScreen}
-        options={{headerShown: true}}
+        options={{headerShown: false}}
       />
       <StackPublic.Screen
         name="Home"
         component={HomeScreen}
         options={{title: 'TinWork', headerBackVisible: false}}
+      />
+      <StackPublic.Screen
+        name="Registro"
+        component={Registration}
+        options={{
+          title: 'Registro',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
       />
       <StackPublic.Screen
         name="Habilidades"
