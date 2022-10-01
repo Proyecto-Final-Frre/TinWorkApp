@@ -4,7 +4,6 @@ import {
   Image,
   StyleSheet,
   Text,
-  TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -13,54 +12,34 @@ import {size} from 'lodash';
 
 import {validateEmail} from '../../utils/helpers';
 import {colors} from '../../constants/colors';
-import {createUser} from '../../services/UserService';
+import {authenticationWithEmailAndPass, createUser} from '../../../AuthService';
 
-export default function Registro({navigation}) {
+export default function Login({navigation}) {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState(defaultFormValues());
-  const [errorNombre, setErrorNombre] = useState('');
-  const [errorApellido, setErrorApellido] = useState('');
   const [errorCorreo, setErrorCorreo] = useState('');
   const [errorContrasena, setErrorContrasena] = useState('');
-  const [errorConfirm, setErrorConfirm] = useState('');
-
-  var numeros = '0123456789';
 
   const onChange = (e, type) => {
     setFormData({...formData, [type]: e.nativeEvent.text});
   };
 
-  const registerUser = async () => {
+  const loginUser = async () => {
     if (!validateData()) {
       return;
     }
-
-    const user = {
-      name: `${formData.nombre} ${formData.apellido}`,
-      email: formData.correo,
-      pass: formData.password,
-    };
-    const userSaved = await createUser(user);
-    if (userSaved) {
-      navigation.navigate('Habilidades');
+    const user = await authenticationWithEmailAndPass(
+      formData.correo,
+      formData.password,
+    );
+    if (user) {
+      navigation.navigate('Offer');
     }
-  };
-
-  const tiene_numeros = texto => {
-    for (let i = 0; i < texto.length; i++) {
-      if (numeros.indexOf(texto.charAt(i), 0) != -1) {
-        return true;
-      }
-    }
-    return false;
   };
 
   const validateData = () => {
-    setErrorNombre('');
-    setErrorApellido('');
     setErrorCorreo('');
     setErrorContrasena('');
-    setErrorConfirm('');
     let isValid = true;
 
     if (!validateEmail(formData.correo)) {
@@ -68,43 +47,10 @@ export default function Registro({navigation}) {
       isValid = false;
     }
 
-    if (size(formData.nombre) < 3) {
-      setErrorNombre('Debes ingresar un nombre de al menos 3 caracteres');
-      isValid = false;
-    }
-
-    if (tiene_numeros(formData.nombre)) {
-      setErrorNombre('Debes ingresar un nombre válido');
-      isValid = false;
-    }
-
-    if (size(formData.apellido) < 3) {
-      setErrorApellido('Debes ingresar un apellido de al menos 3 caracteres');
-      isValid = false;
-    }
-
-    if (tiene_numeros(formData.apellido)) {
-      setErrorApellido('Debes ingresar un apellido válido');
-      isValid = false;
-    }
-
     if (size(formData.password) < 6) {
       setErrorContrasena(
         'Debes ingresar una contraseña de al menos 6 caracteres',
       );
-      isValid = false;
-    }
-
-    if (size(formData.confirm < 6)) {
-      setErrorConfirm(
-        'Debes ingresar una confirmacion de contraseña de al menos 6 caracteres',
-      );
-      isValid = false;
-    }
-
-    if (formData.confirm !== formData.password) {
-      setErrorContrasena('La contraseña y la confirmación deben ser iguales');
-      setErrorConfirm('La contraseña y la confirmación deben ser iguales');
       isValid = false;
     }
 
@@ -121,20 +67,6 @@ export default function Registro({navigation}) {
         />
       </View>
       <View style={styles.form}>
-        <Input
-          placeholder="Nombre"
-          containerStyle={styles.input}
-          onChange={e => onChange(e, 'nombre')}
-          errorMessage={errorNombre}
-          defaultValue={formData.nombre}
-        />
-        <Input
-          placeholder="Apellido"
-          containerStyle={styles.input}
-          onChange={e => onChange(e, 'apellido')}
-          errorMessage={errorApellido}
-          defaultValue={formData.apellido}
-        />
         <Input
           placeholder="Correo"
           containerStyle={styles.input}
@@ -160,36 +92,19 @@ export default function Registro({navigation}) {
           errorMessage={errorContrasena}
           defaultValue={formData.password}
         />
-        <Input
-          placeholder="Repetir contraseña"
-          containerStyle={styles.input}
-          password={true}
-          secureTextEntry={!showPassword}
-          onChange={e => onChange(e, 'confirm')}
-          rightIcon={
-            <Icon
-              name={showPassword ? 'eyeo' : 'eye'}
-              size={22}
-              style={styles.ojo}
-              onPress={() => setShowPassword(!showPassword)}
-            />
-          }
-          errorMessage={errorConfirm}
-          defaultValue={formData.confirm}
-        />
         <Button
-          title={'Registrate'}
+          title={'Ingresar'}
           containerStyle={styles.btnContainer}
           buttonStyle={styles.btn}
-          onPress={() => registerUser()}
+          onPress={() => loginUser()}
         />
       </View>
       <View style={styles.login}>
         <Text>
-          Ya tienes una cuenta?{'  '}
+          Todavia no estas registrado?{'  '}
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.btnLogin}>Iniciar sesion</Text>
+            onPress={() => navigation.navigate('Registro')}>
+            <Text style={styles.btnLogin}>Registrarse</Text>
           </TouchableWithoutFeedback>
         </Text>
       </View>
@@ -199,11 +114,8 @@ export default function Registro({navigation}) {
 
 const defaultFormValues = () => {
   return {
-    nombre: '',
-    apellido: '',
     correo: '',
     password: '',
-    confirm: '',
   };
 };
 
@@ -217,6 +129,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   form: {
+    marginTop: 50,
     alignItems: 'center',
     width: '100%',
   },

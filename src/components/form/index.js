@@ -4,10 +4,10 @@ import {generateFormSchema} from '../../utils/form';
 import {findAll} from '../../services/AbilityService';
 import {findAllCategories} from '../../services/CategoryService';
 import {findUserAuthenticated} from '../../../AuthService';
-import {create, findByUid, updateUser} from '../../services/UserService';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import {findByUid, updateUser} from '../../services/UserService';
+import {showMessage} from 'react-native-flash-message';
 
-const Form = () => {
+const Form = ({navigation}) => {
   const [formData, setFormData] = useState([]);
   const [abilities, setAbilities] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -55,6 +55,7 @@ const Form = () => {
       message: 'Habilidades Actualizadas',
       type: 'success',
     });
+    navigation.navigate('Offer');
   }, [formData]);
 
   return (

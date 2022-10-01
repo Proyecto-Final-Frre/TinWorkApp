@@ -4,6 +4,7 @@ import {authenticationWithGoogle, singOutGoogle} from '../../../AuthService';
 import {Button} from '../../components';
 import {create, findByUid, updateUser} from '../../services/UserService';
 import messaging from '@react-native-firebase/messaging';
+import Login from '../../components/login';
 
 function onGoogleButtonPress() {
   return authenticationWithGoogle().then(response => {
@@ -26,35 +27,5 @@ function onGoogleButtonPress() {
 }
 
 export default function LoginScreen({navigation}) {
-  return (
-    <>
-      <View>
-        <Button
-          title={'Ir a Habilidades'}
-          onPress={() =>
-            onGoogleButtonPress()
-              .then(() => navigation.navigate('Habilidades'))
-              .catch(err => console.log('error', err))
-          }
-        />
-        <Button
-          title={'Ir a Ofertas'}
-          onPress={() =>
-            onGoogleButtonPress()
-              .then(() => navigation.navigate('Offer'))
-              .catch(err => console.log('error', err))
-          }
-        />
-        <Button
-          title={'Ir a Registro'}
-          onPress={() =>
-            onGoogleButtonPress()
-              .then(() => navigation.navigate('Registro'))
-              .catch(err => console.log('error', err))
-          }
-        />
-        <Button title={'Cerrar Sesion'} onPress={singOutGoogle} />
-      </View>
-    </>
-  );
+  return <Login navigation={navigation} />;
 }

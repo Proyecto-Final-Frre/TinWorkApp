@@ -9,14 +9,17 @@ GoogleSignin.configure({
 
 const COLLECTION_USER = 'Users';
 
-export const createUser = (user, pass) => {
-  auth()
-    .createUserWithEmailAndPassword(user.email, pass)
+export const createUser = (name, email, pass) => {
+  return auth()
+    .createUserWithEmailAndPassword(email, pass)
     .then(result => {
-      updateProfileUser(user.name);
-      saveUser(user);
+      updateProfileUser(name);
+      return result;
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      throw err;
+    });
 };
 
 const updateProfileUser = name => {
@@ -44,12 +47,11 @@ export const authenticationWithEmailAndPass = (email, pass) => {
   return auth()
     .signInWithEmailAndPassword(email, pass)
     .then(result => {
-      console.log(result);
-      return true;
+      return result;
     })
     .catch(err => {
       console.log(err);
-      return false;
+      throw err;
     });
 };
 

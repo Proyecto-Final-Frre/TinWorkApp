@@ -3,10 +3,10 @@ import {ScrollView} from 'react-native';
 import Registro from '../../components/registro';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-const Registration = () => {
+const Registration = ({navigation}) => {
   return (
     <KeyboardAwareScrollView>
-      <Registro />
+      <Registro navigation={navigation} />
     </KeyboardAwareScrollView>
   );
 };
