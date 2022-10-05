@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {size} from 'lodash';
-
+import messaging from '@react-native-firebase/messaging';
 import {validateEmail} from '../../utils/helpers';
 import {colors} from '../../constants/colors';
+import {updateUser} from '../../services/UserService';
 import {authenticationWithEmailAndPass, createUser} from '../../../AuthService';
 
 export default function Login({navigation}) {
@@ -28,11 +29,16 @@ export default function Login({navigation}) {
     if (!validateData()) {
       return;
     }
-    const user = await authenticationWithEmailAndPass(
+    const auth = await authenticationWithEmailAndPass(
       formData.correo,
       formData.password,
     );
-    if (user) {
+    const token = await messaging().getToken();
+    if (auth) {
+      await updateUser({
+        uid: auth.user.uid,
+        token: token,
+      });
       navigation.navigate('Offer');
     }
   };

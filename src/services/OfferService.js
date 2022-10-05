@@ -5,6 +5,10 @@ export const update = (offer, user) => {
     abilities: user.abilities,
     uid: user.uid,
     name: user.name,
+    email: user.email,
+    description: user.description,
+    image: user.image,
+    location: user.location,
     status: 'wait',
   };
   offer.interestedUsers.push(userSave);
