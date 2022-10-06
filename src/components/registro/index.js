@@ -4,12 +4,12 @@ import {
   Image,
   StyleSheet,
   Text,
-  TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {size} from 'lodash';
+import {showMessage} from 'react-native-flash-message';
 
 import {validateEmail} from '../../utils/helpers';
 import {colors} from '../../constants/colors';
@@ -40,9 +40,20 @@ export default function Registro({navigation}) {
       email: formData.correo,
       pass: formData.password,
     };
-    const userSaved = await createUser(user);
-    if (userSaved) {
-      navigation.navigate('Habilidades');
+
+    try {
+      const userSaved = await createUser(user);
+      if (userSaved) {
+        navigation.navigate('Habilidades');
+      }
+    } catch (error) {
+      showMessage({
+        message:
+          error.code === 'auth/email-already-in-use'
+            ? 'Ya existe un usuario con ese mail. Pruebe iniciando sesion'
+            : 'Ups, hubo un error. Intente nuevamente',
+        type: 'danger',
+      });
     }
   };
 
@@ -199,11 +210,11 @@ export default function Registro({navigation}) {
 
 const defaultFormValues = () => {
   return {
-    nombre: '',
-    apellido: '',
-    correo: '',
-    password: '',
-    confirm: '',
+    nombre: 'Julian',
+    apellido: 'Diazzzz',
+    correo: 'juliandiazok@xxx.com',
+    password: '1234567',
+    confirm: '1234567',
   };
 };
 
