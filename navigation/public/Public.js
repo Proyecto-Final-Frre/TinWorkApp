@@ -26,7 +26,11 @@ export default function Public() {
       <StackPublic.Screen
         name="Home"
         component={HomeScreen}
-        options={{title: 'TinWork', headerBackVisible: false}}
+        options={{
+          title: 'TinWork',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
       />
       <StackPublic.Screen
         name="Registro"

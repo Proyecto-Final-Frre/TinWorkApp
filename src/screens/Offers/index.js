@@ -66,6 +66,8 @@ export default function OfferScreen() {
           useNativeDriver: true,
         }).start(removeTopCard);
       } else {
+        getAbilitiesByUidUser();
+        findOffersByAbilities();
         Animated.spring(swipe, {
           toValue: {
             x: 0,
@@ -146,6 +148,7 @@ export default function OfferScreen() {
           title={'Cargar más'}
           buttonStyle={{marginHorizontal: 15, marginVertical: 15}}
           onSubmit={() => {
+            getAbilitiesByUidUser();
             findOffersByAbilities();
             showMessage({
               message: 'Ofertas Cargadas',
