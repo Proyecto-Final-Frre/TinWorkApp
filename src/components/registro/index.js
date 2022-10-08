@@ -210,11 +210,11 @@ export default function Registro({navigation}) {
 
 const defaultFormValues = () => {
   return {
-    nombre: 'Julian',
-    apellido: 'Diazzzz',
-    correo: 'juliandiazok@xxx.com',
-    password: '1234567',
-    confirm: '1234567',
+    nombre: '',
+    apellido: '',
+    correo: '',
+    password: '',
+    confirm: '',
   };
 };
 

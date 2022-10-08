@@ -5,9 +5,6 @@ import {colors} from '../../constants/colors';
 
 const Aptitude = ({title, onAptitudePress, userAptitude}) => {
   const [isSelected, setIsSelected] = useState(userAptitude);
-
-  /*console.log(userAptitude);*/
-
   useEffect(() => {
     if (userAptitude !== undefined) {
       setIsSelected(userAptitude);
