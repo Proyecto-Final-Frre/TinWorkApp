@@ -9,13 +9,14 @@ import LoginScreen from '../../src/screens/Login';
 import OffersScreen from '../../src/screens/OffersScreen';
 import OfferScreen from '../../src/screens/Offers';
 import Registration from '../../src/screens/Registration';
+import Matchs from '../../src/screens/Matchs';
 
 const StackPublic = createNativeStackNavigator();
 
 export default function Public() {
   return (
     <StackPublic.Navigator
-      initialRouteName="Login"
+      initialRouteName="Matchs"
       //screenOptions={themeApp[modo].fondoBarra}
     >
       <StackPublic.Screen
@@ -33,6 +34,15 @@ export default function Public() {
         component={Registration}
         options={{
           title: 'Registro',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
+      />
+      <StackPublic.Screen
+        name="Matchs"
+        component={Matchs}
+        options={{
+          title: 'Mis Matchs',
           headerBackVisible: false,
           headerShown: false,
         }}
