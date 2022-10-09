@@ -1,20 +1,43 @@
-import {CurrentRenderContext} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
-import {colors} from '../../constants/colors';
-import {CARD, FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
-import Icon from 'react-native-vector-icons/Entypo';
+import {FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
 
 export const styles = StyleSheet.create({
-  container: {
+  containerrrr: {
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   title: {
     fontFamily: FUENTES.BOLD,
     fontSize: FONT_SIZE.xl2,
     color: '#000',
+  },
+  vistaGeneral: {display: 'flex'},
+  descripcion: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  img: {
+    height: 45,
+    width: 45,
+    marginHorizontal: 5,
+  },
+  ubicacion: {
+    marginTop: 4,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  texto: {
+    marginHorizontal: 5,
+  },
+  mismatchs: {
+    fontSize: 35,
+    color: '#000',
+    marginHorizontal: 15,
+    marginTop: 15,
+    marginBottom: 5,
   },
 });
