@@ -25,6 +25,10 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     marginVertical: 5,
   },
+  tituloSecun: {
+    marginTop: 10,
+    fontSize: 15,
+  },
   datos: {
     fontSize: 18,
     color: 'black',
@@ -32,12 +36,16 @@ export const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginVertical: 15,
+    marginVertical: 5,
+    marginLeft: -5,
   },
   img: {
     height: 120,
     width: 120,
     marginHorizontal: 5,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#000'
   },
   ubicacion: {
     marginTop: 4,

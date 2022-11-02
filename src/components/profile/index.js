@@ -21,7 +21,6 @@ export default function Profile() {
   }, []);
 
   let minAbilities = userAuth?.abilities.length - 5;
-  console.log(minAbilities);
 
   return (
     <View>
@@ -30,7 +29,7 @@ export default function Profile() {
         <View style={styles.containerrrr}>
           <Image
             style={styles.img}
-            source={require('../../images/tinwork-logo.png')}
+            source={require('../../images/descarga.jpg')}
           />
           <View style={styles.nombreymail}>
             <Text style={styles.titulos}>Nombre Completo</Text>
@@ -39,34 +38,38 @@ export default function Profile() {
             <Text style={styles.datos}>{userAuth?.email || ''}</Text>
           </View>
         </View>
-        <Text style={styles.titulos}>Nombre Completo</Text>
-        <View style={styles.datos}>
-          <View style={styles.buttonsContainer}>
-            {userAuth?.abilities.slice(0, 5).map((ability, index) => (
-              <AptitudeOffer title={ability} key={index} />
-            ))}
-            {!expandAptitude
-              ? userAuth?.abilities.length > minAbilities && (
-                  <ButtonMoreAbilities
-                    buttonStyle={false}
-                    titleStyle={false}
-                    title={`+${minAbilities}`}
-                    onPress={() => setExpandAptitude(true)}
-                  />
-                )
-              : userAuth?.abilities
-                  .slice(5, userAuth?.abilities.length)
-                  .map((ability, index) => (
-                    <AptitudeOffer title={ability} key={index} />
-                  ))}
-            {expandAptitude && (
-              <ButtonMoreAbilities
-                buttonStyle={false}
-                titleStyle={false}
-                title={`Ver Menos`}
-                onPress={() => setExpandAptitude(false)}
-              />
-            )}
+        <View style={styles.nombreymail}>
+          <Text style={styles.tituloSecun}>Habilidades</Text>
+          <View style={styles.datos}>
+            <View style={styles.buttonsContainer}>
+              {userAuth?.abilities.slice(0, 5).map((ability, index) => (
+                <AptitudeOffer title={ability} key={index} />
+              ))}
+              {!expandAptitude
+                ? userAuth?.abilities.length > minAbilities && (
+                    <ButtonMoreAbilities
+                      buttonStyle={false}
+                      titleStyle={false}
+                      title={`+${minAbilities}`}
+                      onPress={() => setExpandAptitude(true)}
+                    />
+                  )
+                : userAuth?.abilities
+                    .slice(5, userAuth?.abilities.length)
+                    .map((ability, index) => (
+                      <AptitudeOffer title={ability} key={index} />
+                    ))}
+              {expandAptitude && (
+                <ButtonMoreAbilities
+                  buttonStyle={false}
+                  titleStyle={false}
+                  title={`Ver Menos`}
+                  onPress={() => setExpandAptitude(false)}
+                />
+              )}
+            </View>
+            <Text style={styles.tituloSecun}>Ubicación</Text>
+            <Text style={styles.tituloSecun}>Descripción</Text>
           </View>
         </View>
       </Card>
