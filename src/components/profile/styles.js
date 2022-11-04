@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
+import {colors} from '../../constants/colors';
 
 export const styles = StyleSheet.create({
   containerrrr: {
@@ -45,7 +46,26 @@ export const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#000'
+    borderColor: '#000',
+  },
+  imageContainer: {
+    display: 'flex',
+    height: 120,
+    width: 120,
+    marginHorizontal: 5,
+    borderRadius: 18,
+    borderWidth: 0.5,
+    borderColor: '#000',
+    overflow: 'hidden',
+    alignItems: 'center',
+  },
+  textoImagen: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    backgroundColor: 'rgb(0, 0, 0)',
+    opacity: 0.8,
+    color: 'white',
+    top: '83%',
   },
   ubicacion: {
     marginTop: 4,
@@ -63,5 +83,21 @@ export const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 15,
     marginBottom: 5,
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 10,
+    marginTop: 8,
+  },
+  botonEditar: {
+    fontSize: 16,
+    lineHeight: 21,
+    letterSpacing: 0.25,
+    color: colors.tinworkBlue,
+  },
+  tituloyBoton: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });

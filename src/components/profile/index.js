@@ -1,15 +1,20 @@
-import {Image, Text, View} from 'react-native';
-import {styles} from './styles';
 import React, {useState, useEffect} from 'react';
+import {ImageBackground, Image, Text, View, Pressable} from 'react-native';
 import {Card} from '@rneui/themed';
 import {findUserAuthenticated} from '../../../AuthService';
 import {findByUid} from '../../services/UserService';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
+import {styles} from './styles';
+import FormSubmitButton from '../form-submit-button';
+import {todasProvincias} from '../../services/ProvinceService';
+import {Picker} from '@react-native-picker/picker';
 
 export default function Profile() {
   const [userAuth, setUserAuth] = useState();
   const [expandAptitude, setExpandAptitude] = useState(false);
+  const [provincias, setProvincias] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState();
 
   useEffect(() => {
     const getAbilitiesByUidUser = async () => {
@@ -20,6 +25,15 @@ export default function Profile() {
     getAbilitiesByUidUser();
   }, []);
 
+  const findAllProvinces = async () => {
+    const prov = await todasProvincias();
+    setProvincias(prov);
+  };
+
+  useEffect(() => {
+    findAllProvinces();
+  }, []);
+
   let minAbilities = userAuth?.abilities.length - 5;
 
   return (
@@ -27,10 +41,15 @@ export default function Profile() {
       <Text style={styles.mismatchs}>Mi Perfil</Text>
       <Card>
         <View style={styles.containerrrr}>
-          <Image
-            style={styles.img}
-            source={require('../../images/descarga.jpg')}
-          />
+          <View style={styles.imageContainer}>
+            <Pressable onPress={() => console.log('Cambiar Foto')}>
+              <ImageBackground
+                style={styles.img}
+                source={require('../../images/descarga.jpg')}>
+                <Text style={styles.textoImagen}>Cambiar Foto</Text>
+              </ImageBackground>
+            </Pressable>
+          </View>
           <View style={styles.nombreymail}>
             <Text style={styles.titulos}>Nombre Completo</Text>
             <Text style={styles.datos}>{userAuth?.name || ''}</Text>
@@ -68,11 +87,39 @@ export default function Profile() {
                 />
               )}
             </View>
-            <Text style={styles.tituloSecun}>Ubicación</Text>
-            <Text style={styles.tituloSecun}>Descripción</Text>
+            <View style={styles.tituloyBoton}>
+              <Text style={styles.tituloSecun}>Ubicación</Text>
+              <Pressable
+                style={styles.button}
+                onPress={() => console.log('Editar Ubicacion')}>
+                <Text style={styles.botonEditar}>Editar</Text>
+              </Pressable>
+            </View>
+            <Picker
+              selectedValue={selectedProvince}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedProvince(itemValue)
+              }>
+              {provincias.map(provincia => (
+                <Picker.Item
+                  key={provincia?.id}
+                  label={`${provincia?.nombre}`}
+                  value={`${provincia?.nombre}`}
+                />
+              ))}
+            </Picker>
+            <View style={styles.tituloyBoton}>
+              <Text style={styles.tituloSecun}>Descripción</Text>
+              <Pressable
+                style={styles.button}
+                onPress={() => console.log('Editar Descripcion')}>
+                <Text style={styles.botonEditar}>Editar</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Card>
+      <FormSubmitButton title={`Aplicar Cambios`} />
     </View>
   );
 }
