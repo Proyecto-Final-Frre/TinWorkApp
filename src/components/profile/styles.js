@@ -84,6 +84,12 @@ export const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 5,
   },
+  textInput: {
+    marginTop: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'gray',
+  },
   button: {
     alignItems: 'center',
     justifyContent: 'center',

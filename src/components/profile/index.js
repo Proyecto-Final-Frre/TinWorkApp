@@ -2,19 +2,128 @@ import React, {useState, useEffect} from 'react';
 import {ImageBackground, Image, Text, View, Pressable} from 'react-native';
 import {Card} from '@rneui/themed';
 import {findUserAuthenticated} from '../../../AuthService';
-import {findByUid} from '../../services/UserService';
+import {findByUid, updateUser} from '../../services/UserService';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
 import {styles} from './styles';
 import FormSubmitButton from '../form-submit-button';
 import {todasProvincias} from '../../services/ProvinceService';
 import {Picker} from '@react-native-picker/picker';
+import * as ImagePicker from 'react-native-image-picker';
+import {firebase} from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import {Alert} from 'react-native';
+import {TouchableOpacity} from 'react-native';
+import {TextInput} from 'react-native';
+import {showMessage} from 'react-native-flash-message';
+import {useCallback} from 'react';
 
 export default function Profile() {
   const [userAuth, setUserAuth] = useState();
   const [expandAptitude, setExpandAptitude] = useState(false);
   const [provincias, setProvincias] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState();
+  const [mostrarDescripcion, setMostrarDescripcion] = useState(false);
+  const [userDescription, setUserDescription] = useState(
+    userAuth?.description || '',
+  );
+  //Subida de img
+  const [imageUrl, setImageUrl] = useState();
+  const [filename, setFilename] = useState();
+  const [image, setImage] = useState(userAuth ? userAuth.imageProfile : '');
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    storage()
+      .ref('/perfil/' + userAuth?.imageProfile) //name in storage in firebase console
+      .getDownloadURL()
+      .then(url => {
+        setImageUrl(url);
+        console.log(imageUrl);
+      })
+      .catch(e => console.log('Errors while downloading => ', e));
+  }, []);
+
+  const handleImageUser = () => {
+    Alert.alert(
+      'Seleccione',
+      'Seleccione de donde quiere obtener la foto de perfil',
+      [
+        {
+          text: 'Galeria',
+          onPress: () => pickImage(),
+          style: 'default',
+        },
+        {
+          text: 'Cámara',
+          onPress: () => pickImageCamera(),
+          style: 'default',
+        },
+        {
+          cancelable: true,
+          text: 'Cancelar',
+          onDismiss: () => console.log('tratar despues...'),
+        },
+      ],
+    );
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibrary({
+      mediaType: 'photo',
+      quality: 1,
+    });
+
+    if (result.didCancel) {
+      console.log('Se canceló la carga de imagen');
+    } else if (result.errorCode) {
+      console.log('Error: ', result.errorMessage);
+    } else if (result?.assets) {
+      let source = {uri: result.assets[0].uri};
+      console.log(result.assets);
+      setFilename(result.assets[0].fileName);
+      setImage(source);
+    }
+  };
+
+  console.log(image);
+
+  const pickImageCamera = async () => {
+    const result = await ImagePicker.launchCamera({
+      mediaType: 'photo',
+      saveToPhotos: false,
+      cameraType: 'front',
+      quality: 1,
+    });
+
+    if (result.didCancel) {
+      console.log('Se canceló la carga de imagen');
+    } else if (result.errorCode) {
+      console.log('Error: ', result.errorMessage);
+    } else if (result?.assets) {
+      let source = {uri: result.assets[0].uri};
+      setImage(source);
+    }
+  };
+
+  const uploadImage = async () => {
+    setUploading(true);
+    const response = await fetch(image.uri);
+    const blob = await response.blob();
+    const filename = image.uri.substring(image.uri.lastIndexOf('/') + 1);
+    var ref = firebase.storage().ref('/perfil').child(filename).put(blob);
+
+    console.log(ref);
+
+    try {
+      await ref;
+    } catch (e) {
+      console.log(e);
+    }
+    setUploading(false);
+    Alert.alert('Foto Subida');
+    setImage(null);
+  };
 
   useEffect(() => {
     const getAbilitiesByUidUser = async () => {
@@ -34,6 +143,23 @@ export default function Profile() {
     findAllProvinces();
   }, []);
 
+  const onSubmit = useCallback(() => {
+    uploadImage;
+    const user = {
+      uid: uid,
+      location: selectedProvince + ', Argentina',
+      description: userDescription,
+      imageProfile: filename,
+    };
+    updateUser(user);
+    showMessage({
+      message: 'Usuario Actualizado',
+      type: 'success',
+    });
+  }, [selectedProvince, image, userDescription]);
+
+  let uid = userAuth?.uid;
+
   let minAbilities = userAuth?.abilities.length - 5;
 
   return (
@@ -42,10 +168,9 @@ export default function Profile() {
       <Card>
         <View style={styles.containerrrr}>
           <View style={styles.imageContainer}>
-            <Pressable onPress={() => console.log('Cambiar Foto')}>
-              <ImageBackground
-                style={styles.img}
-                source={require('../../images/descarga.jpg')}>
+            <Pressable
+              onPress={/*() => console.log('Cambiar Foto')*/ handleImageUser}>
+              <ImageBackground style={styles.img} source={image}>
                 <Text style={styles.textoImagen}>Cambiar Foto</Text>
               </ImageBackground>
             </Pressable>
@@ -89,11 +214,6 @@ export default function Profile() {
             </View>
             <View style={styles.tituloyBoton}>
               <Text style={styles.tituloSecun}>Ubicación</Text>
-              <Pressable
-                style={styles.button}
-                onPress={() => console.log('Editar Ubicacion')}>
-                <Text style={styles.botonEditar}>Editar</Text>
-              </Pressable>
             </View>
             <Picker
               selectedValue={selectedProvince}
@@ -110,16 +230,19 @@ export default function Profile() {
             </Picker>
             <View style={styles.tituloyBoton}>
               <Text style={styles.tituloSecun}>Descripción</Text>
-              <Pressable
-                style={styles.button}
-                onPress={() => console.log('Editar Descripcion')}>
-                <Text style={styles.botonEditar}>Editar</Text>
-              </Pressable>
             </View>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={setUserDescription}
+              value={userDescription}
+            />
           </View>
         </View>
       </Card>
-      <FormSubmitButton title={`Aplicar Cambios`} />
+      <Pressable onPress={/*() => console.log('Cambiar Foto')*/ uploadImage}>
+        <Text>Cambiar Foto</Text>
+      </Pressable>
+      <FormSubmitButton title={`Aplicar Cambios`} onSubmit={onSubmit} />
     </View>
   );
 }
