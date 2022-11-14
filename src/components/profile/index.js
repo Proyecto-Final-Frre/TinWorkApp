@@ -122,7 +122,7 @@ export default function Profile() {
     }
     setUploading(false);
     Alert.alert('Foto Subida');
-    setImage(null);
+    onSubmit();
   };
 
   useEffect(() => {
@@ -239,10 +239,7 @@ export default function Profile() {
           </View>
         </View>
       </Card>
-      <Pressable onPress={/*() => console.log('Cambiar Foto')*/ uploadImage}>
-        <Text>Cambiar Foto</Text>
-      </Pressable>
-      <FormSubmitButton title={`Aplicar Cambios`} onSubmit={onSubmit} />
+      <FormSubmitButton title={`Aplicar Cambios`} onSubmit={uploadImage} />
     </View>
   );
 }
