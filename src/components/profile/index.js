@@ -1,6 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import {ImageBackground, Image, Text, View, Pressable} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  ImageBackground,
+  Image,
+  Text,
+  View,
+  Pressable,
+  TextInput,
+  Alert,
+} from 'react-native';
 import {Card} from '@rneui/themed';
+import {showMessage} from 'react-native-flash-message';
+import storage from '@react-native-firebase/storage';
+import {Picker} from '@react-native-picker/picker';
+import {firebase} from '@react-native-firebase/auth';
 import {findUserAuthenticated} from '../../../AuthService';
 import {findByUid, updateUser} from '../../services/UserService';
 import AptitudeOffer from '../aptitudeOffer';
@@ -8,41 +20,27 @@ import ButtonMoreAbilities from '../buttonMoreAbilities';
 import {styles} from './styles';
 import FormSubmitButton from '../form-submit-button';
 import {todasProvincias} from '../../services/ProvinceService';
-import {Picker} from '@react-native-picker/picker';
 import * as ImagePicker from 'react-native-image-picker';
-import {firebase} from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
-import {Alert} from 'react-native';
-import {TouchableOpacity} from 'react-native';
-import {TextInput} from 'react-native';
-import {showMessage} from 'react-native-flash-message';
-import {useCallback} from 'react';
 
 export default function Profile() {
   const [userAuth, setUserAuth] = useState();
   const [expandAptitude, setExpandAptitude] = useState(false);
   const [provincias, setProvincias] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState();
-  const [mostrarDescripcion, setMostrarDescripcion] = useState(false);
-  const [userDescription, setUserDescription] = useState(
-    userAuth?.description || '',
-  );
+  const [userDescription, setUserDescription] = useState();
   //Subida de img
-  const [imageUrl, setImageUrl] = useState();
   const [filename, setFilename] = useState();
   const [image, setImage] = useState(userAuth ? userAuth.imageProfile : '');
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    storage()
-      .ref('/perfil/' + userAuth?.imageProfile) //name in storage in firebase console
-      .getDownloadURL()
-      .then(url => {
-        setImageUrl(url);
-        console.log(imageUrl);
-      })
-      .catch(e => console.log('Errors while downloading => ', e));
-  }, []);
+    if (userAuth?.imageProfile) {
+      setImage({uri: userAuth?.imageProfile});
+    }
+    if (userAuth?.description) {
+      setUserDescription(userAuth?.description);
+    }
+  }, [userAuth]);
 
   const handleImageUser = () => {
     Alert.alert(
@@ -86,8 +84,6 @@ export default function Profile() {
     }
   };
 
-  console.log(image);
-
   const pickImageCamera = async () => {
     const result = await ImagePicker.launchCamera({
       mediaType: 'photo',
@@ -113,16 +109,16 @@ export default function Profile() {
     const filename = image.uri.substring(image.uri.lastIndexOf('/') + 1);
     var ref = firebase.storage().ref('/perfil').child(filename).put(blob);
 
-    console.log(ref);
-
     try {
       await ref;
     } catch (e) {
       console.log(e);
     }
     setUploading(false);
-    Alert.alert('Foto Subida');
-    onSubmit();
+    const url = await storage()
+      .ref('perfil/' + filename)
+      .getDownloadURL();
+    onSubmit(url);
   };
 
   useEffect(() => {
@@ -143,20 +139,22 @@ export default function Profile() {
     findAllProvinces();
   }, []);
 
-  const onSubmit = useCallback(() => {
-    uploadImage;
-    const user = {
-      uid: uid,
-      location: selectedProvince + ', Argentina',
-      description: userDescription,
-      imageProfile: filename,
-    };
-    updateUser(user);
-    showMessage({
-      message: 'Usuario Actualizado',
-      type: 'success',
-    });
-  }, [selectedProvince, image, userDescription]);
+  const onSubmit = useCallback(
+    url => {
+      const user = {
+        uid: uid,
+        location: selectedProvince + ', Argentina',
+        description: userDescription,
+        imageProfile: url,
+      };
+      updateUser(user);
+      showMessage({
+        message: 'Usuario Actualizado',
+        type: 'success',
+      });
+    },
+    [selectedProvince, image, userDescription],
+  );
 
   let uid = userAuth?.uid;
 
@@ -168,8 +166,7 @@ export default function Profile() {
       <Card>
         <View style={styles.containerrrr}>
           <View style={styles.imageContainer}>
-            <Pressable
-              onPress={/*() => console.log('Cambiar Foto')*/ handleImageUser}>
+            <Pressable onPress={handleImageUser}>
               <ImageBackground style={styles.img} source={image}>
                 <Text style={styles.textoImagen}>Cambiar Foto</Text>
               </ImageBackground>
