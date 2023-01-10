@@ -1,27 +1,49 @@
-import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
-import {findAll} from '../services/AbilityService';
-import {findAllCategories} from '../services/CategoryService';
-import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import OfferScreen from './Offers';
+import AbilitiesScreen from './Abilities';
+import {Image} from 'react-native';
+import Profiles from './Profile';
 
-const abilities = () => {
-  const abilties = findAll();
-};
-
-const categories = () => {
-  findAllCategories();
-};
+const Tab = createBottomTabNavigator();
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
-  useEffect(() => abilities(), []);
-  useEffect(() => categories(), []);
-
   return (
-    <>
-      <View>
-        <Text onPress={navigation.navigate('Aptitudes')}>Hola Mundo</Text>
-      </View>
-    </>
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Offer"
+        component={OfferScreen}
+        options={{
+          tabBarLabel: 'Ofertas',
+          headerBackVisible: false,
+          headerShown: false,
+          tabBarIcon: ({focused}) => {
+            return (
+              <Image
+                resizeMode={'contain'}
+                source={require('./home_ico.png')}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profiles}
+        options={{
+          tabBarLabel: 'Perfil',
+          headerBackVisible: false,
+          headerShown: false,
+          tabBarIcon: ({}) => {
+            return (
+              <Image
+                resizeMode={'contain'}
+                source={require('./perfil_ico.png')}
+              />
+            );
+          },
+        }}
+      />
+    </Tab.Navigator>
   );
 }
