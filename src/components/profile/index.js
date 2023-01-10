@@ -164,69 +164,80 @@ export default function Profile() {
     <View>
       <Text style={styles.mismatchs}>Mi Perfil</Text>
       <Card>
-        <View style={styles.containerrrr}>
-          <View style={styles.imageContainer}>
-            <Pressable onPress={handleImageUser}>
-              <ImageBackground style={styles.img} source={image}>
-                <Text style={styles.textoImagen}>Cambiar Foto</Text>
-              </ImageBackground>
-            </Pressable>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignContent: 'space-around',
+          }}>
+          <View style={styles.container}>
+            <View style={styles.imageContainer}>
+              <Pressable onPress={handleImageUser}>
+                <ImageBackground style={styles.img} source={image}>
+                  <Text style={styles.textoImagen}>Cambiar Foto</Text>
+                </ImageBackground>
+              </Pressable>
+            </View>
+            <View style={styles.locationContainer}>
+              <View style={styles.tituloyBoton}>
+                <Text style={styles.titulos}>Ubicación</Text>
+              </View>
+              <Picker
+                selectedValue={selectedProvince}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedProvince(itemValue)
+                }>
+                {provincias.map(provincia => (
+                  <Picker.Item
+                    key={provincia?.id}
+                    label={`${provincia?.nombre}`}
+                    value={`${provincia?.nombre}`}
+                  />
+                ))}
+              </Picker>
+            </View>
           </View>
-          <View style={styles.nombreymail}>
+          <View style={styles.datosContainer}>
             <Text style={styles.titulos}>Nombre Completo</Text>
             <Text style={styles.datos}>{userAuth?.name || ''}</Text>
             <Text style={styles.titulos}>E-Mail</Text>
             <Text style={styles.datos}>{userAuth?.email || ''}</Text>
           </View>
-        </View>
-        <View style={styles.nombreymail}>
-          <Text style={styles.tituloSecun}>Habilidades</Text>
-          <View style={styles.datos}>
-            <View style={styles.buttonsContainer}>
-              {userAuth?.abilities.slice(0, 5).map((ability, index) => (
-                <AptitudeOffer title={ability} key={index} />
-              ))}
-              {!expandAptitude
-                ? userAuth?.abilities.length > minAbilities && (
-                    <ButtonMoreAbilities
-                      buttonStyle={false}
-                      titleStyle={false}
-                      title={`+${minAbilities}`}
-                      onPress={() => setExpandAptitude(true)}
-                    />
-                  )
-                : userAuth?.abilities
-                    .slice(5, userAuth?.abilities.length)
-                    .map((ability, index) => (
-                      <AptitudeOffer title={ability} key={index} />
-                    ))}
-              {expandAptitude && (
-                <ButtonMoreAbilities
-                  buttonStyle={false}
-                  titleStyle={false}
-                  title={`Ver Menos`}
-                  onPress={() => setExpandAptitude(false)}
-                />
-              )}
+          <View style={styles.abilitiesContainer}>
+            <Text style={styles.titulos}>Habilidades</Text>
+            <View style={styles.datos}>
+              <View style={styles.buttonsContainer}>
+                {userAuth?.abilities.slice(0, 5).map((ability, index) => (
+                  <AptitudeOffer title={ability} key={index} />
+                ))}
+                {!expandAptitude
+                  ? userAuth?.abilities.length > minAbilities && (
+                      <ButtonMoreAbilities
+                        buttonStyle={false}
+                        titleStyle={false}
+                        title={`+${minAbilities}`}
+                        onPress={() => setExpandAptitude(true)}
+                      />
+                    )
+                  : userAuth?.abilities
+                      .slice(5, userAuth?.abilities.length)
+                      .map((ability, index) => (
+                        <AptitudeOffer title={ability} key={index} />
+                      ))}
+                {expandAptitude && (
+                  <ButtonMoreAbilities
+                    buttonStyle={false}
+                    titleStyle={false}
+                    title={`Ver Menos`}
+                    onPress={() => setExpandAptitude(false)}
+                  />
+                )}
+              </View>
             </View>
+          </View>
+          <View style={styles.descriptionContainer}>
             <View style={styles.tituloyBoton}>
-              <Text style={styles.tituloSecun}>Ubicación</Text>
-            </View>
-            <Picker
-              selectedValue={selectedProvince}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedProvince(itemValue)
-              }>
-              {provincias.map(provincia => (
-                <Picker.Item
-                  key={provincia?.id}
-                  label={`${provincia?.nombre}`}
-                  value={`${provincia?.nombre}`}
-                />
-              ))}
-            </Picker>
-            <View style={styles.tituloyBoton}>
-              <Text style={styles.tituloSecun}>Descripción</Text>
+              <Text style={styles.titulos}>Descripción</Text>
             </View>
             <TextInput
               style={styles.textInput}

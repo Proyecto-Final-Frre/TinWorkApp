@@ -3,11 +3,27 @@ import {FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
 import {colors} from '../../constants/colors';
 
 export const styles = StyleSheet.create({
-  containerrrr: {
-    display: 'flex',
+  container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
+  imageContainer: {
+    display: 'flex',
+    height: 120,
+    width: 120,
+    borderRadius: 18,
+    borderWidth: 0.5,
+    borderColor: '#000',
+    overflow: 'hidden',
+    alignItems: 'center',
+    flexBasis: 121,
+  },
+  abilitiesContainer: {},
+  locationContainer: {
+    flexBasis: 198,
+  },
+  descriptionContainer: {},
   title: {
     fontFamily: FUENTES.BOLD,
     fontSize: FONT_SIZE.xl2,
@@ -19,11 +35,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  nombreymail: {
-    marginLeft: 10,
-  },
+  datosContainer: {},
   titulos: {
-    fontSize: 15,
+    fontSize: 20,
+    color: 'black',
     marginVertical: 5,
   },
   tituloSecun: {
@@ -32,7 +47,6 @@ export const styles = StyleSheet.create({
   },
   datos: {
     fontSize: 18,
-    color: 'black',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -48,17 +62,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000',
   },
-  imageContainer: {
-    display: 'flex',
-    height: 120,
-    width: 120,
-    marginHorizontal: 5,
-    borderRadius: 18,
-    borderWidth: 0.5,
-    borderColor: '#000',
-    overflow: 'hidden',
-    alignItems: 'center',
-  },
+
   textoImagen: {
     textAlign: 'center',
     textAlignVertical: 'center',
@@ -68,15 +72,11 @@ export const styles = StyleSheet.create({
     top: '83%',
   },
   ubicacion: {
-    marginTop: 4,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 5,
   },
-  texto: {
-    marginHorizontal: 5,
-  },
+  texto: {},
   mismatchs: {
     fontSize: 35,
     color: '#000',
@@ -85,9 +85,8 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
   },
   textInput: {
-    marginTop: 5,
     borderRadius: 8,
-    borderWidth: 1,
+    borderWidth: 0.2,
     borderColor: 'gray',
   },
   button: {

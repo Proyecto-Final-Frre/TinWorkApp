@@ -39,7 +39,7 @@ export default function Login({navigation}) {
         uid: auth.user.uid,
         token: token,
       });
-      navigation.navigate('Profile');
+      navigation.navigate('Home');
     }
   };
 

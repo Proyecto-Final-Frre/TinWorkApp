@@ -4,7 +4,7 @@ import Profile from '../../components/profile';
 
 const Profiles = ({navigation}) => {
   return (
-    <ScrollView>
+    <ScrollView style={{flex: 1}}>
       <Profile navigation={navigation} />
     </ScrollView>
   );
