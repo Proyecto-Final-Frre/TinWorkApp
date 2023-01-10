@@ -3,6 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import OfferScreen from './Offers';
 import AbilitiesScreen from './Abilities';
 import {Image} from 'react-native';
+import Profiles from './Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,8 +28,8 @@ export default function HomeScreen() {
         }}
       />
       <Tab.Screen
-        name="Habilidades"
-        component={AbilitiesScreen}
+        name="Profile"
+        component={Profiles}
         options={{
           tabBarLabel: 'Perfil',
           headerBackVisible: false,

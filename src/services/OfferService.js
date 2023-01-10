@@ -1,17 +1,8 @@
 import firestore from '@react-native-firebase/firestore';
 
 export const update = (offer, user) => {
-  let userSave = {
-    abilities: user.abilities,
-    uid: user.uid,
-    name: user.name,
-    email: user.email,
-    description: user.description,
-    image: user.image,
-    location: user.location,
-    status: 'wait',
-  };
-  offer.interestedUsers.push(userSave);
+  user.status = 'wait';
+  offer.interestedUsers.push(user);
   firestore()
     .collection('Offers')
     .doc(offer.id)
@@ -20,6 +11,9 @@ export const update = (offer, user) => {
     })
     .then(() => {
       console.log('Offer updated!');
+    })
+    .catch(err => {
+      console.log('error', err);
     });
 };
 

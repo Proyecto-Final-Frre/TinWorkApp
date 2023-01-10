@@ -127,6 +127,7 @@ export default function OfferScreen() {
     };
 
     updateUser(userUpdate);
+    // validar que userAuth despues lleve: descripcion, image y location
     update(offer, userAuth);
     setInterested(undefined);
   };

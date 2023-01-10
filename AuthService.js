@@ -17,7 +17,6 @@ export const createUser = (name, email, pass) => {
       return result;
     })
     .catch(err => {
-      console.log(err);
       throw err;
     });
 };

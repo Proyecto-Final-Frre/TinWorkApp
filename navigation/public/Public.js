@@ -9,6 +9,7 @@ import LoginScreen from '../../src/screens/Login';
 import OffersScreen from '../../src/screens/OffersScreen';
 import OfferScreen from '../../src/screens/Offers';
 import Registration from '../../src/screens/Registration';
+import Profiles from '../../src/screens/Profile';
 
 const StackPublic = createNativeStackNavigator();
 
@@ -40,6 +41,11 @@ export default function Public() {
           headerBackVisible: false,
           headerShown: false,
         }}
+      />
+      <StackPublic.Screen
+        name="Profile"
+        component={Profiles}
+        options={{headerShown: false}}
       />
       <StackPublic.Screen
         name="Habilidades"
