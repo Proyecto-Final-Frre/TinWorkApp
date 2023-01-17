@@ -12,9 +12,13 @@ export const createUser = async ({name, email, pass}) => {
       email: email,
       uid: auth.user.uid,
       token: token,
+      location: '',
+      description: '',
+      imageProfile: '',
       abilities: [],
       interestingOffers: [],
       uninterestingOffers: [],
+      offersMatch: [],
     })
     .then(result => {
       console.log('User added!');

@@ -1,27 +1,69 @@
-import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
-import {findAll} from '../services/AbilityService';
-import {findAllCategories} from '../services/CategoryService';
-import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import OfferScreen from './Offers';
+import AbilitiesScreen from './Abilities';
+import {Image} from 'react-native';
+import Profiles from './Profile';
+import Matchs from './Matchs';
+import MatchList from '../components/matchList';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const abilities = () => {
-  const abilties = findAll();
-};
+const Tab = createBottomTabNavigator();
 
-const categories = () => {
-  findAllCategories();
+const screenOptions = (route, color) => {
+  let iconName;
+
+  switch (route.name) {
+    case 'Offer':
+      iconName = 'home';
+      break;
+    case 'Matches':
+      iconName = 'heart';
+      break;
+    case 'Profile':
+      iconName = 'user';
+      break;
+    default:
+      break;
+  }
+
+  return <Icon name={iconName} color={color} size={24} />;
 };
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
-  useEffect(() => abilities(), []);
-  useEffect(() => categories(), []);
-
   return (
-    <>
-      <View>
-        <Text onPress={navigation.navigate('Aptitudes')}>Hola Mundo</Text>
-      </View>
-    </>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({color}) => screenOptions(route, color),
+      })}>
+      <Tab.Screen
+        name="Offer"
+        component={OfferScreen}
+        options={{
+          tabBarLabel: 'Ofertas',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Matches"
+        component={MatchList}
+        options={{
+          title: 'Mis Matchs',
+          tabBarLabel: 'Mis Matchs',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profiles}
+        options={{
+          tabBarLabel: 'Perfil',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
+      />
+    </Tab.Navigator>
   );
 }

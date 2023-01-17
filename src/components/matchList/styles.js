@@ -40,4 +40,23 @@ export const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 5,
   },
+  imageContainer: {
+    display: 'flex',
+    height: 120,
+    width: 120,
+    borderRadius: 18,
+    borderWidth: 0.5,
+    borderColor: '#000',
+    overflow: 'hidden',
+    alignItems: 'center',
+    flexBasis: 121,
+  },
+  img: {
+    height: 120,
+    width: 120,
+    marginHorizontal: 5,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#000',
+  },
 });
