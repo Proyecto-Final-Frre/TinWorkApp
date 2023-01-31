@@ -4,12 +4,38 @@ import OfferScreen from './Offers';
 import AbilitiesScreen from './Abilities';
 import {Image} from 'react-native';
 import Profiles from './Profile';
+import Matchs from './Matchs';
+import MatchList from '../components/matchList';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Tab = createBottomTabNavigator();
 
+const screenOptions = (route, color) => {
+  let iconName;
+
+  switch (route.name) {
+    case 'Offer':
+      iconName = 'home';
+      break;
+    case 'Matches':
+      iconName = 'heart';
+      break;
+    case 'Profile':
+      iconName = 'user';
+      break;
+    default:
+      break;
+  }
+
+  return <Icon name={iconName} color={color} size={24} />;
+};
+
 export default function HomeScreen() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({color}) => screenOptions(route, color),
+      })}>
       <Tab.Screen
         name="Offer"
         component={OfferScreen}
@@ -17,14 +43,16 @@ export default function HomeScreen() {
           tabBarLabel: 'Ofertas',
           headerBackVisible: false,
           headerShown: false,
-          tabBarIcon: ({focused}) => {
-            return (
-              <Image
-                resizeMode={'contain'}
-                source={require('./home_ico.png')}
-              />
-            );
-          },
+        }}
+      />
+      <Tab.Screen
+        name="Matches"
+        component={MatchList}
+        options={{
+          title: 'Mis Matchs',
+          tabBarLabel: 'Mis Matchs',
+          headerBackVisible: false,
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -34,14 +62,6 @@ export default function HomeScreen() {
           tabBarLabel: 'Perfil',
           headerBackVisible: false,
           headerShown: false,
-          tabBarIcon: ({}) => {
-            return (
-              <Image
-                resizeMode={'contain'}
-                source={require('./perfil_ico.png')}
-              />
-            );
-          },
         }}
       />
     </Tab.Navigator>
