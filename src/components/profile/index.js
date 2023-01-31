@@ -22,7 +22,7 @@ import FormSubmitButton from '../form-submit-button';
 import {todasProvincias} from '../../services/ProvinceService';
 import * as ImagePicker from 'react-native-image-picker';
 
-export default function Profile() {
+export default function Profile({navigation}) {
   const [userAuth, setUserAuth] = useState();
   const [expandAptitude, setExpandAptitude] = useState(false);
   const [provincias, setProvincias] = useState([]);
@@ -208,7 +208,22 @@ export default function Profile() {
             <Text style={styles.datos}>{userAuth?.email || ''}</Text>
           </View>
           <View style={styles.abilitiesContainer}>
-            <Text style={styles.titulos}>Habilidades</Text>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={styles.titulos}>Habilidades</Text>
+              <Text
+                style={{
+                  color: '#2E81FB',
+                }}
+                onPress={() => navigation.navigate('Habilidades')}>
+                Editar
+              </Text>
+            </View>
             <View style={styles.datos}>
               <View style={styles.buttonsContainer}>
                 {userAuth?.abilities.slice(0, 5).map((ability, index) => (
