@@ -21,6 +21,7 @@ import {styles} from './styles';
 import FormSubmitButton from '../form-submit-button';
 import {todasProvincias} from '../../services/ProvinceService';
 import * as ImagePicker from 'react-native-image-picker';
+import {set} from 'lodash';
 
 export default function Profile({navigation}) {
   const [userAuth, setUserAuth] = useState();
@@ -43,6 +44,9 @@ export default function Profile({navigation}) {
     }
     if (userAuth?.description) {
       setUserDescription(userAuth?.description);
+    }
+    if (userAuth?.province) {
+      setSelectedProvince(userAuth?.province);
     }
   }, [userAuth]);
 
@@ -82,7 +86,6 @@ export default function Profile({navigation}) {
       console.log('Error: ', result.errorMessage);
     } else if (result?.assets) {
       let source = {uri: result.assets[0].uri};
-      console.log(result.assets);
       setFilename(result.assets[0].fileName);
       setImage(source);
     }
@@ -123,6 +126,7 @@ export default function Profile({navigation}) {
       .ref('perfil/' + filename)
       .getDownloadURL();
     onSubmit(url);
+    /*navigation.navigate('Home');*/
   };
 
   useEffect(() => {
@@ -148,6 +152,7 @@ export default function Profile({navigation}) {
       const user = {
         uid: uid,
         location: selectedProvince + ', Argentina',
+        province: selectedProvince,
         description: userDescription,
         imageProfile: url,
       };
@@ -159,6 +164,11 @@ export default function Profile({navigation}) {
     },
     [selectedProvince, image, userDescription],
   );
+
+  const traerUbi = () => {
+    console.log(userAuth?.province);
+    return selectedProvince;
+  };
 
   let uid = userAuth?.uid;
 
@@ -187,13 +197,13 @@ export default function Profile({navigation}) {
                 <Text style={styles.titulos}>Ubicación</Text>
               </View>
               <Picker
-                selectedValue={selectedProvince}
+                selectedValue={traerUbi()}
                 onValueChange={(itemValue, itemIndex) =>
                   setSelectedProvince(itemValue)
                 }>
                 {provincias.map(provincia => (
                   <Picker.Item
-                    key={provincia?.id}
+                    key={selectedProvince}
                     label={`${provincia?.nombre}`}
                     value={`${provincia?.nombre}`}
                   />
@@ -230,7 +240,8 @@ export default function Profile({navigation}) {
                   <AptitudeOffer title={ability} key={index} />
                 ))}
                 {!expandAptitude
-                  ? userAuth?.abilities.length > minAbilities && (
+                  ? userAuth?.abilities.length > minAbilities &&
+                    userAuth?.abilities.length > 5 && (
                       <ButtonMoreAbilities
                         buttonStyle={false}
                         titleStyle={false}

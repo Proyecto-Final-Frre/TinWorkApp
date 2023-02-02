@@ -55,7 +55,7 @@ const Form = ({navigation}) => {
       message: 'Habilidades Actualizadas',
       type: 'success',
     });
-    navigation.navigate('Home');
+    navigation.navigate('Profile');
   }, [formData]);
 
   return (

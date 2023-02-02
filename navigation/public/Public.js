@@ -35,6 +35,15 @@ export default function Public() {
         }}
       />
       <StackPublic.Screen
+        name="Profile"
+        component={Profiles}
+        options={{
+          title: 'Mi Perfil',
+          headerBackVisible: false,
+          headerShown: false,
+        }}
+      />
+      <StackPublic.Screen
         name="Registro"
         component={Registration}
         options={{
