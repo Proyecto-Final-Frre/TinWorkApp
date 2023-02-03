@@ -132,7 +132,7 @@ export default function Profile({navigation}) {
       setUserAuth(user);
     };
     getAbilitiesByUidUser();
-  }, []);
+  }, [userAuth]);
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
@@ -148,6 +148,7 @@ export default function Profile({navigation}) {
       const user = {
         uid: uid,
         location: selectedProvince + ', Argentina',
+        province: selectedProvince,
         description: userDescription,
         imageProfile: url,
       };
@@ -230,7 +231,8 @@ export default function Profile({navigation}) {
                   <AptitudeOffer title={ability} key={index} />
                 ))}
                 {!expandAptitude
-                  ? userAuth?.abilities.length > minAbilities && (
+                  ? userAuth?.abilities.length > minAbilities &&
+                    userAuth?.abilities.length > 5 && (
                       <ButtonMoreAbilities
                         buttonStyle={false}
                         titleStyle={false}
@@ -243,7 +245,7 @@ export default function Profile({navigation}) {
                       .map((ability, index) => (
                         <AptitudeOffer title={ability} key={index} />
                       ))}
-                {expandAptitude && (
+                {expandAptitude && userAuth?.abilities.length > 5 && (
                   <ButtonMoreAbilities
                     buttonStyle={false}
                     titleStyle={false}
