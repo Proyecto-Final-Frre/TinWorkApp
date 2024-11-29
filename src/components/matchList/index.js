@@ -14,11 +14,18 @@ import {CARD, FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
 import offerMaletin from '../../../src/images/maletin.png'
 const MatchList = () => {
   const [matchs, setMatchs] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   const setUser = async () => {
-    let userAuthenticated = findUserAuthenticated();
-    const {offersMatch} = await findByUid(userAuthenticated.uid);
-    setMatchs(offersMatch);
+    try {
+      let userAuthenticated = findUserAuthenticated();
+      const { offersMatch } = await findByUid(userAuthenticated.uid);
+      setMatchs(offersMatch);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false); 
+    }
   };
 
   useEffect(() => {
@@ -28,53 +35,71 @@ const MatchList = () => {
   return (
     <ScrollView style={styles.container}>
       <Text style={{fontSize: 35, padding: 15}}>Mis Matchs</Text>
-      {matchs.map((match,index) => (
-        <View style={styles.matchContainer} key={`${match.id}-${index}`}>
-          <View style={styles.imageContainer}>
-            <Image
-              style={styles.img}
-              source={offerMaletin}
-            />
-          </View>
-          <View style={styles.detailContainer}>
-            <Text style={styles.jobTitle}>{match.title}</Text>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}>
+      {loading ? (
+        <View style={styles.skeletonContainer}>
+          {[...Array(5)].map((_, index) => (
+            <View style={styles.skeletonMatch} key={index}>
+              <View style={styles.skeletonImage} />
+              <View style={styles.skeletonDetails}>
+                <View style={styles.skeletonLine} />
+                <View style={[styles.skeletonLine, styles.shortLine]} />
+              </View>
+            </View>
+          ))}
+        </View>
+      ) : 
+        matchs.map((match,index) => (
+          <View style={styles.matchContainer} key={`${match.id}-${index}`}>
+            <View style={styles.imageContainer}>
+              <Image
+                style={styles.img}
+                source={offerMaletin}
+              />
+            </View>
+            <View style={styles.detailContainer}>
+              <Text style={styles.jobTitle}>{match.title}</Text>
               <View
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
-                  marginRight: 15,
                 }}>
-                <Icon name={'location-pin'} size={15} />
-                <Text style={{flexGrow: 5}}>
-                  {match.province}, {match.country}
-                </Text>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginRight: 15,
+                  }}>
+                  <Icon name={'location-pin'} size={15} />
+                  <Text style={{flexGrow: 5}}>
+                    {match.province}, {match.country}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                  }}>
+                  <Icon name={'briefcase'} size={15} />
+                  <Text style={{flexGrow: 3}}> {match.workDay}</Text>
+                </View>
               </View>
               <View
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
+                  marginTop: 2,
                 }}>
                 <Icon name={'briefcase'} size={15} />
-                <Text style={{flexGrow: 3}}> {match.workDay}</Text>
+                <Text style={{flexGrow: 2}}> Hace 1 mes</Text>
               </View>
             </View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginTop: 2,
-              }}>
-              <Icon name={'briefcase'} size={15} />
-              <Text style={{flexGrow: 2}}> Hace 1 mes</Text>
-            </View>
           </View>
-        </View>
-      ))}
+        ))}
+
+      
+
+
+   
     </ScrollView>
   );
 };
@@ -123,6 +148,33 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
+  skeletonContainer: {
+    padding: 10,
+  },
+  skeletonMatch: {
+    flexDirection: 'row',
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+  skeletonImage: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  skeletonDetails: {
+    flex: 1,
+  },
+  skeletonLine: {
+    height: 10,
+    backgroundColor: '#e0e0e0',
+    marginBottom: 8,
+    borderRadius: 5,
+  },
+  shortLine: {
+    width: '60%',
+  }
 });
 
 export default MatchList;
