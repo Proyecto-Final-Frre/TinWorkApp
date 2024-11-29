@@ -143,13 +143,26 @@ export default function OfferScreen() {
     setInterested(undefined);
   };
 
+  
+  const fetchOffers=()=>{
+    getAbilitiesByUidUser();
+    findOffersByAbilities();
+    offers.length > 0 ? showMessage({
+      message: 'Ofertas cargadas exitosamente',
+      type: 'success',
+    }) :
+    showMessage({
+      message: 'Por favor, intente más tarde',
+      type: 'danger',
+    });
+  }
   return (
     <View style={styles.container}>
       {loading ? (
         <Text>Cargando</Text>
       ) :
         offers.length < 1 ? (
-          <DefaultCard />)
+          <DefaultCard onRefresh={fetchOffers} />)
           : (
             offers.length > 0 &&
             offers
