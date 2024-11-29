@@ -1,11 +1,15 @@
 import React from 'react';
 import {Animated, Text, View,Image} from 'react-native';
-import { showMessage } from 'react-native-flash-message';
-import Icon from 'react-native-vector-icons/Entypo';
 import FormSubmitButton from '../form-submit-button';
 import {styles} from './style';
 
-export default function DefaultCard({ ...rest }) {
+
+
+export default function DefaultCard({ onRefresh,...rest }) {
+  const handleRefresh = async () => {
+    await onRefresh();    
+  };  
+  
   return (
     <Animated.View style={[styles.container]} {...rest}>
       <View style={styles.shadow}>
@@ -24,16 +28,8 @@ export default function DefaultCard({ ...rest }) {
          
           <FormSubmitButton
            title={'Cargar más'}
-           onSubmit={() => {
-          //  getAbilitiesByUidUser();
-          //    findOffersByAbilities();
-             showMessage({
-              message: 'Ofertas Cargadas',
-              type: 'success',
-            });
-           }}
+           onSubmit={() => {handleRefresh()}}
            style={styles.button}
-
          />
        
         </View>
