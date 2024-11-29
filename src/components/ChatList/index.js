@@ -10,23 +10,33 @@ import { useNavigation } from '@react-navigation/native';  // Importa useNavigat
 const ChatList = () => {
   const [recrutiersData, setRecrutiersData] = useState([]);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true); 
+
   const setRecruiter = async () => {
-    let userAuthenticated = findUserAuthenticated();
-    const { offersMatch } = await findByUid(userAuthenticated.uid);
-    const recruiterUids = offersMatch.map(offer => offer.uid);
-
-    const recruiterDataPromises = recruiterUids.map(uid => findByUid(uid));
-    const recruitersData = await Promise.all(recruiterDataPromises);
-
-    const uniqueRecruitersData = recruitersData.filter((recruiter, index, self) =>
-      index === self.findIndex((r) => r.uid === recruiter.uid)
-    );
-
-    setRecrutiersData(uniqueRecruitersData);
+    try {
+      let userAuthenticated = findUserAuthenticated();
+      const { offersMatch } = await findByUid(userAuthenticated.uid);
+      const recruiterUids = offersMatch.map(offer => offer.uid);
+      const recruiterDataPromises = recruiterUids.map(uid => findByUid(uid));
+      const recruitersData = await Promise.all(recruiterDataPromises);
+  
+      const uniqueRecruitersData = recruitersData.filter(
+        (recruiter, index, self) => index === self.findIndex((r) => r.uid === recruiter.uid)
+      );
+  
+      setRecrutiersData(uniqueRecruitersData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false); 
+    }
+  
+  
     
 
   };
 
+ 
   useEffect(() => {
     setRecruiter();
   }, []);
@@ -39,7 +49,21 @@ const ChatList = () => {
     <View style={styles.container}>
       <ScrollView style={styles.container}>
         <Text style={{ fontSize: 35, padding: 15 }}>Mis chats</Text>
-        {recrutiersData.map((recrutier, index) => (
+        
+        {loading ? (
+          <View style={styles.skeletonContainer}>
+            {[...Array(5)].map((_, index) => (
+              <View style={styles.skeletonChatContainer} key={index}>
+                <View style={styles.skeletonAvatar} />
+                <View style={styles.skeletonDetails}>
+                  <View style={styles.skeletonLine} />
+                  <View style={[styles.skeletonLine, styles.shortLine]} />
+                </View>
+              </View>
+            ))}
+          </View>
+        ) : 
+        recrutiersData.map((recrutier, index) => (
           <TouchableOpacity
             key={`${recrutier.uid}-${index}`}
             onPress={() => handlePress(recrutier)} 
@@ -126,6 +150,33 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: "80%",
+  },
+  skeletonContainer: {
+    padding: 10,
+  },
+  skeletonChatContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  skeletonAvatar: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    backgroundColor: '#e0e0e0',
+    marginRight: 10,
+  },
+  skeletonDetails: {
+    flex: 1,
+  },
+  skeletonLine: {
+    height: 10,
+    backgroundColor: '#e0e0e0',
+    marginBottom: 6,
+    borderRadius: 5,
+  },
+  shortLine: {
+    width: '60%',
   },
 });
 export default ChatList;
