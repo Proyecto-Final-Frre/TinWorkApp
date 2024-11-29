@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text,Image, TextInput, Button, FlatList,ScrollView, StyleSheet,TouchableOpacity,KeyboardAvoidingView  } from 'react-native';
+import React, { useState, useEffect,useRef } from 'react';
+import { View, Text,Image, TextInput,FlatList, StyleSheet,TouchableOpacity,KeyboardAvoidingView,Keyboard  } from 'react-native';
 import { findUserAuthenticated } from '../../../AuthService';
 import { findByUid } from '../../services/UserService';
-import {CARD, FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
-import Icon from 'react-native-vector-icons/Entypo';
 import IconSend from 'react-native-vector-icons/Ionicons';
-import {  useRoute } from '@react-navigation/native';
-import IconUser from 'react-native-vector-icons/FontAwesome';
 import { createMessage, listenForMessages } from '../../services/ChatService';
 
 
@@ -15,8 +11,8 @@ const Chat = ({route}) => {
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState('');
   const imgProfileRecrutier = route.params.recrutier.imageProfile
-  const uidRecrutier = route.params.recrutier.uid
- 
+  const flatListRef = useRef(null); // Referencia al FlatList
+
 
   const handleSubmit = () => {
     if (message && user) {
@@ -24,6 +20,8 @@ const Chat = ({route}) => {
       createMessage(message, user.uid,user.uid, user.name);
       setMessage('');  // Limpiar el campo del mensaje
     }
+    Keyboard.dismiss()
+    flatListRef.current?.scrollToEnd({ animated: true });
   };
   
   useEffect(()=>{
@@ -31,7 +29,6 @@ const Chat = ({route}) => {
     let userAuthenticated = findUserAuthenticated();
     let user = await findByUid(userAuthenticated.uid);
     setUser(user)
-    console.log("user auth",user.imageProfile === '')
     }
     getUser()
     },[])
@@ -62,7 +59,7 @@ const Chat = ({route}) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={'height'}
     >
       
       <View style={styles.header}>
@@ -71,10 +68,14 @@ const Chat = ({route}) => {
       </View>
 
       <FlatList
+        ref={flatListRef}
         data={messages}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         style={styles.messageArea}
+        contentContainerStyle={{ flexGrow: 1 }}
+        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+        onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
       />
 
       <View style={styles.inputContainer}>
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     paddingHorizontal: 15,
+    marginVertical:"4%",
     backgroundColor: '#f5f5f5',
   },
   sendButton: {
