@@ -21,7 +21,7 @@ const ChatList = () => {
       const recruitersData = await Promise.all(recruiterDataPromises);
   
       const uniqueRecruitersData = recruitersData.filter(
-        (recruiter, index, self) => index === self.findIndex((r) => r.uid === recruiter.uid)
+        (recruiter, index, self) => index === self.findIndex((r) => r?.uid === recruiter?.uid)
       );
   
       setRecrutiersData(uniqueRecruitersData);
@@ -48,7 +48,7 @@ const ChatList = () => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container}>
-        <Text style={{ fontSize: 35, padding: 15 }}>Mis chats</Text>
+        <Text style={{ fontSize: 35, padding: 15,color:"black" }}>Mis chats</Text>
         
         {loading ? (
           <View style={styles.skeletonContainer}>
@@ -65,19 +65,19 @@ const ChatList = () => {
         ) : 
         recrutiersData.map((recrutier, index) => (
           <TouchableOpacity
-            key={`${recrutier.uid}-${index}`}
+            key={`${recrutier?.uid}-${index}`}
             onPress={() => handlePress(recrutier)} 
           >
-            <View style={styles.recrutierContainer} key={`${recrutier.uid}-${index}`}>
+            <View style={styles.recrutierContainer} key={`${recrutier?.uid}-${index}`}>
               <View style={styles.imageContainer}>
 
                 <Image
-                  source={{ uri: recrutier.imageProfile }}
+                  source={{ uri: recrutier?.imageProfile }}
                   style={styles.avatar}
                 />
               </View>
               <View style={styles.detailContainer}>
-                <Text style={styles.jobTitle}><Text style={styles.name}>{recrutier.name}</Text></Text>
+                <Text style={styles.jobTitle}><Text style={styles.name}>{recrutier?.name}</Text></Text>
                 <Icon name="chat" size={24} style={styles.icon} />
 
 
