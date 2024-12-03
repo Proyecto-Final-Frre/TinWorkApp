@@ -237,5 +237,69 @@ export const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 8,
+  },
+  inputContainer: {
+    backgroundColor: '#F8F9FA',
+    borderWidth: 1,
+    borderColor: '#E4E6EB',
+    borderRadius: 12,
+    padding: 12,
+    minHeight: 120,
+  },
+  inputContainerFocused: {
+    borderColor: '#2196F3',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#2196F3',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  inputContainerFilled: {
+    backgroundColor: '#FFFFFF',
+  },
+  input: {
+    fontSize: 16,
+    color: '#1A1A1A',
+    lineHeight: 24,
+    minHeight: 96,
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+    fontSize: 16,
+    color: '#1A1A1A',
+    lineHeight: 24,
+  },
+  descriptionContainer: {
+    backgroundColor: '#F8F9FA',
+    borderWidth: 1,
+    borderColor: '#E4E6EB',
+    borderRadius: 12,
+    padding: 12,
+  },
+  characterCount: {
+    fontSize: 12,
+    color: '#9EA0A4',
+    textAlign: 'right',
+    marginTop: 4,
+  },
+  helperText: {
+    fontSize: 13,
+    color: '#65676B',
+    marginTop: 4,
+    fontStyle: 'italic',
+  },
+  inputGroup: {
+    marginVertical: 16,
   }
 });

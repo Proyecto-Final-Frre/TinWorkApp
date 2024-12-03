@@ -38,6 +38,7 @@ export default function Profile({ navigation }) {
   const [selectedProvince, setSelectedProvince] = useState();
   const [userDescription, setUserDescription] = useState();
   const [uploading, setUploading] = useState(false);
+  const [uploadingCertification, setUploadingCertification] = useState(false);
 
   const [filename, setFilename] = useState();
   const [image, setImage] = useState(
@@ -54,6 +55,7 @@ export default function Profile({ navigation }) {
   const [description, setDescription] = useState('');
   // Método para seleccionar y subir una certificación
   const handleCertificationPicker = async () => {
+    setUploadingCertification(true)
     try {
 
       const result = await ImagePicker.launchImageLibrary({
@@ -71,6 +73,9 @@ export default function Profile({ navigation }) {
 
     } catch (error) {
       console.error('Error al seleccionar o subir certificación:', error);
+    } 
+    finally {
+      setUploadingCertification(false)
     }
   };
 
@@ -274,29 +279,34 @@ export default function Profile({ navigation }) {
     }
   };
 
-  // Función para subir el archivo CV a Firebase Storage
   const uploadCvFile = async () => {
     if (!cvFile) return;
-
+  
     setUploading(true);
-    const response = await fetch(cvFile[0].uri);
-    const blob = await response.blob();
+    const fileUri = cvFile[0].uri;
     const filename = cvFile[0].name;
-
-    const ref = firebase.storage().ref('/cv').child(filename).put(blob);
-
+  
     try {
-      await ref;
-    } catch (e) {
-      console.log(e);
+      // Convierte el archivo en un blob utilizando ReactNativeBlobUtil
+      const blob = await ReactNativeBlobUtil.fs.readFile(fileUri, 'base64');
+  
+      // Crea el metadato necesario para subir el archivo como blob
+      const storageRef = firebase.storage().ref(`/cv/${filename}`);
+      const uploadTask = storageRef.putString(blob, 'base64', { contentType: 'application/pdf' });
+  
+      await uploadTask;
+      const url = await storageRef.getDownloadURL();
+  
+      console.log('URL del archivo subido:', url);
+      setCvUrl(url);
+      return url;
+    } catch (error) {
+      console.error('Error al subir el archivo:', error);
+    } finally {
+      setUploading(false);
     }
-    setUploading(false);
-
-    // Obtener la URL del archivo subido
-    const url = await storage().ref('cv/' + filename).getDownloadURL();
-    setCvUrl(url)
-    return url;
   };
+  
 
   useEffect(() => {
     const getAbilitiesByUidUser = async () => {
@@ -420,7 +430,7 @@ export default function Profile({ navigation }) {
   const renderCertification = ({ item }) => (
     <Pressable onPress={() => /*confirmDelete(item*/ openImageModal(item)} style={styles.certificationContainer}  >
       <TouchableOpacity onPress={() => confirmDelete(item)} style={styles.trashIcon}>
-        <Icon name="trash" size={20} color="red" />
+        <Icon name="trash" size={22} color="red" />
       </TouchableOpacity>
       <Image
         source={{ uri: item }}
@@ -590,6 +600,12 @@ export default function Profile({ navigation }) {
                   style={styles.pdf}
                   onLoad={() => console.log('PDF rendered successfully')}
                   onError={(error) => console.error('Cannot render PDF', error)}
+                  scale={1.0} // Escala inicial
+                  minScale={1.0} // Escala mínima para evitar sobre-zoom out
+                  maxScale={3.0} // Escala máxima para evitar zoom excesivo
+                  horizontal={false} // Permitir scroll vertical
+                  enablePaging={false} // Deshabilitar el pase de página automático
+                  enableAnnotationRendering={true} // Mejorar visualización de anotaciones
                 />
               </View>
             )}
@@ -607,7 +623,7 @@ export default function Profile({ navigation }) {
               </Pressable>
             </View>
 
-            {uploading && <ActivityIndicator size="large" color="#0000ff" />}
+            {uploadingCertification && <ActivityIndicator size="large" color="#0000ff" />}
             <FlatList
 
 
