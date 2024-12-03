@@ -12,13 +12,13 @@ export default function Footer({handleChoice}) {
         name="x"
         size={40}
         color={COLORS.nope}
-        onPress={() => handleChoice(-1)}
+        onPress={() => handleChoice(1)}
       />
       <RoundButton
         name="heart"
         size={40}
         color={COLORS.like}
-        onPress={() => handleChoice(1)}
+        onPress={() => handleChoice(-1)}
       />
     </View>
   );
