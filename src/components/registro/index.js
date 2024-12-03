@@ -6,6 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {size} from 'lodash';
@@ -23,6 +24,7 @@ export default function Registro({navigation}) {
   const [errorCorreo, setErrorCorreo] = useState('');
   const [errorContrasena, setErrorContrasena] = useState('');
   const [errorConfirm, setErrorConfirm] = useState('');
+  const [isLoading, setIsLoading] = useState(false); 
 
   var numeros = '0123456789';
 
@@ -34,7 +36,7 @@ export default function Registro({navigation}) {
     if (!validateData()) {
       return;
     }
-
+    setIsLoading(true)
     const user = {
       name: `${formData.nombre} ${formData.apellido}`,
       email: formData.correo,
@@ -54,6 +56,9 @@ export default function Registro({navigation}) {
             : 'Ups, hubo un error. Intente nuevamente',
         type: 'danger',
       });
+    }
+    finally {
+      setIsLoading(false); 
     }
   };
 
@@ -189,7 +194,9 @@ export default function Registro({navigation}) {
           defaultValue={formData.confirm}
         />
         <Button
-          title={'Registrate'}
+          title={isLoading ? (
+            <ActivityIndicator color="#fff" />
+          ): 'Registrate'}
           containerStyle={styles.btnContainer}
           buttonStyle={styles.btn}
           onPress={() => registerUser()}
