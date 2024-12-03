@@ -51,7 +51,7 @@ export default function Profile({ navigation }) {
   const [cvUrl, setCvUrl] = useState(null);  // Estado para la URL del CV (PDF)
   const [certifications, setCertifications] = useState([]);
   const [dataCertifications, setDataCertifications] = useState([])
-
+  const [description, setDescription] = useState('');
   // Método para seleccionar y subir una certificación
   const handleCertificationPicker = async () => {
     try {
@@ -448,7 +448,7 @@ export default function Profile({ navigation }) {
 
   return (
     <View>
-      <Text style={{ fontSize: 35, padding: 20 }}>Mi Perfil</Text>
+      <Text style={{ fontSize: 35, padding: 20,color:"black" }}>Mi Perfil</Text>
       <Card>
         <View
           style={{
@@ -537,20 +537,26 @@ export default function Profile({ navigation }) {
               </View>
             </View>
           </View>
-          <View style={styles.descriptionContainer}>
-            <View style={styles.tituloyBoton}>
-              <Text style={styles.titulos}>Descripción</Text>
-            </View>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={setUserDescription}
-              value={userDescription}
-              multiline={true} // Permitir múltiples líneas
-              numberOfLines={4} // Número de líneas visibles
-              textAlignVertical="top" // Alinear el texto al inicio
-              placeholder="Escribe tu descripción aquí..." // Placeholder para mejorar la UX
-            />
-          </View>
+          <View style={styles.inputGroup}>
+      <Text style={styles.label}>Descripción</Text>
+      <View style={styles.descriptionContainer}>
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Cuéntanos sobre ti..."
+          placeholderTextColor="#9EA0A4"
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top"
+          value={description}
+          onChangeText={setDescription}
+        />
+      </View>
+      {description.length > 0 && (
+        <Text style={styles.helperText}>
+          Tu descripción ayudará a reclutadores a conocerte mejor
+        </Text>
+      )}
+    </View>
           <Pressable style={styles.cvButton} onPress={uploadImage}>
             <Text style={styles.buttonText} numberOfLines={1} ellipsizeMode="tail" >{uploading ? "Actualizando..." : "Actualizar perfil"}</Text>
           </Pressable>
@@ -572,7 +578,7 @@ export default function Profile({ navigation }) {
                 <Text style={styles.buttonText}>  {showPdf ? 'Ocultar' : 'Visualizar'}</Text>
               </Pressable>
               <Pressable style={styles.cvButton} onPress={handleCvUpload}>
-                <Text style={styles.buttonText} numberOfLines={1} ellipsizeMode="tail" >{"Subir CV"}</Text>
+                <Text style={styles.buttonText} numberOfLines={1} ellipsizeMode="tail" >{"Subir"}</Text>
               </Pressable>
             </View>
 
@@ -589,7 +595,7 @@ export default function Profile({ navigation }) {
             )}
           </View>}
           <View style={styles.cvContainer}>
-            <Text style={styles.titulo}>Mis Certificaciones</Text>
+            <Text style={styles.titulo}>Certificaciones</Text>
 
             <View style={styles.buttonsContainer}>
 
