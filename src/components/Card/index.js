@@ -134,7 +134,7 @@ export default function Card({
                 </Text>
               )}
               <View style={styles.buttonsContainer}>
-                {requiredAbilities.slice(0, 5).map((ability, index) => (
+                {requiredAbilities.slice(0, 4).map((ability, index) => (
                   <AptitudeOffer title={ability} key={index} />
                 ))}
                 {totalAbilities.length > requiredAbilities.length && (

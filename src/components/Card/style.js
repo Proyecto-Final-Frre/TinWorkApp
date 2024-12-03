@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginVertical: 15,
+    marginVertical: "2%",
   },
   botoncito: {
     marginTop: 20,
