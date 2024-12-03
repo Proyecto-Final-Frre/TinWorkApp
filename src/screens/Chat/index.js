@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react';
-import { View, Text,Image, TextInput,FlatList, StyleSheet,TouchableOpacity,KeyboardAvoidingView,Keyboard  } from 'react-native';
+import { View, Text,Image, TextInput,FlatList, StyleSheet,TouchableOpacity,KeyboardAvoidingView,Keyboard, TouchableWithoutFeedback, Linking  } from 'react-native';
 import { findUserAuthenticated } from '../../../AuthService';
 import { findByUid } from '../../services/UserService';
 import IconSend from 'react-native-vector-icons/Ionicons';
@@ -43,18 +43,44 @@ const Chat = ({route}) => {
       }
     }, [user]);
 
-  const renderItem = ({ item }) => (
-    <View style={styles.messageRow}>
-      <Image
-        source={{ uri: item.senderUId === item.chatId ? (user.imageProfile ? user.imageProfile : null) : imgProfileRecrutier }}
-        style={styles.avatar}
-      />
-      <View style={styles.messageContent}>
-        <Text style={styles.senderName}>{item.senderName}</Text>
-        <Text style={styles.messageText}>{item.content}</Text>
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    const renderMessageWithLinks = (text) => {
+      const parts = text.split(urlRegex);
+      
+      return parts.map((part, index) => {
+        if (urlRegex.test(part)) {
+          return (
+            <Text
+              key={index}
+              style={{ color: 'blue', textDecorationLine: 'underline' }}
+              onPress={() => Linking.openURL(part)}
+            >
+              {part}
+            </Text>
+          );
+        } else {
+          return <Text key={index}>{part}</Text>;
+        }
+      });
+    };
+    
+    const renderItem = ({ item }) => (
+      <View style={styles.messageRow}>
+        <Image
+          source={{ uri: item.senderUId === item.chatId ? (user.imageProfile ? user.imageProfile : null) : imgProfileRecrutier }}
+          style={styles.avatar}
+        />
+        <View style={styles.messageContent}>
+          <Text style={styles.senderName}>{item.senderName}</Text>
+          <TouchableWithoutFeedback>
+            <Text style={styles.messageText}>
+              {renderMessageWithLinks(item.content)}
+            </Text>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
-    </View>
-  );
+    );
 
   return (
     <KeyboardAvoidingView

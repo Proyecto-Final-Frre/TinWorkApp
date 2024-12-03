@@ -34,7 +34,7 @@ const MatchList = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={{fontSize: 35, padding: 15}}>Mis Matchs</Text>
+      <Text style={{fontSize: 35, padding: 15,color:"black"}}>Mis Matchs</Text>
       {loading ? (
         <View style={styles.skeletonContainer}>
           {[...Array(5)].map((_, index) => (
@@ -70,7 +70,14 @@ const MatchList = () => {
                     marginRight: 15,
                   }}>
                   <Icon name={'location-pin'} size={15} />
-                  <Text style={{flexGrow: 5}}>
+                  <Text
+                  style={{
+                    flexGrow: 5,
+                    flexShrink: 1,
+                    overflow: 'hidden',
+                    maxWidth: 150, // Ajusta según tus necesidades
+                  }}
+                  >
                     {match.province}, {match.country}
                   </Text>
                 </View>
