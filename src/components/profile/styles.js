@@ -1,31 +1,182 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
 import {colors} from '../../constants/colors';
+const screenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+  },
+  title:{
+    fontFamily: FUENTES.REGULAR,
+    fontSize: FONT_SIZE.xl,
+    color: colors.tinworkBlack,   
+    overflowWrap: 'break-word',
+    wordBreak: 'break-word',
+    width:screenWidth * 0.5
+  },
+  subtitle:{
+    fontFamily: FUENTES.LIGHT,
+    fontSize: FONT_SIZE.xl,
+    color: colors.tinworkBlack, 
+    overflowWrap: 'break-word',
+    wordBreak: 'break-word',
+    width:screenWidth * 0.5
+  },
+  ubi:{
+    fontFamily: FUENTES.LIGHT,
+    fontSize: FONT_SIZE.base,
+    color: colors.tinworkBlack, 
+    overflowWrap: 'break-word',
+    wordBreak: 'break-word',
+    width:screenWidth * 0.5
+  },
+  searchInput: {
+    width: '100%',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  selectedLocationContainer: {
+    padding: 14,
+    flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EFEFEF',
+  },
+  selectedLocationContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  selectedLocationLabel: {
+    fontSiz: 12,
+    color: '#888',
+  },
+  selectedeLocationText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  changeLocationButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: '#F0F7FF',
+    borderRadius: 6,
+  },
+  changeLocationText: {
+    color: '#4A90E2',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  locationContainer: {    
+    marginLeft:'6%',   
+  },
+  locationHeader: { 
+    marginTop:'6%', 
+    
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width:screenWidth * 0.5
+  },
+  ubication:{
+    fontFamily: FUENTES.REGULAR,
+    fontSize: FONT_SIZE.xl,
+    color: colors.tinworkBlack,     
+  },
+
+  locationTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  locationSelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 14,
+  },
+  locationText: {
+    fontSize: 15,
+    color: '#444',
   },
   imageContainer: {
-    display: 'flex',
-    height: 120,
-    width: 120,
-    borderRadius: 18,
-    borderWidth: 0.5,
-    borderColor: '#000',
+    position: 'relative',
+    height: 130,
+    width: 130,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageWrapper: {
+    position: 'absolute',
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     overflow: 'hidden',
     alignItems: 'center',
-    flexBasis: 121,
+    justifyContent: 'center',
+  },
+  uploadIconContainer: {
+    position: 'absolute',
+    bottom: 10, // Ajustá según la necesidad
+    left:96,  // Ajustá según la necesidad
+    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Fondo oscuro semitransparente
+    padding: 3,
+    borderRadius: 20, // Hace que el fondo sea un círculo
+  },
+  img: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  textoImagen: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -30 }, { translateY: -10 }],
+  },
+  progressCircle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  percentageContainer: {
+    position: 'absolute',
+    bottom: -10,
+    backgroundColor: '#000',
+    borderRadius: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+  },
+  percentageText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  progressContainer: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 30,
+    padding: 4,
+  },
+  progressText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#2E81FB',
   },
   abilitiesContainer: {
     marginVertical: 10
 
   },
-  locationContainer: {
-    flexBasis: 198,
-  },
+ 
   descriptionContainer: {
     marginVertical: 10,
     padding: 16, // Padding para evitar que el texto toque los bordes
@@ -46,7 +197,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  datosContainer: {},
   titulos: {
     fontSize: 20,
     color: 'black',
@@ -205,19 +355,7 @@ export const styles = StyleSheet.create({
     height: 100,
     margin: 5,
     borderRadius: 8,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    width: '90%',
-    height: '80%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  }, 
   fullSizeImage: {
     width: '100%',
     height: '100%',
@@ -301,5 +439,78 @@ export const styles = StyleSheet.create({
   },
   inputGroup: {
     marginVertical: 16,
-  }
+  },
+
+  //Estilos de modal ubicacion 
+  modalContainer: {
+   flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    width: '85%',
+    maxHeight: '70%',
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    flexDirection: 'row',
+    margin:'1%',
+    justifyContent:'space-between',
+    alignItems:'center',
+    alignContent:'center',
+
+
+  },
+  closeIcon: {
+   
+    
+  },
+
+  locationItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EFEFEF',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  locationItemSelected: {
+    backgroundColor: '#F0F7FF',
+  },
+  locationItemText: {
+    fontSize: 16,
+    color: '#444',
+    marginLeft:'2%'
+  },
+  locationItemTextSelected: {
+    fontWeight: '600',
+    color: '#4A90E2',
+  },
+  closeButton: {
+    marginTop: 16,
+    padding: 12,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    fontSize: 16,
+    color: '#555',
+    fontWeight: '500',
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
 });

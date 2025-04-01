@@ -22,24 +22,27 @@ import { findByUid, removeCertification, updateUser } from '../../services/UserS
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
 import { styles } from './styles';
-import FormSubmitButton from '../form-submit-button';
 import { todasProvincias } from '../../services/ProvinceService';
 import * as ImagePicker from 'react-native-image-picker';
 import Pdf from 'react-native-pdf';
 import ReactNativeBlobUtil from 'react-native-blob-util'
-
 import DocumentPicker from 'react-native-document-picker';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Asegúrate de importar el ícono
+import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import IconCameraPlus from 'react-native-vector-icons/MaterialCommunityIcons';
+import Svg, {Path, Circle } from "react-native-svg";
+import { TbCameraPlus } from "react-icons/tb";
 
 export default function Profile({ navigation }) {
   const [userAuth, setUserAuth] = useState();
   const [expandAptitude, setExpandAptitude] = useState(false);
   const [provincias, setProvincias] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState();
+  const [selectedLocation, setSelectedLocation] = useState([]);
   const [userDescription, setUserDescription] = useState();
   const [uploading, setUploading] = useState(false);
   const [uploadingCertification, setUploadingCertification] = useState(false);
-
+  const [modalUbiVisible, setModalUbiVisible] = useState(false);
+  const [searchText, setSearchText] = useState("")
   const [filename, setFilename] = useState();
   const [image, setImage] = useState(
     userAuth
@@ -53,6 +56,7 @@ export default function Profile({ navigation }) {
   const [certifications, setCertifications] = useState([]);
   const [dataCertifications, setDataCertifications] = useState([])
   const [description, setDescription] = useState('');
+
   // Método para seleccionar y subir una certificación
   const handleCertificationPicker = async () => {
     setUploadingCertification(true)
@@ -73,7 +77,7 @@ export default function Profile({ navigation }) {
 
     } catch (error) {
       console.error('Error al seleccionar o subir certificación:', error);
-    } 
+    }
     finally {
       setUploadingCertification(false)
     }
@@ -179,10 +183,20 @@ export default function Profile({ navigation }) {
       setDataCertifications(userAuth?.certifications)
     }
 
+    if(userAuth?.location) {
+      setSelectedLocation({name:userAuth?.location})
+    }
+    console.log("user auth",userAuth?.location)
+
+    
+
   }, [userAuth]);
 
 
-
+  const  aceptUbication =() =>{
+    setModalUbiVisible(false)
+    updateProvince()
+  }
   const handleImageUser = () => {
     Alert.alert(
       'Seleccione',
@@ -281,22 +295,22 @@ export default function Profile({ navigation }) {
 
   const uploadCvFile = async () => {
     if (!cvFile) return;
-  
+
     setUploading(true);
     const fileUri = cvFile[0].uri;
     const filename = cvFile[0].name;
-  
+
     try {
       // Convierte el archivo en un blob utilizando ReactNativeBlobUtil
       const blob = await ReactNativeBlobUtil.fs.readFile(fileUri, 'base64');
-  
+
       // Crea el metadato necesario para subir el archivo como blob
       const storageRef = firebase.storage().ref(`/cv/${filename}`);
       const uploadTask = storageRef.putString(blob, 'base64', { contentType: 'application/pdf' });
-  
+
       await uploadTask;
       const url = await storageRef.getDownloadURL();
-  
+
       console.log('URL del archivo subido:', url);
       setCvUrl(url);
       return url;
@@ -306,7 +320,7 @@ export default function Profile({ navigation }) {
       setUploading(false);
     }
   };
-  
+
 
   useEffect(() => {
     const getAbilitiesByUidUser = async () => {
@@ -319,6 +333,7 @@ export default function Profile({ navigation }) {
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
+    console.log("🚀 ~ findAllProvinces ~ prov:", prov)
     setProvincias(prov);
   };
 
@@ -326,14 +341,23 @@ export default function Profile({ navigation }) {
     findAllProvinces();
   }, []);
 
+
+  const updateProvince = () => {
+    const user = {
+      uid: uid,
+      location: selectedLocation?.name }  
+      updateUser(user);
+      
+  }
+
   const onSubmit = useCallback(
     async url => {
       //const cvUrl = await uploadCvFile();
 
       const user = {
         uid: uid,
-        location: selectedProvince + ', Argentina',
-        description: userDescription,
+        // location: selectedProvince + ', Argentina',
+        description: description,
         imageProfile: url,
         //cv: cvUrl, // Almacenar la URL del CV en el perfil del usuario
 
@@ -345,12 +369,12 @@ export default function Profile({ navigation }) {
         type: 'success',
       });
     },
-    [selectedProvince, image, userDescription],
+    [image, userDescription],
   );
 
   let uid = userAuth?.uid;
 
-  let minAbilities = userAuth?.abilities.length - 5;
+  let minAbilities = userAuth?.abilities?.length - 5;
   const [pdfPath, setPdfPath] = useState(null); // Declara setPdfPath aquí
   const [showPdf, setShowPdf] = useState(false);
 
@@ -455,10 +479,38 @@ export default function Profile({ navigation }) {
     setSelectedImage(null);
   };
 
+  const radius = 60;
+  const strokeWidth = 5;
+  const circumference = 2 * Math.PI * radius;
+
+  const calculateMade =( )=> {
+    let completedFields = 0;
+    if (image) completedFields++;
+    if (selectedLocation?.name) completedFields++;
+    if (userAuth?.name) completedFields++;
+    if (userAuth?.email) completedFields++;
+    if (description) completedFields++;
+    const progressPercentage = (completedFields / 5) * 100;
+    return progressPercentage
+ }
+
+  const progress = calculateMade()
+
+  const handleSelectLocation = (provincia) => {
+    console.log("🚀 ~ handleSelectLocation ~ provincia:", provincia)
+    setSelectedLocation({name:provincia.nombre+", Argentina", id:provincia.id});
+    console.log("selecte",selectedLocation)
+  };
+
+  const filteredProvinces = provincias.filter(item =>
+    item.nombre.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+
 
   return (
     <View>
-      <Text style={{ fontSize: 35, padding: 20,color:"black" }}>Mi Perfil</Text>
+      <Text style={{ fontSize: 35, margin: "2%", color: "black", backgroundColor: "red" }}>Perfil</Text>
       <Card>
         <View
           style={{
@@ -468,38 +520,81 @@ export default function Profile({ navigation }) {
           }}>
           <View style={styles.container}>
             <View style={styles.imageContainer}>
-              <Pressable onPress={handleImageUser}>
-                <ImageBackground style={styles.img} source={image}>
-                  <Text style={styles.textoImagen}>Cambiar Foto</Text>
-                </ImageBackground>
-              </Pressable>
-            </View>
-            <View style={styles.locationContainer}>
-              <View style={styles.tituloyBoton}>
-                <Text style={styles.titulos}>Ubicación</Text>
+              {/* Círculo de progreso */}
+              <Svg height={radius * 2 + strokeWidth * 2} width={radius * 2 + strokeWidth * 2} style={styles.progressCircle}>
+                {/* Fondo gris del círculo */}
+                <Circle
+                  cx={radius + strokeWidth}
+                  cy={radius + strokeWidth}
+                  r={radius}
+                  stroke="#ccc"
+                  strokeWidth={strokeWidth}
+                  fill="none"
+                />
+                {/* Progreso dinámico */}
+                <Circle
+                  cx={radius + strokeWidth}
+                  cy={radius + strokeWidth}
+                  r={radius}
+                  stroke="#000"
+                  strokeWidth={strokeWidth}
+                  strokeDasharray={circumference}
+                  strokeDashoffset={ circumference * (1 - progress / 100)  }
+                  strokeLinecap="round"
+                  fill="none"
+                  transform={`rotate(90, ${radius + strokeWidth}, ${radius + strokeWidth})`} // ✅ Rota el inicio a 135°
+
+                />
+              </Svg>
+
+              {/* Imagen de perfil */}
+              <Pressable onPress={handleImageUser} style={styles.imageWrapper}>
+              <ImageBackground style={styles.img} source={image}>
+              </ImageBackground>
+            </Pressable>
+                <View style={styles.uploadIconContainer}>
+                <IconCameraPlus name="camera-plus" size={30} color={"black"} />
+                </View>
+              {/* Indicador de porcentaje */}
+              <View style={styles.percentageContainer}>
+                <Text style={styles.percentageText}>{progress}%</Text>
               </View>
-              <Picker
-                selectedValue={selectedProvince}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedProvince(itemValue)
-                }>
-                {provincias.map(provincia => (
-                  <Picker.Item
-                    key={provincia?.id}
-                    label={`${provincia?.nombre}`}
-                    value={`${provincia?.nombre}`}
-                  />
-                ))}
-              </Picker>
+            </View>
+
+          <View style={styles.locationContainer}>
+            <Text style={styles.title}>{userAuth?.name || ''}</Text>
+            <Text style={styles.subtitle}>{userAuth?.email || ''}</Text>
+            <View /*style={styles.locationContainer}*/>
+
+           
+
+            <View /*style={styles.locationHeader} */>
+              <View style={styles.locationHeader}>                
+                <Text style={styles.title}>Ubicación </Text>
+                <TouchableOpacity  style={styles.changeLocationButton} onPress={() => setModalUbiVisible(true)}>
+                  <Text style={styles.changeLocationText}> Editar</Text>
+                </TouchableOpacity>
+              </View >
+              {/* <MapPin size={20} color="#4A90E2" style={styles.locationIcon} /> */}
+              <View>
+              {selectedLocation?.name ?
+                <Text style={styles.subtitle}>{selectedLocation?.name}</Text> : <Text style={styles.ubi}> Selecciona tu ubicación</Text> }
+              </View>
+
+
+
+
+
+            </View>
+
+
+        
+
+
             </View>
           </View>
-          <View style={styles.datosContainer}>
-            <Text style={styles.titulos}>Nombre Completo</Text>
-            <Text style={styles.datos}>{userAuth?.name || ''}</Text>
-            <Text style={styles.titulos}>Correo electrónico</Text>
-            {console.log("userAuth", userAuth)}
-            <Text style={styles.datos}>{userAuth?.email || ''}</Text>
           </View>
+
           <View style={styles.abilitiesContainer}>
             <View
               style={{
@@ -519,11 +614,11 @@ export default function Profile({ navigation }) {
             </View>
             <View style={styles.datos}>
               <View style={styles.buttonsContainer}>
-                {userAuth?.abilities.slice(0, 3).map((ability, index) => (
+                {userAuth?.abilities?.slice(0, 3).map((ability, index) => (
                   <AptitudeOffer title={ability} key={index} />
                 ))}
                 {!expandAptitude
-                  ? userAuth?.abilities.length > minAbilities && (
+                  ? userAuth?.abilities?.length > minAbilities && (
                     <ButtonMoreAbilities
                       buttonStyle={false}
                       titleStyle={false}
@@ -532,7 +627,7 @@ export default function Profile({ navigation }) {
                     />
                   )
                   : userAuth?.abilities
-                    .slice(2, userAuth?.abilities.length)
+                    .slice(2, userAuth?.abilities?.length)
                     .map((ability, index) => (
                       <AptitudeOffer title={ability} key={index} />
                     ))}
@@ -548,32 +643,30 @@ export default function Profile({ navigation }) {
             </View>
           </View>
           <View style={styles.inputGroup}>
-      <Text style={styles.label}>Descripción</Text>
-      <View style={styles.descriptionContainer}>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Cuéntanos sobre ti..."
-          placeholderTextColor="#9EA0A4"
-          multiline
-          numberOfLines={4}
-          textAlignVertical="top"
-          value={description}
-          onChangeText={setDescription}
-        />
-      </View>
-      {description.length > 0 && (
-        <Text style={styles.helperText}>
-          Tu descripción ayudará a reclutadores a conocerte mejor
-        </Text>
-      )}
-    </View>
+            <Text style={styles.label}>Descripción</Text>
+            <View style={styles.descriptionContainer}>
+              <TextInput
+                style={[styles.input, styles.textArea]}
+                placeholder="Cuéntanos sobre ti..."
+                placeholderTextColor="#9EA0A4"
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                value={description}
+                onChangeText={setDescription}
+              />
+            </View>
+            {description.length > 0 && (
+              <Text style={styles.helperText}>
+                Tu descripción ayudará a reclutadores a conocerte mejor
+              </Text>
+            )}
+          </View>
           <Pressable style={styles.cvButton} onPress={uploadImage}>
             <Text style={styles.buttonText} numberOfLines={1} ellipsizeMode="tail" >{uploading ? "Actualizando..." : "Actualizar perfil"}</Text>
           </Pressable>
 
-          {uploading ? (
-            <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />
-          ) : <View style={styles.cvContainer}>
+          <View style={styles.cvContainer}>
 
             <Text style={styles.titulo}>Currículum Vitae</Text>
 
@@ -609,7 +702,7 @@ export default function Profile({ navigation }) {
                 />
               </View>
             )}
-          </View>}
+          </View>
           <View style={styles.cvContainer}>
             <Text style={styles.titulo}>Certificaciones</Text>
 
@@ -645,6 +738,12 @@ export default function Profile({ navigation }) {
           >
             <TouchableOpacity style={styles.modalContainer} onPress={closeImageModal} activeOpacity={1}>
               <View style={styles.modalContent}>
+              <View style={styles.modalTitle}>
+            <Text style={styles.title}>Certificado seleccionado</Text>
+              <TouchableOpacity style={styles.closeIcon} onPress={ closeImageModal}>
+            <MaterialIcons name="close" size={30} color="#333" />
+          </TouchableOpacity> 
+            </View>
                 <Image
                   source={{ uri: selectedImage }}
                   style={styles.fullSizeImage}
@@ -654,6 +753,71 @@ export default function Profile({ navigation }) {
             </TouchableOpacity>
 
           </Modal>
+
+        {/*Modal para seleccionar la provincia*/}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalUbiVisible}
+          onRequestClose={() => setModalUbiVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+        
+            <View style={styles.modalContent}>
+            <View style={styles.modalTitle}>
+            <Text style={styles.title}>Seleccione su ubicación</Text>
+              <TouchableOpacity style={styles.closeIcon} onPress={() => setModalUbiVisible(false)}>
+            <MaterialIcons name="close" size={30} color="#333" />
+          </TouchableOpacity> 
+            </View>
+
+               
+              <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar provincia..."
+            placeholderTextColor="#888"
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+              <FlatList
+                data={filteredProvinces}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+            
+                         <TouchableOpacity
+                    style={[
+                      styles.locationItem,
+                      selectedLocation?.id === item.id && styles.locationItemSelected
+                    ]}
+                    onPress={() => handleSelectLocation(item)}
+                  >
+                       {selectedLocation?.id === item.id? 
+                      <MaterialIcons name="radio-button-checked" size={20} color="#4A90E2" /> : <MaterialIcons name="radio-button-unchecked" size={20} color="#4A90E2" />}
+                    <Text
+                      style={[
+                        styles.locationItemText,
+                        selectedLocation?.id === item.id && styles.locationItemTextSelected
+                      ]}
+                    >
+                      {item.nombre}
+                    </Text>
+
+
+                  </TouchableOpacity>
+                  
+
+                )}
+              />
+
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => aceptUbication() }
+              >
+                <Text style={styles.closeButtonText}>Aceptar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
 
         </View>
       </Card>
