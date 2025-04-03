@@ -11,25 +11,22 @@ export const styles = StyleSheet.create({
   title:{
     fontFamily: FUENTES.REGULAR,
     fontSize: FONT_SIZE.xl,
-    color: colors.tinworkBlack,   
-    overflowWrap: 'break-word',
-    wordBreak: 'break-word',
-    width:screenWidth * 0.5
+    color: colors.tinworkBlack,
+    flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
+    // width:screenWidth * 0.5,
   },
   subtitle:{
     fontFamily: FUENTES.LIGHT,
     fontSize: FONT_SIZE.xl,
-    color: colors.tinworkBlack, 
-    overflowWrap: 'break-word',
-    wordBreak: 'break-word',
+    color: colors.tinworkBlack,
+    flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
     width:screenWidth * 0.5
   },
   ubi:{
     fontFamily: FUENTES.LIGHT,
     fontSize: FONT_SIZE.base,
-    color: colors.tinworkBlack, 
-    overflowWrap: 'break-word',
-    wordBreak: 'break-word',
+    color: colors.tinworkBlack,
+    flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
     width:screenWidth * 0.5
   },
   searchInput: {
@@ -73,22 +70,34 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  locationContainer: {    
-    marginLeft:'6%',   
+  locationContainer: {
+    marginLeft:'6%',
   },
-  locationHeader: { 
-    marginTop:'6%', 
-    
+  locationHeader: {
+    marginTop:'6%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width:screenWidth * 0.5
+    // justifyContent: 'flex-start',
+    width:screenWidth * 0.48,
+    backgroundColor:"red"
   },
   ubication:{
     fontFamily: FUENTES.REGULAR,
     fontSize: FONT_SIZE.xl,
-    color: colors.tinworkBlack,     
+    color: colors.tinworkBlack,
   },
-
+  ubicationContainer:{
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop:"5%"
+  },
+  abilityHeader:{
+     display: 'flex',
+     flexDirection: 'row',
+     alignItems: 'center',
+     justifyContent: 'space-between',
+  },
   locationTitle: {
     fontSize: 16,
     fontWeight: '600',
@@ -173,47 +182,14 @@ export const styles = StyleSheet.create({
     color: '#2E81FB',
   },
   abilitiesContainer: {
-    marginVertical: 10
+    marginTop:'6%'
 
-  },
- 
-  descriptionContainer: {
-    marginVertical: 10,
-    padding: 16, // Padding para evitar que el texto toque los bordes
-    backgroundColor: '#f9f9f9', // Fondo claro para diferenciar la sección
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-
-  },
-  title: {
-    fontFamily: FUENTES.BOLD,
-    fontSize: FONT_SIZE.xl2,
-    color: '#000',
-  },
-  vistaGeneral: {display: 'flex'},
-  descripcion: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  titulos: {
-    fontSize: 20,
-    color: 'black',
-    marginVertical: 5,
-  },
-  tituloSecun: {
-    marginTop: 10,
-    fontSize: 15,
-  },
-  datos: {
-    fontSize: 18,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginVertical: 5,
-    marginLeft: -5,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-start",
+    marginHorizontal: -4, // Compensate for button margins
   },
   img: {
     height: 120,
@@ -237,7 +213,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  texto: {},
   mismatchs: {
     fontSize: 35,
     color: '#000',
@@ -274,14 +249,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  cvContainer: {
-    marginVertical: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    //backgroundColor: '#f9f9f9',
-  },
+
   cvButton: {
     padding: 10,
     backgroundColor: '#e0e0e0',
@@ -292,70 +260,13 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-  pdfContainer: {
-    marginTop: 20,
-    height: 300,  // Altura del visor PDF
-  },
-  pdf: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  cvContainer: {
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: '#f9f9f9',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 3,
-    marginVertical: 10,
-  },
-  titulo: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  buttonsContainer: {
-     flexDirection: 'row',
-  flexWrap: 'wrap', // Permite que los botones se ajusten a nuevas líneas
-  justifyContent: 'flex-start', // Alinea los botones a la izquierda
-  marginVertical: 5,
-  },
-  cvButton: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-    marginHorizontal: 5,
-    backgroundColor: '#007BFF',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
-  pdfContainer: {
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  previewTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  pdf: {
-    width: '100%',
-    height: 300,
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
+
   thumbnail: {
     width: 100,
     height: 100,
     margin: 5,
     borderRadius: 8,
-  }, 
+  },
   fullSizeImage: {
     width: '100%',
     height: '100%',
@@ -441,7 +352,7 @@ export const styles = StyleSheet.create({
     marginVertical: 16,
   },
 
-  //Estilos de modal ubicacion 
+  //Estilos de modal ubicacion
   modalContainer: {
    flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -469,11 +380,6 @@ export const styles = StyleSheet.create({
 
 
   },
-  closeIcon: {
-   
-    
-  },
-
   locationItem: {
     paddingVertical: 12,
     paddingHorizontal: 16,
