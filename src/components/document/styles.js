@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         marginHorizontal: 5,
-        backgroundColor: '#007BFF',
+        backgroundColor: colors.tinworkBlue,
         borderRadius: 5,
       },
       uploadContainer: {
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor: '#007BFF',
+        backgroundColor:colors.tinworkBlue,
         borderRadius: 5,
       },
       buttonText: {

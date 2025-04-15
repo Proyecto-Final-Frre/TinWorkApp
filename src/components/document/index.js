@@ -24,6 +24,7 @@ import ReactNativeBlobUtil from 'react-native-blob-util'
 import DocumentPicker from 'react-native-document-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { colors } from '../../constants/colors';
 
 
 export default function Document({ navigation }) {
@@ -304,9 +305,7 @@ export default function Document({ navigation }) {
             
           </Pressable>
 
-          {uploading ? (
-            <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />
-          ) : null}
+          {uploading && <ActivityIndicator color={colors.tinworkBlue} style={{margin:"1%"}} />}
           <View style={styles.buttonsContainer}>      
             <Pressable style={styles.cvButton} onPress={handleCvView}>
             <MaterialIcons name={showPdf ? 'visibility' : 'visibility-off'}  size={20} color="#fff"   style={{ marginRight: 8 }}  />
@@ -336,7 +335,7 @@ export default function Document({ navigation }) {
         </View>
         <View style={styles.cvContainer}>
           <Text style={styles.title}>Certificaciones 🎓</Text>
-          {uploadingCertification && <ActivityIndicator size="large" color="#0000ff" />}
+          {uploadingCertification &&   <ActivityIndicator color={colors.tinworkBlue} style={{margin:"1%"}} />}
           <FlatList
             data={[...certifications, ...dataCertifications]}
             keyExtractor={(item, index) => index.toString()}
