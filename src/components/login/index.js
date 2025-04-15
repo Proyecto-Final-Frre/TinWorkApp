@@ -6,6 +6,10 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  KeyboardAvoidingView,
+  Keyboard,
+  ScrollView,
+   
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {size} from 'lodash';
@@ -13,34 +17,49 @@ import messaging from '@react-native-firebase/messaging';
 import {validateEmail} from '../../utils/helpers';
 import {colors} from '../../constants/colors';
 import {updateUser} from '../../services/UserService';
-import {authenticationWithEmailAndPass, createUser} from '../../../AuthService';
+import {authenticationWithEmailAndPass} from '../../../AuthService';
+import { BACKGROUND, FUENTES } from '../../utils/constants';
 
 export default function Login({navigation}) {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState(defaultFormValues());
   const [errorCorreo, setErrorCorreo] = useState('');
   const [errorContrasena, setErrorContrasena] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
+ 
   const onChange = (e, type) => {
-    setFormData({...formData, [type]: e.nativeEvent.text});
+    const newFormData = { ...formData, [type]: e.nativeEvent.text };
+    setFormData(newFormData);  
+    if (type === 'password' && newFormData.password) {
+      setErrorContrasena(newFormData.password.length >= 6 ? '' : 'La contraseña debe tener al menos 6 caracteres');
+    }
   };
 
+
   const loginUser = async () => {
+    setIsLoading(true)
     if (!validateData()) {
       return;
     }
-    const auth = await authenticationWithEmailAndPass(
-      formData.correo,
-      formData.password,
-    );
-    const token = await messaging().getToken();
-    if (auth) {
-      await updateUser({
-        uid: auth.user.uid,
-        token: token,
-      });
-      navigation.navigate('Home');
+    try {
+      const auth = await authenticationWithEmailAndPass(
+        formData.correo,
+        formData.password,
+      );
+      const token = await messaging().getToken();
+      if (auth) {
+        await updateUser({
+          uid: auth.user.uid,
+          token: token,
+        });
+
+        navigation.navigate('Home');
+      }
+    } catch(err) { console.log("error",err)
+    } finally {
+      setIsLoading(false)
     }
+   
   };
 
   const validateData = () => {
@@ -64,57 +83,91 @@ export default function Login({navigation}) {
   };
 
   return (
-    <>
-      <View style={styles.imageContainer}>
+
+  <KeyboardAvoidingView
+      behavior={ "height"}
+      style={{ flex: 1 }}
+    >
+  <ScrollView
+    contentContainerStyle={{ flexGrow: 1 }}
+    keyboardShouldPersistTaps="handled"
+  >
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+  <View style={styles.loginContainer}>
+
+      <View style={styles.imageContainer}>      
         <Image
-          source={require('../../images/tinwork-logo.png')}
+          source={require('../../images/logo_tinwork.png')}
           resizeMode="contain"
           style={styles.image}
         />
+        <Text style={styles.welcomeText}>Descubrí ofertas laborales 💼 hechas para vos 💫</Text>
+         <Image
+          source={require('../../images/Reclutier.png')}
+          resizeMode="contain"
+          style={styles.image_2}
+        />
       </View>
       <View style={styles.form}>
-        <Input
-          placeholder="Correo"
-          containerStyle={styles.input}
-          onChange={e => onChange(e, 'correo')}
-          keyboardType="email-address"
-          errorMessage={errorCorreo}
-          defaultValue={formData.correo}
-        />
-        <Input
-          placeholder="Contraseña"
-          containerStyle={styles.input}
-          password={true}
-          secureTextEntry={!showPassword}
-          onChange={e => onChange(e, 'password')}
-          rightIcon={
-            <Icon
-              name={showPassword ? 'eyeo' : 'eye'}
-              size={22}
-              style={styles.ojo}
-              onPress={() => setShowPassword(!showPassword)}
-            />
-          }
-          errorMessage={errorContrasena}
-          defaultValue={formData.password}
-        />
+      <Input
+      placeholder="Ingresa tu correo"
+      containerStyle={styles.input}
+      inputContainerStyle={styles.inputContainer}
+      inputStyle={styles.inputText}
+      placeholderTextColor="#9e9e9e"
+      onChange={e => onChange(e, 'correo')}
+      keyboardType="email-address"
+      errorMessage={errorCorreo}
+      errorStyle={styles.errorText}
+      defaultValue={formData.correo}
+      leftIcon={{ type: 'material', name: 'email', color: '#9e9e9e', size: 20 }}
+    />
+      <Input
+        placeholder="Contraseña"
+        containerStyle={styles.input}
+        inputContainerStyle={styles.inputContainer}
+        inputStyle={styles.inputText}
+        placeholderTextColor="#9e9e9e"
+        password={true}
+        secureTextEntry={!showPassword}
+        onChange={e => onChange(e, 'password')}
+        errorMessage={errorContrasena}
+        errorStyle={styles.errorText}
+        defaultValue={formData.password}
+        leftIcon={{ type: 'material', name: 'lock', color: '#9e9e9e', size: 20 }}
+        rightIcon={
+          <Icon
+            name={showPassword ? 'eyeo' : 'eye'}
+            size={22}
+            style={styles.ojo}
+            onPress={() => setShowPassword(!showPassword)}
+          />
+        }
+      />
+          
         <Button
           title={'Ingresar'}
           containerStyle={styles.btnContainer}
           buttonStyle={styles.btn}
+          loading={isLoading}
+          //disabled={!validateEmail(formData.correo)}
           onPress={() => loginUser()}
         />
       </View>
-      <View style={styles.login}>
-        <Text>
-          Todavia no estas registrado?{'  '}
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Registro')}>
-            <Text style={styles.btnLogin}>Registrarse</Text>
-          </TouchableWithoutFeedback>
-        </Text>
+      <View style={styles.loginFooter}>
+      <Text style={styles.registerText}>
+        ¿Todavía no estás registrado?{'  '}
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate('Registro')}>
+          <Text style={styles.btnLogin}>Registrarse</Text>
+        </TouchableWithoutFeedback>
+      </Text>        
       </View>
-    </>
+    </View>
+  </TouchableWithoutFeedback>
+  </ScrollView>
+</KeyboardAvoidingView>
+   
   );
 }
 
@@ -126,38 +179,66 @@ const defaultFormValues = () => {
 };
 
 const styles = StyleSheet.create({
+  loginContainer:{
+    flex:1,
+    backgroundColor:BACKGROUND.secondary,
+    paddingHorizontal: 20,
+  },
   imageContainer: {
-    alignItems: 'center',
+    alignItems: "center",
+    marginTop: 10, // Añadir espacio en la parte superior
+    marginBottom: 20, // Espacio entre las imágenes y el formulario
   },
   image: {
-    height: 150,
-    width: '60%',
-    marginBottom: 20,
+    height: 80, // Reducir un poco el tamaño para que se vea más proporcionado
+    width: "60%",
+  },
+  welcomeText: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: '#333', // gris oscuro, sobrio y legible
+    fontWeight: '400',
+  },
+  image_2: {
+    height: 180, // Aumentar un poco para que la ilustración se vea mejor
+    width: "80%",
+    marginTop: 10, // Espacio entre las dos imágenes
   },
   form: {
-    marginTop: 50,
+    marginTop: 5,
     alignItems: 'center',
     width: '100%',
   },
   input: {
-    width: '95%',
+    width: "100%",
+  },
+  inputText: {
+    fontSize:18,
+    color: colors.tinworkBlack, // Color gris para el texto de input
+    fontFamily:FUENTES.REGULAR
   },
   btnContainer: {
-    marginTop: 20,
-    marginBottom: 20,
-    width: '90%',
+    marginTop:10,
+    width: '95%',
     alignSelf: 'center',
   },
-  login: {
+  loginFooter: {
     marginTop: 10,
     marginBottom: 30,
     alignItems: 'center',
+  },
+  registerText:{
+    fontSize: 16
+  },
+  btn:{
+    backgroundColor:colors.tinworkBlue
   },
   btnLogin: {
     color: colors.tinworkBlue,
     fontWeight: 'bold',
   },
   ojo: {
-    color: '#c1c1c1',
+    color: '#9e9e9e',
   },
+
 });
