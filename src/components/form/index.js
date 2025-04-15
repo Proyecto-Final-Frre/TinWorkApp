@@ -6,12 +6,15 @@ import {findAllCategories} from '../../services/CategoryService';
 import {findUserAuthenticated} from '../../../AuthService';
 import {findByUid, updateUser} from '../../services/UserService';
 import {showMessage} from 'react-native-flash-message';
+import { TextInput,View,ActivityIndicator } from 'react-native';
+import { colors } from '../../constants/colors';
 
 const Form = ({navigation}) => {
   const [formData, setFormData] = useState([]);
   const [abilities, setAbilities] = useState([]);
   const [categories, setCategories] = useState([]);
   const [userAbilities, setUserAbilities] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   useEffect(() => {
     findAll().then(abilities => setAbilities(abilities));
     findAllCategories().then(categories => setCategories(categories));
@@ -60,21 +63,64 @@ const Form = ({navigation}) => {
 
   return (
     <>
-      {formSections.map(section => (
-        <FormSection
-          title={section.name}
-          aptitudes={section.abilities}
-          key={section.id}
-          onAptitudePress={onAptitudePress}
-          userAbilities={userAbilities}
-        />
-      ))}
-      <FormSubmitButton
-        onSubmit={onSubmit}
-        disabled={formData.length > 0 ? false : true}
-      />
+      {abilities.length === 0 || categories.length === 0 ? (
+        <ActivityIndicator color={colors.tinworkBlue} size='large'/>
+      ) : (
+        <>
+          <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+            <TextInput
+              placeholder="Buscar habilidad o categoría..."
+              value={searchTerm}
+              onChangeText={setSearchTerm}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 8,
+                padding: 10,
+                borderColor: '#ccc',
+                borderWidth: 1,
+                marginBottom: 10,
+              }}
+            />
+          </View>
+  
+          {formSections.map(section => {
+            const matchesCategory = section.name
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase());
+  
+            const filteredAbilities = section.abilities.filter(a =>
+              a.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+  
+            if (
+              matchesCategory ||
+              filteredAbilities.length > 0 ||
+              searchTerm.trim() === ''
+            ) {
+              return (
+                <FormSection
+                  title={section.name}
+                  aptitudes={
+                    matchesCategory ? section.abilities : filteredAbilities
+                  }
+                  key={section.id}
+                  onAptitudePress={onAptitudePress}
+                  userAbilities={userAbilities}
+                />
+              );
+            }
+  
+            return null;
+          })}
+  
+          <FormSubmitButton
+            onSubmit={onSubmit}
+            disabled={formData?.length > 0 ? false : true}
+            title={'Guardar habilidades'}
+          />
+        </>
+      )}
     </>
-  );
-};
+  )};
 
 export default Form;
