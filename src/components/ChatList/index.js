@@ -1,41 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text , ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text , ScrollView, Image,TouchableOpacity,RefreshControl   } from 'react-native';
 import { findUserAuthenticated } from '../../../AuthService';
 import { findByUid } from '../../services/UserService';
-import { FONT_SIZE, FUENTES } from '../../utils/constants';
 import Icon from 'react-native-vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';  // Importa useNavigation
+import { styles } from './styles';
 
 
 const ChatList = () => {
   const [recrutiersData, setRecrutiersData] = useState([]);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true); 
-
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await setRecruiter();
+    setRefreshing(false);
+  };
   const setRecruiter = async () => {
+    setLoading(true); 
     try {
-      let userAuthenticated = findUserAuthenticated();
-      const { offersMatch } = await findByUid(userAuthenticated.uid);
-      const recruiterUids = offersMatch.map(offer => offer.uid);
-      const recruiterDataPromises = recruiterUids.map(uid => findByUid(uid));
-      const recruitersData = await Promise.all(recruiterDataPromises);
+      const userAuthenticated = findUserAuthenticated();
+      if (!userAuthenticated) {
+        console.error("No se encontró un usuario autenticado.");
+        return;
+      }
   
-      const uniqueRecruitersData = recruitersData.filter(
-        (recruiter, index, self) => index === self.findIndex((r) => r?.uid === recruiter?.uid)
+      const { offersMatch } = await findByUid(userAuthenticated.uid);
+      if (!offersMatch || offersMatch.length === 0) {
+        setRecrutiersData([]);
+        return;
+      }
+  
+      const recruiterUids = offersMatch.map((offer) => offer.uid);
+  
+      // Recuperar datos de reclutadores en paralelo
+      const recruitersData = await Promise.all(
+        recruiterUids.map((uid) => findByUid(uid))
       );
   
+      // Filtrar reclutadores únicos por uid
+      const uniqueRecruitersData = recruitersData.filter(
+        (recruiter, index, self) =>
+          index === self.findIndex((r) => r?.uid === recruiter?.uid)
+      );
+  
+      // Actualizar el estado con los datos únicos
       setRecrutiersData(uniqueRecruitersData);
     } catch (error) {
-      console.error(error);
+      console.error("Error al recuperar reclutadores:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false); // Finalizar la carga
     }
-  
-  
-    
-
   };
-
+  
  
   useEffect(() => {
     setRecruiter();
@@ -47,9 +65,9 @@ const ChatList = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.container}>
-        <Text style={{ fontSize: 35, padding: 15,color:"black" }}>Mis chats</Text>
-        
+      <ScrollView style={styles.container} 
+                  refreshControl={ <RefreshControl refreshing={refreshing} 
+                  onRefresh={onRefresh} />}>        
         {loading ? (
           <View style={styles.skeletonContainer}>
             {[...Array(5)].map((_, index) => (
@@ -62,13 +80,25 @@ const ChatList = () => {
               </View>
             ))}
           </View>
-        ) : 
-        recrutiersData.map((recrutier, index) => (
+        ) :  recrutiersData.length === 0 ? (
+          <View style={styles.emptyMessageContainer}>
+              <Image
+        source={require('../../images/sin-chats.png')} 
+        style={styles.img}
+        resizeMode='center'
+      />
+            <Text style={styles.emptyMessage}>
+            ¡Aún no tienes chats! No has hecho match con ningún reclutador todavía.</Text>
+          </View>
+        ) :
+        recrutiersData.length > 0 && recrutiersData.map((recrutier, index) => (
+          recrutier?.imageProfile && recrutier?.name  ? (            
+       
           <TouchableOpacity
-            key={`${recrutier?.uid}-${index}`}
-            onPress={() => handlePress(recrutier)} 
+          key={recrutier?.uid}
+          onPress={() => handlePress(recrutier)} 
           >
-            <View style={styles.recrutierContainer} key={`${recrutier?.uid}-${index}`}>
+            <View style={styles.recrutierContainer}>
               <View style={styles.imageContainer}>
 
                 <Image
@@ -83,7 +113,7 @@ const ChatList = () => {
 
               </View>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity>    ) : null 
 
         ))}
       </ScrollView>
@@ -92,91 +122,4 @@ const ChatList = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f2f2f2',
-  },
-  recrutierContainer: {
-    backgroundColor: 'white',
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
-    shadowColor: 'black',
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  jobTitle: {
-    fontFamily: FUENTES.BOLD,
-    fontSize: FONT_SIZE.xl,
-    color: '#000',
-  },
-  name: {
-    fontFamily: FUENTES.REGULAR,
-    fontSize: FONT_SIZE.lg,
-    color: '#333',
-  },
-  company: {
-    fontSize: 16,
-    color: 'gray',
-  },
-  imageContainer: {
-    height: 50,
-    width: 50,
-    borderRadius: 10,
-  },
-  img: {
-    height: 50,
-    width: 50,
-    borderRadius: 10,
-  },
-  avatar: {
-    width: 45,                     // Tamaño de la imagen de perfil
-    height: 45,
-    borderRadius: 22.5,            // Forma circular
-    marginHorizontal: 10,          // Espacio entre el avatar y el mensaje
-    borderColor: '#ccc',
-    borderWidth: 1,
-  },
-  detailContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: 10
-  },
-  icon: {
-    marginLeft: "80%",
-  },
-  skeletonContainer: {
-    padding: 10,
-  },
-  skeletonChatContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  skeletonAvatar: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
-    backgroundColor: '#e0e0e0',
-    marginRight: 10,
-  },
-  skeletonDetails: {
-    flex: 1,
-  },
-  skeletonLine: {
-    height: 10,
-    backgroundColor: '#e0e0e0',
-    marginBottom: 6,
-    borderRadius: 5,
-  },
-  shortLine: {
-    width: '60%',
-  },
-});
 export default ChatList;
