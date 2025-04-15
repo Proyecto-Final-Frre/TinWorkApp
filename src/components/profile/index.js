@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ImageBackground,
-  Image,
   Text,
   View,
   Pressable,
   TextInput,
   Alert,
-  ActivityIndicator,
   FlatList,
   Modal,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl
 } from 'react-native';
 import { Card } from '@rneui/themed';
 import storage from '@react-native-firebase/storage';
@@ -23,8 +23,9 @@ import { todasProvincias } from '../../services/ProvinceService';
 import * as ImagePicker from 'react-native-image-picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import IconCameraPlus from 'react-native-vector-icons/MaterialCommunityIcons';
-import Svg, { Path, Circle } from "react-native-svg";
+import Svg, { Circle } from "react-native-svg";
 import DescriptionProfile from '../descriptionProfile';
+import SkeletonProfile from '../SkeletonProfile';
 
 export default function Profile({ navigation }) {
   const [userAuth, setUserAuth] = useState();
@@ -39,21 +40,26 @@ export default function Profile({ navigation }) {
       ? userAuth.imageProfile
       : { uri: 'https://w7.pngwing.com/pngs/223/244/png-transparent-computer-icons-avatar-user-profile-avatar-heroes-rectangle-black.png' },
   );
-  const [cvUrl, setCvUrl] = useState(null);  // Estado para la URL del CV (PDF)
-  const [dataCertifications, setDataCertifications] = useState([])
+
+  const [loading, setLoading] = useState(true);  
   
   useEffect(() => {
     const getAbilitiesByUidUser = async () => {
-      let userAuthenticated = await findUserAuthenticated();
-      let user = await findByUid(userAuthenticated.uid);
-      setUserAuth(user);
+      setLoading(true); 
+      try {
+        let userAuthenticated = await findUserAuthenticated();
+        let user = await findByUid(userAuthenticated.uid);
+        setUserAuth(user);
+      } catch (error) {
+        console.error("Error cargando usuario:", error);
+      }
+      setLoading(false); 
     };
     getAbilitiesByUidUser();
   }, []);
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
-    console.log("🚀 ~ findAllProvinces ~ prov:", prov)
     setProvincias(prov);
   };
 
@@ -67,7 +73,6 @@ export default function Profile({ navigation }) {
       setImage({ uri: userAuth?.imageProfile });
     } 
     
-    console.log("🚀 ~ useEffect ~ userAuth?.description:", userAuth?.description)
     setUserDescription(userAuth?.description)
 
     if (userAuth?.location) {
@@ -216,21 +221,32 @@ export default function Profile({ navigation }) {
   const progress = calculateMade()
 
   const handleSelectLocation = (provincia) => {
-    console.log("🚀 ~ handleSelectLocation ~ provincia:", provincia)
     setSelectedLocation({ name: provincia.nombre + ", Argentina", id: provincia.id });
-    console.log("selecte", selectedLocation)
   };
 
   const filteredProvinces = provincias.filter(item =>
     item.nombre.toLowerCase().includes(searchText.toLowerCase())
-  );
+  );  
 
-
-
+  const reloadProfile = async () => {
+    setLoading(true);
+    try {
+      let userAuthenticated = await findUserAuthenticated();
+      let user = await findByUid(userAuthenticated.uid);
+      setUserAuth(user);
+    } catch (error) {
+      console.error("Error recargando perfil:", error);
+    }
+    setLoading(false); 
+  };
+  
   return (
-    <View>
-      <Text style={{ fontSize: 35, margin: "1%", color: "black", backgroundColor: "red" }}>Perfil</Text>
-      <Card>
+    <View>            
+       <ScrollView refreshControl={<RefreshControl refreshing={false} onRefresh={reloadProfile} />}                        > 
+      {loading  ? (  
+        <SkeletonProfile />
+      ) : ( <>      
+      <Card containerStyle={styles.card}>
         <View style={{ flex: 1, flexDirection: 'column', alignContent: 'space-between' }}>
           <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -264,11 +280,11 @@ export default function Profile({ navigation }) {
               {/* Imagen de perfil */}
               <Pressable onPress={handleImageUser} style={styles.imageWrapper}>
                 <ImageBackground style={styles.img} source={image}>
-                </ImageBackground>
-              </Pressable>
-              <View style={styles.uploadIconContainer}>
+                </ImageBackground>                
+              </Pressable>           
+              <Pressable onPress={handleImageUser}   style={styles.uploadIconContainer}>
                 <IconCameraPlus name="camera-plus" size={30} color={"black"} />
-              </View>
+              </Pressable>
               {/* Indicador de porcentaje */}
               <View style={styles.percentageContainer}>
                 <Text style={styles.percentageText}>{progress}%</Text>
@@ -352,7 +368,7 @@ export default function Profile({ navigation }) {
                   onChangeText={setSearchText}
                 />
                 <FlatList
-                  data={filteredProvinces}
+                  data={[...filteredProvinces].sort((a, b) => a.nombre.localeCompare(b.nombre))}
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
 
@@ -393,7 +409,8 @@ export default function Profile({ navigation }) {
 
         </View>
       </Card>
-
+    </>) }
+     </ScrollView> 
     </View>
   );
 }

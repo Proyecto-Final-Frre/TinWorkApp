@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import {FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
+import {BACKGROUND, FONT_SIZE, FUENTES} from '../../utils/constants';
 import {colors} from '../../constants/colors';
 const screenWidth = Dimensions.get('window').width;
 
@@ -8,25 +8,30 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+   card: {
+          backgroundColor: BACKGROUND.secondary,
+          borderRadius: 10,
+  
+        },
   title:{
     fontFamily: FUENTES.REGULAR,
     fontSize: FONT_SIZE.xl,
     color: colors.tinworkBlack,
-    flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
+    flexWrap: 'wrap', 
     // width:screenWidth * 0.5,
   },
   subtitle:{
     fontFamily: FUENTES.LIGHT,
     fontSize: FONT_SIZE.xl,
     color: colors.tinworkBlack,
-    flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
+    flexWrap: 'wrap', 
     width:screenWidth * 0.5
   },
   ubi:{
     fontFamily: FUENTES.LIGHT,
     fontSize: FONT_SIZE.base,
     color: colors.tinworkBlack,
-    flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
+    flexWrap: 'wrap', 
     width:screenWidth * 0.5
   },
   searchInput: {
@@ -62,7 +67,7 @@ export const styles = StyleSheet.create({
   changeLocationButton: {
     paddingVertical: 6,
     paddingHorizontal: 12,
-    backgroundColor: '#F0F7FF',
+    backgroundColor:BACKGROUND.primary,
     borderRadius: 6,
   },
   changeLocationText: {
