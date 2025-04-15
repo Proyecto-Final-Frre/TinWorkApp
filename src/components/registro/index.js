@@ -15,6 +15,7 @@ import {showMessage} from 'react-native-flash-message';
 import {validateEmail} from '../../utils/helpers';
 import {colors} from '../../constants/colors';
 import {createUser} from '../../services/UserService';
+import { BACKGROUND } from '../../utils/constants';
 
 export default function Registro({navigation}) {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,9 +25,7 @@ export default function Registro({navigation}) {
   const [errorCorreo, setErrorCorreo] = useState('');
   const [errorContrasena, setErrorContrasena] = useState('');
   const [errorConfirm, setErrorConfirm] = useState('');
-  const [isLoading, setIsLoading] = useState(false); 
-
-  var numeros = '0123456789';
+  const [isLoading, setIsLoading] = useState(false);  
 
   const onChange = (e, type) => {
     setFormData({...formData, [type]: e.nativeEvent.text});
@@ -49,6 +48,7 @@ export default function Registro({navigation}) {
         navigation.navigate('Habilidades');
       }
     } catch (error) {
+      console.log("🚀 ~ registerUser ~ error:", error)
       showMessage({
         message:
           error.code === 'auth/email-already-in-use'
@@ -60,15 +60,6 @@ export default function Registro({navigation}) {
     finally {
       setIsLoading(false); 
     }
-  };
-
-  const tiene_numeros = texto => {
-    for (let i = 0; i < texto.length; i++) {
-      if (numeros.indexOf(texto.charAt(i), 0) != -1) {
-        return true;
-      }
-    }
-    return false;
   };
 
   const validateData = () => {
@@ -89,18 +80,8 @@ export default function Registro({navigation}) {
       isValid = false;
     }
 
-    if (tiene_numeros(formData.nombre)) {
-      setErrorNombre('Debes ingresar un nombre válido');
-      isValid = false;
-    }
-
     if (size(formData.apellido) < 3) {
       setErrorApellido('Debes ingresar un apellido de al menos 3 caracteres');
-      isValid = false;
-    }
-
-    if (tiene_numeros(formData.apellido)) {
-      setErrorApellido('Debes ingresar un apellido válido');
       isValid = false;
     }
 
@@ -128,28 +109,40 @@ export default function Registro({navigation}) {
   };
 
   return (
-    <>
-      <View style={styles.imageContainer}>
+    <View style={styles.registerContainer} >
+       <View style={styles.imageContainer}>
         <Image
-          source={require('../../images/tinwork-logo.png')}
+          source={require('../../images/logo_tinwork.png')}
           resizeMode="contain"
           style={styles.image}
         />
-      </View>
+      </View>   
+      <Text style={styles.welcomeText}>
+        Descubrí ofertas laborales 💼 hechas para vos 💫
+      </Text>
+
       <View style={styles.form}>
-        <Input
-          placeholder="Nombre"
-          containerStyle={styles.input}
-          onChange={e => onChange(e, 'nombre')}
-          errorMessage={errorNombre}
-          defaultValue={formData.nombre}
-        />
+  
+      
+              <Input
+                placeholder="Nombre"
+                containerStyle={styles.input}
+                onChange={(e) => onChange(e, "nombre")}
+                defaultValue={formData.nombre}
+                leftIcon={{ type: "font-awesome", name: "user", color: "#ccc", size: 18 }}
+                autoCapitalize="words"
+                returnKeyType="next"
+                blurOnSubmit={false}
+                
+              />
         <Input
           placeholder="Apellido"
           containerStyle={styles.input}
           onChange={e => onChange(e, 'apellido')}
           errorMessage={errorApellido}
           defaultValue={formData.apellido}
+          leftIcon={{ type: "font-awesome", name: "user", color: "#ccc", size: 18 }}
+
         />
         <Input
           placeholder="Correo electrónico"
@@ -158,6 +151,8 @@ export default function Registro({navigation}) {
           keyboardType="email-address"
           errorMessage={errorCorreo}
           defaultValue={formData.correo}
+          leftIcon={{ type: "font-awesome", name: "envelope", color: "#ccc", size: 16 }}
+
         />
         <Input
           placeholder="Contraseña"
@@ -165,6 +160,7 @@ export default function Registro({navigation}) {
           password={true}
           secureTextEntry={!showPassword}
           onChange={e => onChange(e, 'password')}
+          leftIcon={{ type: "font-awesome", name: "lock", color: "#ccc", size: 18 }}
           rightIcon={
             <Icon
               name={showPassword ? 'eyeo' : 'eye'}
@@ -182,6 +178,7 @@ export default function Registro({navigation}) {
           password={true}
           secureTextEntry={!showPassword}
           onChange={e => onChange(e, 'confirm')}
+          leftIcon={{ type: "font-awesome", name: "lock", color: "#ccc", size: 18 }}
           rightIcon={
             <Icon
               name={showPassword ? 'eyeo' : 'eye'}
@@ -194,7 +191,7 @@ export default function Registro({navigation}) {
           defaultValue={formData.confirm}
         />
         <Button
-          title={isLoading ? (
+          title={isLoading  ? (
             <ActivityIndicator color="#fff" />
           ): 'Registrate'}
           containerStyle={styles.btnContainer}
@@ -202,16 +199,16 @@ export default function Registro({navigation}) {
           onPress={() => registerUser()}
         />
       </View>
-      <View style={styles.login}>
-        <Text>
-          Ya tienes una cuenta?{'  '}
+         <View style={styles.loginFooter}>
+            <Text style={styles.registerText}>
+            ¿Ya tienes una cuenta?{"  "}
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.btnLogin}>Iniciar sesion</Text>
+            <Text style={styles.btnLogin}>Iniciar sesión</Text>
           </TouchableWithoutFeedback>
         </Text>
       </View>
-    </>
+    </View>
   );
 }
 
@@ -226,15 +223,30 @@ const defaultFormValues = () => {
 };
 
 const styles = StyleSheet.create({
+  registerContainer:{
+      flex:1,
+      paddingHorizontal: 8,
+    },
+    welcomeText: {
+      fontSize: 14,
+      textAlign: 'center',
+      color: '#333', // gris oscuro, sobrio y legible
+      fontWeight: '400',
+    },
   imageContainer: {
     alignItems: 'center',
   },
   image: {
-    height: 150,
+    height: 100,
     width: '60%',
-    marginBottom: 20,
+  }, 
+  image_2: {
+    height: 100, 
+    width: "90%",
+    marginTop: 2, 
   },
   form: {
+    marginTop: 25,
     alignItems: 'center',
     width: '100%',
   },
@@ -242,10 +254,12 @@ const styles = StyleSheet.create({
     width: '95%',
   },
   btnContainer: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop:10,
     width: '90%',
     alignSelf: 'center',
+  },
+   btn:{
+    backgroundColor:colors.tinworkBlue
   },
   login: {
     marginTop: 10,
@@ -257,6 +271,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   ojo: {
-    color: '#c1c1c1',
+    color: '#9e9e9e',
+  },
+  formTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 8,
+    color: "#333",
+  },
+  formSubtitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#555',
+    marginBottom: 15,
+    textAlign: 'left',
+  },
+  loginFooter: {
+    marginTop: 10,
+    marginBottom: 30,
+    alignItems: 'center',
+  },
+  registerText:{
+    fontSize: 16
   },
 });
