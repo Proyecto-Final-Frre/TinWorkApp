@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image} from 'react-native';
+import {Image,View,Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 //Screens
@@ -10,8 +10,10 @@ import OffersScreen from '../../src/screens/OffersScreen';
 import OfferScreen from '../../src/screens/Offers';
 import Registration from '../../src/screens/Registration';
 import Matchs from '../../src/screens/Matchs';
-import Profiles from '../../src/screens/Profile';
 import ChatScreen from '../../src/screens/Chat';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { colors } from '../../src/constants/colors';
+
 const StackPublic = createNativeStackNavigator();
 
 export default function Public() {
@@ -56,14 +58,31 @@ export default function Public() {
         name="Habilidades"
         component={AbilitiesScreen}
         options={{
-          headerLeft: () => (
-            <Image
-              style={{width: 55, height: 55, margin: 2}}
-              source={require('../../src/images/CuatroDeCuatro.png')}
-            />
+          // headerLeft: () => (
+          //   <Image
+          //     style={{width: 55, height: 55, margin: 2}}
+          //     source={require('../../src/images/CuatroDeCuatro.png')}
+          //   />
+          // ),
+          headerTitle: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Icon name="hammer-wrench" size={22} color={colors.tinworkBlue} />
+              <Text style={{ marginLeft: 6, fontSize: 18, fontWeight: '600', color:colors.tinworkBlue}}>
+                Habilidades
+              </Text>
+            </View>
           ),
-          headerBackVisible: false,
           headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#e5f1ff',
+            borderBottomWidth: 1,
+            borderBottomColor: '#ccc',
+            elevation: 4, // sombra en Android
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+          },
         }}
       />
       <StackPublic.Screen
@@ -79,7 +98,27 @@ export default function Public() {
        <StackPublic.Screen
         name="Chat"
         component={ChatScreen}
-        options={{headerShown: false}}
+        options={{        
+          headerTitle: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Icon name="chat" size={22} color={colors.tinworkBlue} />
+              <Text style={{ marginLeft: 6, fontSize: 18, fontWeight: '600', color:colors.tinworkBlue}}>
+                Chat
+              </Text>
+            </View>
+          ),
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#e5f1ff',
+            borderBottomWidth: 1,
+            borderBottomColor: '#ccc',
+            elevation: 4, // sombra en Android
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+          },
+        }}
       />
       
     </StackPublic.Navigator>
