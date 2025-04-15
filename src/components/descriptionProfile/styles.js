@@ -1,7 +1,6 @@
-import {CurrentRenderContext} from '@react-navigation/native';
 import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from '../../constants/colors';
-import {CARD, FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
+import {BACKGROUND, FONT_SIZE, FUENTES} from '../../utils/constants';
 const screenWidth = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
@@ -26,7 +25,7 @@ export const styles = StyleSheet.create({
       alignItems: "center",
       paddingVertical: 6,
       paddingHorizontal: 12,
-      backgroundColor: '#F0F7FF',
+      backgroundColor: BACKGROUND.primary,
       borderRadius: 6,
     },
     editButtonText: {
@@ -66,10 +65,14 @@ export const styles = StyleSheet.create({
     },
     descriptionContainer: {
       borderWidth: 1,
-      borderColor: "#E1E3E8",
-      borderRadius: 12,
-      backgroundColor: "#F9FAFC",
-      minHeight: 120,
+      borderColor: '#D0D0D0',
+      backgroundColor: '#E0ECFF',
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
     },
     descriptionContainerActive: {
       borderColor: "#4A80F0",
@@ -81,11 +84,15 @@ export const styles = StyleSheet.create({
       elevation: 2,
     },
     input: {
-      fontFamily: FUENTES.LIGHT,
-         fontSize: FONT_SIZE.xl,
-         color: colors.tinworkBlack,
-         flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
+      fontFamily: FUENTES.REGULAR,
+      fontSize: FONT_SIZE.xs,
+      color: colors.tinworkBlack,
+      flexWrap: 'wrap', // Permite que el texto pase a la siguiente línea si es necesario
       padding: 4,
+      fontSize: 15,
+      lineHeight: 22,
+      padding: 10,
+      //fontFamily: 'System', // Cambialo si usás una fuente custom
     },
     textArea: {
       minHeight: 120,

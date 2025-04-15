@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Animated } from "react-native"
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"
 import {styles} from './styles';
 import { updateUser } from '../../services/UserService';
 
 const DescriptionProfile = ({ userUid,userDescription }) => {
-  console.log("🚀 ~ DescriptionProfile ~ userDescription:", userDescription , userUid)
   const [description, setDescription] = useState("");
-
-  console.log("🚀 ~ DescriptionProfile ~ description:", description)
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [tempDescription, setTempDescription] = useState("")
 
-  const MAX_CHARS = 250
+  const MAX_CHARS = 450
 
   useEffect(()=>{
     setDescription(userDescription)
