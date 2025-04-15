@@ -1,14 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Animated, Image, Text, View} from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Animated, Image, Text, TouchableOpacity, View } from 'react-native';
 import Choise from '../Choise';
-import {ACTION_OFFSET} from '../../utils/constants';
+import { ACTION_OFFSET, BACKGROUND } from '../../utils/constants';
 import AptitudeOffer from '../aptitudeOffer';
 import ButtonMoreAbilities from '../buttonMoreAbilities';
-import {formatDistance} from 'date-fns';
+import { formatDistance } from 'date-fns';
 import esLocale from 'date-fns/locale/es';
 import Icon from 'react-native-vector-icons/Entypo';
-
-import {styles} from './style';
+import { styles } from './style';
 
 export default function Card({
   title,
@@ -21,13 +20,15 @@ export default function Card({
   desiredAbilities,
   source,
   isFirst,
+  logoURL,
+  workModality,
+  companyName,
   swipe,
   tiltSign,
   ...rest
 }) {
   const [expand, setExpand] = useState(false);
   const [expandAptitude, setExpandAptitude] = useState(false);
-
   let totalAbilities = [...requiredAbilities, ...desiredAbilities];
   let moreAbilities = totalAbilities.length - requiredAbilities.length;
 
@@ -37,7 +38,7 @@ export default function Card({
   });
 
   const animatedCardStyle = {
-    transform: [...swipe.getTranslateTransform(), {rotate}],
+    transform: [...swipe.getTranslateTransform(), { rotate }],
   };
 
   const likeOpacity = swipe.x.interpolate({
@@ -56,6 +57,7 @@ export default function Card({
     locale: esLocale,
   });
 
+
   const renderChoise = useCallback(() => {
     return (
       <>
@@ -63,138 +65,138 @@ export default function Card({
           style={[
             styles.choiseContainer,
             styles.nopeContainer,
-            {opacity: nopeOpacity},
+            { opacity: nopeOpacity },
           ]}>
-        <Choise type="like" title="ME INTERESA" />
+          <Choise type="like" title="ME INTERESA" />
         </Animated.View>
         <Animated.View
           style={[
             styles.choiseContainer,
             styles.likeContainer,
-            {opacity: likeOpacity},
+            { opacity: likeOpacity },
           ]}>
           <Choise type="nope" title="NO ME INTERESA" />
-          </Animated.View>
+        </Animated.View>
       </>
     );
   }, []);
 
   return (
-    <Animated.View
-      style={[styles.container, isFirst && animatedCardStyle]}
-      {...rest}>
+    <Animated.View style={[styles.container, isFirst && animatedCardStyle]} {...rest}>
       <View style={styles.shadow}>
         {!expand && !expandAptitude ? (
           <View style={styles.card}>
-            <Image
-              style={[styles.image]}
-              source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/tinwork-6a67f.appspot.com/o/image_tinwork.png?alt=media&token=f6439911-dcda-4211-b920-465680990a38',
-              }}
-            />
-            <View style={{flex: 1, paddingHorizontal: '5%'}}>
-              <Text
-                style={[styles.title, {paddingBottom: '0%', paddingTop: '5%'}]}>
-                {title}
-              </Text>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                }}>
-                <Icon name={'location-pin'} size={17} />
-                <Text style={{flexGrow: 5}}>{province}</Text>
-                <Icon name={'briefcase'} size={17} />
-                <Text style={{flexGrow: 2, marginLeft: 1}}> {workDay}</Text>
-              </View>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  paddingBottom: '5%',
-                }}>
-                <Icon name={'calendar'} size={17} />
-                <Text style={{flexGrow: 5, marginLeft: 1}}>
-                  {' '}
-                  Hace {dataOffer}
-                </Text>
-              </View>
-              <Text style={styles.description}>
-                {descriptionShort ? descriptionShort + '...' : description}
-              </Text>
-              {descriptionShort && (
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    paddingTop: '5%',
-                    color: '#2E81FB',
+            <View style={styles.header}>
+              <View style={styles.logoContainer}>
+                <Image
+                  style={styles.logo}
+                  source={{
+                    uri:
+                      logoURL ||
+                      "https://firebasestorage.googleapis.com/v0/b/tinwork-6a67f.appspot.com/o/image_tinwork.png?alt=media&token=f6439911-dcda-4211-b920-465680990a38",
                   }}
-                  onPress={() => setExpand(true)}>
-                  Ver más
-                </Text>
-              )}
-              <View style={styles.buttonsContainer}>
-                {requiredAbilities.slice(0, 4).map((ability, index) => (
+                  resizeMode="cover"
+                />
+              </View>
+              <View style={styles.headerContent}>
+                <Text style={styles.title}>{companyName}</Text>
+                <Text style={styles.subtitle}>{title}</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1, margin: "4%", backgroundColor:BACKGROUND.secondary }}>
+              <View style={styles.mainInfoContainer}>
+                <View style={styles.column}>
+                  <View style={styles.infoItem}>
+                    <Icon name={'location-pin'} size={17} color="red" />
+                    <Text style={styles.infoText}>Argentina, {province} </Text>
+                  </View>
+                  <View style={styles.infoItem}>                    
+                    <Text style={styles.infoText}>💼 {workDay}</Text>
+                  </View>
+                </View>
+                <View style={styles.column}>
+                  <View style={styles.infoItem}>                  
+                    <Text style={styles.infoText}>📅 {`Hace ${dataOffer.replace("alrededor de ", "")}`}</Text>
+                  </View>
+                  <View style={[styles.infoItem]}>                
+                    <Text style={styles.infoText}>💼 {workModality}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.descriptionContainer}>
+                <Text style={styles.description}>{descriptionShort + '...' || description}</Text>
+                {descriptionShort && (
+                  <TouchableOpacity onPress={() => setExpand(true)} style={styles.expandButton}>
+                    <Text style={styles.expandButtonText}>Ver más</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View style={styles.tagsContainer}>
+                {requiredAbilities.slice(0, 5).map((ability, index) => (
                   <AptitudeOffer title={ability} key={index} />
                 ))}
                 {totalAbilities.length > requiredAbilities.length && (
                   <ButtonMoreAbilities
-                    buttonStyle={false}
-                    titleStyle={false}
+                    buttonStyle={true}
+                    titleStyle={true}
                     title={`+${moreAbilities}`}
                     onPress={() => setExpandAptitude(true)}
                   />
                 )}
+                
               </View>
             </View>
           </View>
         ) : expand && !expandAptitude ? (
           <View style={styles.card}>
-            <View style={{flex: 1, paddingHorizontal: '5%'}}>
-              <Text
-                style={[styles.title, {paddingBottom: '2%', paddingTop: '5%'}]}>
-                {title}
-              </Text>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                }}>
-                <Icon name={'location-pin'} size={17} />
-                <Text style={{flexGrow: 5}}>{province}</Text>
-                <Icon name={'briefcase'} size={17} />
-                <Text style={{flexGrow: 2, marginLeft: 1}}>{workDay}</Text>
+            <View style={styles.header}>
+              <View style={styles.logoContainer}>
+                <Image
+                  style={styles.logo}
+                  source={{
+                    uri:
+                      logoURL ||
+                      "https://firebasestorage.googleapis.com/v0/b/tinwork-6a67f.appspot.com/o/image_tinwork.png?alt=media&token=f6439911-dcda-4211-b920-465680990a38",
+                  }}
+                  resizeMode="cover"
+                />
               </View>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  paddingBottom: '5%',
-                }}>
-                <Icon name={'calendar'} size={17} />
-                <Text style={{flexGrow: 5, marginLeft: 1}}>
-                  {' '}
-                  Hace {dataOffer}
-                </Text>
+              <View style={styles.headerContent}>
+                <Text style={styles.title}>{companyName}</Text>
+                <Text style={styles.subtitle}>{title}</Text>
               </View>
-              <Text style={styles.description}>{description}</Text>
             </View>
-            <Text
-              style={{
-                textAlign: 'center',
-                justifyContent: 'center',
-                color: '#2E81FB',
-                marginBottom: 10,
-              }}
-              onPress={() => setExpand(false)}>
-              Ver menos
-            </Text>
+            <View style={{ flex: 1, paddingHorizontal: '5%',marginTop:'2%' }}>              
+            <View style={styles.mainInfoContainer}>
+              <View style={styles.column}>
+                <View style={styles.infoItem}>
+                  <Icon name={'location-pin'} size={17} color="red" />
+                  <Text style={styles.infoText}>Argentina, {province} </Text>
+                </View>
+                <View style={styles.infoItem}>                
+                  <Text style={styles.infoText}>💼 {workDay}</Text>
+                </View>
+              </View>
+              <View style={styles.column}>
+                <View style={styles.infoItem}>                
+                  <Text style={styles.infoText}>📅 {`Hace ${dataOffer.replace("alrededor de ", "")}`}</Text>
+                </View>
+                <View style={[styles.infoItem]}>             
+                  <Text style={styles.infoText}>💼 {workModality}</Text>
+                </View>
+              </View>
+              </View>
+                <Text style={styles.description}>{description}</Text>
+              </View>
+              <Text style={{textAlign: 'center',justifyContent: 'center',color: '#2E81FB',marginBottom: 10}} onPress={() => setExpand(false)}>
+                Ver menos
+              </Text>
           </View>
         ) : (
           <View style={styles.card}>
-            <View style={{flex: 1, paddingHorizontal: '5%'}}>
+            <View style={{ flex: 1, paddingHorizontal: '5%' }}>
               <Text
-                style={[styles.title, {paddingBottom: '0%', paddingTop: '3%'}]}>
+                style={[styles.title, { paddingBottom: '0%', paddingTop: '3%' }]}>
                 Habilidades Requeridas
               </Text>
               <View style={styles.buttonsContainer}>
@@ -203,7 +205,7 @@ export default function Card({
                 ))}
               </View>
               <Text
-                style={[styles.title, {paddingBottom: '0%', paddingTop: '0%'}]}>
+                style={[styles.title, { paddingBottom: '0%', paddingTop: '0%' }]}>
                 Habilidades Secundarias
               </Text>
               <View style={styles.buttonsContainer}>
@@ -223,7 +225,6 @@ export default function Card({
           </View>
         )}
       </View>
-
       {isFirst && renderChoise()}
     </Animated.View>
   );
