@@ -3,8 +3,9 @@ import {Animated, TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {styles} from './styles';
+import { BACKGROUND } from '../../utils/constants';
 
-export default function RoundButton({size, color, name, onPress}) {
+export default function RoundButton({size, color, name, onPress }) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const animateScale = useCallback(
@@ -20,14 +21,16 @@ export default function RoundButton({size, color, name, onPress}) {
 
   return (
     <TouchableWithoutFeedback
-      onPressIn={() => animateScale(0.8)}
+      onPressIn={() =>{animateScale(0.8) } }
       delayPressIn={0}
       onPressOut={() => {
         animateScale(1);
         onPress();
       }}
       delayPressOut={110}>
-      <Animated.View style={[styles.container, {transform: [{scale}]}]}>
+      <Animated.View style={[styles.container, {transform: [{scale}],
+        backgroundColor:BACKGROUND.secondary, // Cambia color si está activo
+      }] }>
         <Icon name={name} size={size} color={color} />
       </Animated.View>
     </TouchableWithoutFeedback>
