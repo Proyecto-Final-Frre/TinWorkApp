@@ -1,7 +1,5 @@
-import {CurrentRenderContext} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
-import {colors} from '../../constants/colors';
-import {CARD, FONT_SIZE, FUENTES, fuentes} from '../../utils/constants';
+import {BACKGROUND, CARD, FONT_SIZE, FUENTES} from '../../utils/constants';
 
 export const styles = StyleSheet.create({
   container: {position: 'absolute', top: 45},
@@ -10,7 +8,7 @@ export const styles = StyleSheet.create({
     height: CARD.HEIGHT,
     borderRadius: CARD.BORDER_RADIUS,
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    backgroundColor:BACKGROUND.secondary,
     justifyContent:'space-between'
   },
   shadow: {
@@ -20,11 +18,11 @@ export const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 4,
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 10,
   },
   title: {
     fontFamily: FUENTES.BOLD,

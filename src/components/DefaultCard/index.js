@@ -2,12 +2,20 @@ import React from 'react';
 import {Animated, Text, View,Image} from 'react-native';
 import FormSubmitButton from '../form-submit-button';
 import {styles} from './style';
+import { showMessage } from 'react-native-flash-message';
 
 
 
 export default function DefaultCard({ onRefresh,...rest }) {
   const handleRefresh = async () => {
-    await onRefresh();    
+    await onRefresh(); 
+    /*offers.length > 0 ? */    
+ 
+    /*:  
+    showMessage({
+      message: 'No se encontraron ofertas para sus habilidades.',
+      type: 'info',
+    });*/   
   };  
   
   return (
