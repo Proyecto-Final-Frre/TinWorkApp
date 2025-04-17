@@ -4,6 +4,8 @@ import { findUserAuthenticated } from '../../../AuthService';
 import { findByUid } from '../../services/UserService';
 import IconSend from 'react-native-vector-icons/Ionicons';
 import { createMessage, listenForMessages } from '../../services/ChatService';
+import { BACKGROUND } from '../../utils/constants';
+import { colors } from '../../constants/colors';
 
 
 const Chat = ({route}) => {
@@ -83,47 +85,39 @@ const Chat = ({route}) => {
     );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={'height'}
-    >
-      
-      <View style={styles.header}>
-      
-        <Text style={styles.title}>Chat</Text>
-      </View>
-
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.messageArea}
-        contentContainerStyle={{ flexGrow: 1 }}
-        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-        onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+    <View style={styles.container}>
+    <FlatList
+      ref={flatListRef}
+      data={messages}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => index.toString()}
+      contentContainerStyle={{ flexGrow: 1 }}
+      style={{ flex: 1 }}
+      onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+      onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+    />
+  
+    <View style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
+        placeholderTextColor="#999"
+        placeholder="Escribe un mensaje..."
+        value={message}
+        onChangeText={(text) => setMessage(text)}
       />
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe un mensaje..."
-          value={message}
-          onChangeText={(text) => setMessage(text)}
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSubmit}>
-          <IconSend name="send" size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      <TouchableOpacity style={styles.sendButton} onPress={handleSubmit}>
+        <IconSend name="send" size={24} color="#fff" />
+      </TouchableOpacity>
+    </View>
+  </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'space-between',
+    backgroundColor:BACKGROUND.secondary,
+    //justifyContent: 'space-between',
   },
   header: {
     marginTop:5,
@@ -177,7 +171,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    
+    color:colors.tinworkBlack
   },
   nameText: {
     fontWeight: 'bold',
@@ -186,7 +180,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: BACKGROUND.primary,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
     alignItems: 'center',
@@ -199,13 +193,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 15,
     marginVertical:"4%",
-    backgroundColor: '#f5f5f5',
+    backgroundColor: BACKGROUND.secondary,
+    color:colors.tinworkBlack
   },
   sendButton: {
     marginLeft: 10,
-    backgroundColor: '#007bff',
+    backgroundColor:colors.tinworkBlue,
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -217,13 +212,14 @@ const styles = StyleSheet.create({
   },
   messageContent: {
     flex: 1,  // Para que ocupe todo el espacio disponible
-    backgroundColor: '#f1f1f1',
+    backgroundColor: BACKGROUND.primary,
     borderRadius: 10,
     padding: 10,
   },
   senderName: {
     fontWeight: 'bold',
     marginBottom: 5,
+    color:colors.tinworkBlack
   },
   messageText: {
     color: '#333',
