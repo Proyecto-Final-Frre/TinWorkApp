@@ -10,8 +10,7 @@ export const styles = StyleSheet.create({
   },
    card: {
           backgroundColor: BACKGROUND.secondary,
-          borderRadius: 10,
-  
+          borderRadius: 10,  
         },
   title:{
     fontFamily: FUENTES.REGULAR,

@@ -26,6 +26,7 @@ import IconCameraPlus from 'react-native-vector-icons/MaterialCommunityIcons';
 import Svg, { Circle } from "react-native-svg";
 import DescriptionProfile from '../descriptionProfile';
 import SkeletonProfile from '../SkeletonProfile';
+import { useFocusEffect } from '@react-navigation/core';
 
 export default function Profile({ navigation }) {
   const [userAuth, setUserAuth] = useState();
@@ -43,20 +44,31 @@ export default function Profile({ navigation }) {
 
   const [loading, setLoading] = useState(true);  
   
-  useEffect(() => {
-    const getAbilitiesByUidUser = async () => {
-      setLoading(true); 
-      try {
-        let userAuthenticated = await findUserAuthenticated();
-        let user = await findByUid(userAuthenticated.uid);
-        setUserAuth(user);
-      } catch (error) {
-        console.error("Error cargando usuario:", error);
-      }
-      setLoading(false); 
-    };
-    getAbilitiesByUidUser();
-  }, []);
+ 
+  // Usamos useFocusEffect para ejecutar el código cuando la pantalla se enfoque
+  useFocusEffect(
+    useCallback(() => {
+      const getAbilitiesByUidUser = async () => {
+        setLoading(true);
+        try {
+          let userAuthenticated = await findUserAuthenticated();
+          let user = await findByUid(userAuthenticated.uid);
+          setUserAuth(user);
+        } catch (error) {
+          console.error("Error cargando usuario:", error);
+        }
+        setLoading(false);
+      };
+
+      // Llamamos la función cuando se enfoca la pantalla
+      getAbilitiesByUidUser();
+
+      // Esta función es opcional, se ejecuta cuando la pantalla pierde el foco
+      return () => {
+        console.log("La pantalla ha perdido el foco");
+      };
+    }, [])  // La dependencia vacía asegura que se ejecute solo una vez por foco
+  );
 
   const findAllProvinces = async () => {
     const prov = await todasProvincias();
@@ -69,6 +81,7 @@ export default function Profile({ navigation }) {
 
 
   useEffect(() => {
+    console.log("🚀 ~ Profile ~ userAuth:", userAuth?.abilities)
     if (userAuth?.imageProfile) {
       setImage({ uri: userAuth?.imageProfile });
     } 
@@ -76,7 +89,7 @@ export default function Profile({ navigation }) {
     setUserDescription(userAuth?.description)
 
     if (userAuth?.location) {
-      setSelectedLocation({ name: userAuth?.location })
+      setSelectedLocation({ name: userAuth?.location?.name , id:userAuth?.location?.id })
     }
 
 
@@ -194,7 +207,7 @@ export default function Profile({ navigation }) {
   const updateProvince = () => {
     const user = {
       uid: uid,
-      location: selectedLocation?.name
+      location: {name:selectedLocation?.name , id:selectedLocation?.id}
     }
     updateUser(user);
 
@@ -239,6 +252,11 @@ export default function Profile({ navigation }) {
     }
     setLoading(false); 
   };
+
+  const closeModal=()=>{
+    setModalUbiVisible(false), 
+    setSelectedLocation({ name: userAuth?.location?.name , id:userAuth?.location?.id })
+  }
   
   return (
     <View>            
@@ -314,7 +332,7 @@ export default function Profile({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.buttonsContainer}>
-              {userAuth?.abilities?.slice(0, 4).map((ability, index) => (
+              {userAuth?.abilities?.slice(0, 5).map((ability, index) => (
                 <AptitudeOffer title={ability} key={index} />
               ))}
               {!expandAptitude
@@ -327,7 +345,7 @@ export default function Profile({ navigation }) {
                   />
                 )
                 : userAuth?.abilities
-                  .slice(3, userAuth?.abilities?.length)
+                  .slice(5, userAuth?.abilities?.length)
                   .map((ability, index) => (
                     <AptitudeOffer title={ability} key={index} />
                   ))}
@@ -347,14 +365,14 @@ export default function Profile({ navigation }) {
             animationType="slide"
             transparent={true}
             visible={modalUbiVisible}
-            onRequestClose={() => setModalUbiVisible(false)}
+            onRequestClose={() => closeModal()}
           >
             <View style={styles.modalContainer}>
 
               <View style={styles.modalContent}>
                 <View style={styles.modalTitle}>
                   <Text style={styles.title}>Seleccione su ubicación</Text>
-                  <TouchableOpacity style={styles.closeIcon} onPress={() => setModalUbiVisible(false)}>
+                  <TouchableOpacity style={styles.closeIcon} onPress={() => closeModal()}>
                     <MaterialIcons name="close" size={30} color="#333" />
                   </TouchableOpacity>
                 </View>
