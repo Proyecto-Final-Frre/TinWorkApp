@@ -8,6 +8,7 @@ import {findByUid, updateUser} from '../../services/UserService';
 import {showMessage} from 'react-native-flash-message';
 import { TextInput,View,ActivityIndicator } from 'react-native';
 import { colors } from '../../constants/colors';
+import ButtonMoreAbilities from '../buttonMoreAbilities';
 
 const Form = ({navigation}) => {
   const [formData, setFormData] = useState([]);
@@ -55,8 +56,10 @@ const Form = ({navigation}) => {
     };
     updateUser(user);
     showMessage({
-      message: 'Habilidades Actualizadas',
+      message: 'Usuario cargado correctamente',
+      description: 'Tus datos se cargaron con éxito.',
       type: 'success',
+      icon: 'auto',
     });
     navigation.navigate('Home');
   }, [formData]);
@@ -113,11 +116,14 @@ const Form = ({navigation}) => {
             return null;
           })}
   
-          <FormSubmitButton
-            onSubmit={onSubmit}
-            disabled={formData?.length > 0 ? false : true}
-            title={'Guardar habilidades'}
-          />
+          <View style={{width:'90%', alignSelf:'center'}} >
+           <ButtonMoreAbilities
+                    buttonStyle={true}
+                    titleStyle={true}
+                    title={/*`+${minAbilities}`*/"Guardar habilidades"}
+                    onPress={()=>onSubmit()}
+                  />
+          </View>
         </>
       )}
     </>

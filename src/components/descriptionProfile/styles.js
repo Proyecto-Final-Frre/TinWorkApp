@@ -128,8 +128,8 @@ export const styles = StyleSheet.create({
       padding: 16,
     },
     emptyStateText: {
-      color: "#9EA0A4",
-      fontSize: 14,
+      color: colors.tinworkBlack,
+      fontSize: 16,
       textAlign: "center",
       fontStyle: "italic",
     },

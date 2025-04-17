@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 15, 
     marginVertical: 15,
-    backgroundColor:colors.tinworkBlack
+    backgroundColor:colors.tinworkBlue
 
   },
 });
