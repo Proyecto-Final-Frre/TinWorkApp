@@ -41,11 +41,15 @@ export const styles = StyleSheet.create({
       fontSize: FONT_SIZE.xl,
       color: colors.tinworkBlack,
       flexWrap: 'wrap', 
+      fontWeight: 'bold',
+   
+  
     },
     subtitle:{
       fontFamily: FUENTES.LIGHT,
-      fontSize: FONT_SIZE.xl,
-      color: colors.tinworkBlack,
+      fontSize: FONT_SIZE.lg,
+      color: colors.tinworkBlue,
+      fontWeight: 'bold',
       flexWrap: 'wrap', 
     },
   choiseContainer: {
@@ -127,7 +131,7 @@ export const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 14,
-    color: '#666',
+    color:colors.tinworkBlack,
     marginLeft: 4,    
   },
   descriptionContainer: {

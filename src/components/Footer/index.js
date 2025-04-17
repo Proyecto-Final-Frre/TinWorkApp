@@ -9,17 +9,18 @@ export default function Footer({handleChoice}) {
   return (
     <View style={styles.container}>
       <RoundButton
-        name="x"
-        size={40}
-        color={COLORS.nope}
-        onPress={() => handleChoice(1)}
-      />
-      <RoundButton
         name="heart"
-        size={40}
+        size={45}
         color={COLORS.like}
         onPress={() => handleChoice(-1)}
       />
+      <RoundButton
+        name="x"
+        size={45}
+        color={COLORS.nope}
+        onPress={() => handleChoice(1)}
+      />
+   
     </View>
   );
 }
