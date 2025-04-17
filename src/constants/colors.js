@@ -1,5 +1,7 @@
 export const colors = {
-  tinworkBlue: '#2E81FB',
+  tinworkBlue: '#0d6efd',
   tinworkWhite: '#FFFFFF',
   tinworkBlack: '#000000',
+  tinworkGrey: '#A0A4A8', 
+
 };

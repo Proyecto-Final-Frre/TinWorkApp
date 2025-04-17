@@ -4,6 +4,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+export { hp, wp };
 export const FONT_SIZE = {
   xs: hp(1.5625),
   sm: hp(1.875),
