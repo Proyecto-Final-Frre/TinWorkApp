@@ -6,7 +6,8 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  TextInput
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {size} from 'lodash';
@@ -130,6 +131,7 @@ export default function Registro({navigation}) {
                 onChange={(e) => onChange(e, "nombre")}
                 defaultValue={formData.nombre}
                 leftIcon={{ type: "font-awesome", name: "user", color: "#ccc", size: 18 }}
+                selectionColor={colors.tinworkBlue}  
                 autoCapitalize="words"
                 returnKeyType="next"
                 blurOnSubmit={false}
@@ -142,18 +144,21 @@ export default function Registro({navigation}) {
           errorMessage={errorApellido}
           defaultValue={formData.apellido}
           leftIcon={{ type: "font-awesome", name: "user", color: "#ccc", size: 18 }}
+          selectionColor={colors.tinworkBlue}  
 
         />
         <Input
           placeholder="Correo electrónico"
           containerStyle={styles.input}
           onChange={e => onChange(e, 'correo')}
-          keyboardType="email-address"
+          //keyboardType="email-address"
+          selectionColor={colors.tinworkBlue}
           errorMessage={errorCorreo}
           defaultValue={formData.correo}
           leftIcon={{ type: "font-awesome", name: "envelope", color: "#ccc", size: 16 }}
 
         />
+       
         <Input
           placeholder="Contraseña"
           containerStyle={styles.input}
@@ -171,6 +176,8 @@ export default function Registro({navigation}) {
           }
           errorMessage={errorContrasena}
           defaultValue={formData.password}
+          selectionColor={colors.tinworkBlue}
+
         />
         <Input
           placeholder="Repetir contraseña"
@@ -189,6 +196,8 @@ export default function Registro({navigation}) {
           }
           errorMessage={errorConfirm}
           defaultValue={formData.confirm}
+          selectionColor={colors.tinworkBlue}
+
         />
         <Button
           title={isLoading  ? (
@@ -230,8 +239,7 @@ const styles = StyleSheet.create({
     welcomeText: {
       fontSize: 14,
       textAlign: 'center',
-      color: '#333', // gris oscuro, sobrio y legible
-      fontWeight: '400',
+      color: colors.tinworkBlack, 
     },
   imageContainer: {
     alignItems: 'center',
@@ -291,8 +299,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
     alignItems: 'center',
+
   },
   registerText:{
-    fontSize: 16
+    fontSize: 16,
+    color:colors.tinworkBlack
   },
 });
