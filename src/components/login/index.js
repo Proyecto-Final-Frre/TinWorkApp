@@ -8,8 +8,8 @@ import {
   View,
   KeyboardAvoidingView,
   Keyboard,
-  ScrollView,
-   
+  ScrollView, 
+  TextInput  
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {size} from 'lodash';
@@ -19,6 +19,7 @@ import {colors} from '../../constants/colors';
 import {updateUser} from '../../services/UserService';
 import {authenticationWithEmailAndPass} from '../../../AuthService';
 import { BACKGROUND, FUENTES } from '../../utils/constants';
+import { showMessage } from 'react-native-flash-message';
 
 export default function Login({navigation}) {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,20 +28,31 @@ export default function Login({navigation}) {
   const [errorContrasena, setErrorContrasena] = useState('');
   const [isLoading, setIsLoading] = useState(false);
  
-  const onChange = (e, type) => {
-    const newFormData = { ...formData, [type]: e.nativeEvent.text };
-    setFormData(newFormData);  
-    if (type === 'password' && newFormData.password) {
-      setErrorContrasena(newFormData.password.length >= 6 ? '' : 'La contraseña debe tener al menos 6 caracteres');
+  const onChange = (text, type) => {
+    const newFormData = { ...formData, [type]: text };
+    setFormData(newFormData);
+  
+    if (text.trim() === '') {
+      // Limpia errores si está vacío
+      if (type === 'correo') setErrorCorreo('');
+      if (type === 'password') setErrorContrasena('');
+      return;
+    }
+  
+    if (type === 'correo') {
+      setErrorCorreo(validateEmail(text) ? '' : 'Debes ingresar un correo válido');
+    }
+  
+    if (type === 'password') {
+      setErrorContrasena(text.length >= 6 ? '' : 'La contraseña debe tener al menos 6 caracteres');
     }
   };
 
-
   const loginUser = async () => {
-    setIsLoading(true)
     if (!validateData()) {
       return;
     }
+    setIsLoading(true)
     try {
       const auth = await authenticationWithEmailAndPass(
         formData.correo,
@@ -55,7 +67,29 @@ export default function Login({navigation}) {
 
         navigation.navigate('Home');
       }
-    } catch(err) { console.log("error",err)
+    } catch(err) { 
+      if (err.code === 'auth/user-not-found') {
+        showMessage({
+          message: 'El usuario no existe',
+          description: 'Verificá el correo ingresado o registrate.',
+          type: 'danger',
+          icon: 'auto',
+        });
+      } else if (err.code === 'auth/wrong-password') {
+        showMessage({
+          message: 'Contraseña incorrecta',
+          description: 'Verificá la contraseña e intentá de nuevo.',
+          type: 'danger',
+          icon: 'auto',
+        });
+      } else {
+        showMessage({
+          message: 'Ocurrió un error al iniciar sesión',
+          description: 'Intentá de nuevo más tarde.',
+          type: 'danger',
+          icon: 'auto',
+        }); }
+      
     } finally {
       setIsLoading(false)
     }
@@ -84,24 +118,19 @@ export default function Login({navigation}) {
 
   return (
 
-  <KeyboardAvoidingView
-      behavior={ "height"}
-      style={{ flex: 1 }}
-    >
-  <ScrollView
-    contentContainerStyle={{ flexGrow: 1 }}
-    keyboardShouldPersistTaps="handled"
-  >
-  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+<ScrollView
+  style={{ backgroundColor: BACKGROUND.secondary }}
+  // contentContainerStyle={{ flexGrow: 1 }}
+  // keyboardShouldPersistTaps="handled"
+>
   <View style={styles.loginContainer}>
-
       <View style={styles.imageContainer}>      
         <Image
           source={require('../../images/logo_tinwork.png')}
           resizeMode="contain"
           style={styles.image}
         />
-        <Text style={styles.welcomeText}>Descubrí ofertas laborales 💼 hechas para vos 💫</Text>
+        <Text style={styles.welcomeText}>Descubrí ofertas laborales 💼</Text>
          <Image
           source={require('../../images/Reclutier.png')}
           resizeMode="contain"
@@ -109,28 +138,31 @@ export default function Login({navigation}) {
         />
       </View>
       <View style={styles.form}>
-      <Input
+  
+       <Input
       placeholder="Ingresa tu correo"
       containerStyle={styles.input}
       inputContainerStyle={styles.inputContainer}
       inputStyle={styles.inputText}
-      placeholderTextColor="#9e9e9e"
-      onChange={e => onChange(e, 'correo')}
-      keyboardType="email-address"
+      selectionColor={colors.tinworkBlue}  
+      onChangeText={text => onChange(text, 'correo')}      //keyboardType="email-address"
       errorMessage={errorCorreo}
       errorStyle={styles.errorText}
       defaultValue={formData.correo}
       leftIcon={{ type: 'material', name: 'email', color: '#9e9e9e', size: 20 }}
-    />
+    /> 
       <Input
-        placeholder="Contraseña"
+        placeholder="Ingresa tu contraseña"
         containerStyle={styles.input}
         inputContainerStyle={styles.inputContainer}
         inputStyle={styles.inputText}
-        placeholderTextColor="#9e9e9e"
+        selectionColor={colors.tinworkBlue}  
         password={true}
         secureTextEntry={!showPassword}
-        onChange={e => onChange(e, 'password')}
+        textContentType="password"
+        // onChange={e => onChange(e, 'password')}
+        onChangeText={text => onChange(text, 'password')}
+
         errorMessage={errorContrasena}
         errorStyle={styles.errorText}
         defaultValue={formData.password}
@@ -150,7 +182,6 @@ export default function Login({navigation}) {
           containerStyle={styles.btnContainer}
           buttonStyle={styles.btn}
           loading={isLoading}
-          //disabled={!validateEmail(formData.correo)}
           onPress={() => loginUser()}
         />
       </View>
@@ -163,10 +194,8 @@ export default function Login({navigation}) {
         </TouchableWithoutFeedback>
       </Text>        
       </View>
-    </View>
-  </TouchableWithoutFeedback>
+  </View>
   </ScrollView>
-</KeyboardAvoidingView>
    
   );
 }
@@ -183,14 +212,16 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor:BACKGROUND.secondary,
     paddingHorizontal: 20,
+  
   },
+
   imageContainer: {
     alignItems: "center",
-    marginTop: 10, // Añadir espacio en la parte superior
-    marginBottom: 20, // Espacio entre las imágenes y el formulario
+    marginTop: '1%', // Añadir espacio en la parte superior
+    marginBottom:'1%', // Espacio entre las imágenes y el formulario
   },
   image: {
-    height: 80, // Reducir un poco el tamaño para que se vea más proporcionado
+    height: 60, // Reducir un poco el tamaño para que se vea más proporcionado
     width: "60%",
   },
   welcomeText: {
@@ -200,12 +231,11 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   image_2: {
-    height: 180, // Aumentar un poco para que la ilustración se vea mejor
+    height: 150, // Aumentar un poco para que la ilustración se vea mejor
     width: "80%",
-    marginTop: 10, // Espacio entre las dos imágenes
+    marginTop: 5, // Espacio entre las dos imágenes
   },
   form: {
-    marginTop: 5,
     alignItems: 'center',
     width: '100%',
   },
@@ -218,17 +248,17 @@ const styles = StyleSheet.create({
     fontFamily:FUENTES.REGULAR
   },
   btnContainer: {
-    marginTop:10,
     width: '95%',
     alignSelf: 'center',
   },
   loginFooter: {
-    marginTop: 10,
+    marginTop: '1%',
     marginBottom: 30,
     alignItems: 'center',
   },
   registerText:{
-    fontSize: 16
+    fontSize: 16,
+    color:colors.tinworkBlack
   },
   btn:{
     backgroundColor:colors.tinworkBlue
