@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {FONT_SIZE, FUENTES, BACKGROUND} from '../../utils/constants';
+import { colors } from '../../constants/colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,7 +10,7 @@ export const styles = StyleSheet.create({
   recrutierContainer: {
     backgroundColor: BACKGROUND.primary,
     padding: 10,
-    margin: 10,
+    margin: '4%',
     borderRadius: 10,
     shadowColor: 'black',
     shadowOpacity: 0.2,
@@ -28,7 +29,7 @@ export const styles = StyleSheet.create({
   name: {
     fontFamily: FUENTES.REGULAR,
     fontSize: FONT_SIZE.lg,
-    color: '#333',
+    color: colors.tinworkBlack,
   },
   company: {
     fontSize: 16,
@@ -60,21 +61,23 @@ export const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: "80%",
+    color:colors.tinworkBlue
   },
   skeletonContainer: {
-    padding: 10,
+    padding: 16,
+    width: '100%',
   },
-  skeletonChatContainer: {
+  skeletonMatch: {
     flexDirection: 'row',
+    marginBottom: 16,
     alignItems: 'center',
-    marginBottom: 15,
   },
-  skeletonAvatar: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
+  skeletonImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     backgroundColor: '#e0e0e0',
-    marginRight: 10,
+    marginRight: 16,
   },
   skeletonDetails: {
     flex: 1,
@@ -82,13 +85,16 @@ export const styles = StyleSheet.create({
   skeletonLine: {
     height: 10,
     backgroundColor: '#e0e0e0',
-    marginBottom: 6,
     borderRadius: 5,
+    marginBottom: 8,
+    width: '100%',
   },
   shortLine: {
     width: '60%',
-  }
-  ,
+  },
+  chatLine: {
+    width: '40%',
+  },
   emptyMessageContainer: {
     flex: 1,
     padding: 30,

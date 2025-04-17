@@ -64,22 +64,26 @@ const ChatList = () => {
 
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} 
-                  refreshControl={ <RefreshControl refreshing={refreshing} 
-                  onRefresh={onRefresh} />}>        
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >    
         {loading ? (
-          <View style={styles.skeletonContainer}>
-            {[...Array(5)].map((_, index) => (
-              <View style={styles.skeletonChatContainer} key={index}>
-                <View style={styles.skeletonAvatar} />
-                <View style={styles.skeletonDetails}>
-                  <View style={styles.skeletonLine} />
-                  <View style={[styles.skeletonLine, styles.shortLine]} />
-                </View>
+           <View style={styles.skeletonContainer}>
+                {[...Array(6)].map((_, index) => (
+                  <View style={styles.skeletonMatch} key={index}>
+                    <View style={styles.skeletonImage} />
+                    <View style={styles.skeletonDetails}>
+                      <View style={styles.skeletonLine} />
+                      <View style={[styles.skeletonLine, styles.shortLine]} />
+                      <View style={[styles.skeletonLine, styles.chatLine]} /> 
+                    </View>
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
         ) :  recrutiersData.length === 0 ? (
           <View style={styles.emptyMessageContainer}>
               <Image
@@ -117,8 +121,6 @@ const ChatList = () => {
 
         ))}
       </ScrollView>
-
-    </View>
   );
 };
 
