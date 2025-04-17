@@ -24,15 +24,50 @@ export default function OfferScreen() {
     setUserAuth(user);
   };
 
-  const findOffersByAbilities = () => {
-    findByAbilities(
-      userAuth.abilities,
-      userAuth.interestingOffers,
-      userAuth.uninterestingOffers,
-    ).then(offersResponse => {
-      setOffers(offersResponse);
-    });
+  const findOffersByAbilities = async () => {
+    try { 
+
+      if(!userAuth.abilities) {
+        showMessage({
+          message: 'Usted no tiene habilidades para el filtrado de ofertas',
+          type: 'danger',
+        })
+        return
+      }
+     
+      const offersResponse = await findByAbilities(
+        userAuth.abilities,
+        userAuth.interestingOffers,
+        userAuth.uninterestingOffers
+      );
+
+      
+      if (offersResponse.length > 0) {
+        setOffers(offersResponse);
+        // showMessage({
+        //   message: 'Ofertas cargadas exitosamente',
+        //   type: 'success',
+        // })
+      }
+    } catch (err) {
+      console.log("errorr",err)
+      // showMessage({
+      //   message: 'Error al cargar las ofertas. Intente más tarde.',
+      //   // description: error.message || 'Error desconocido',
+      //   type: 'danger',
+      // });
+    } finally {
+      // showMessage({
+      //   message: 'Error al cargar las ofertas. Intente más tarde.',
+      //   // description: error.message || 'Error desconocido',
+      //    type: 'danger',
+      //  });
+      setLoading(false); 
+    }
   };
+
+
+
 
   useEffect(() => {
     getAbilitiesByUidUser();
@@ -44,7 +79,6 @@ export default function OfferScreen() {
     }
   }, [userAuth, offers.length]);
 
-  useEffect(() => setLoading(false), [offers]);
 
   const panResponser = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
@@ -100,9 +134,9 @@ export default function OfferScreen() {
 
   const handleDirection = direction => {
     if (direction > 0) {
-      setInterested(true);
-    } else {
       setInterested(false);
+    } else {
+      setInterested(true);
     }
   };
 
@@ -120,7 +154,6 @@ export default function OfferScreen() {
   }, [interested]);
 
   const addInterested = offer => {
-    userAuth.interestingOffers.push(offer.id);
 
     const userUpdate = {
       uid: userAuth.uid,
@@ -147,19 +180,40 @@ export default function OfferScreen() {
   const fetchOffers=()=>{
     getAbilitiesByUidUser();
     findOffersByAbilities();
-    offers.length > 0 ? showMessage({
-      message: 'Ofertas cargadas exitosamente',
-      type: 'success',
-    }) :
-    showMessage({
-      message: 'Por favor, intente más tarde',
-      type: 'danger',
-    });
+    
   }
+
+
   return (
     <View style={styles.container}>
       {loading ? (
-        <Text>Cargando</Text>
+             <View style={styles.skeletonCard}>
+             {/* Imagen de la Card */}
+             <View style={styles.skeletonImage} />
+       
+             {/* Detalles de la oferta */}
+             <View style={styles.skeletonDetails}>
+               {/* Título de la oferta */}
+               <View style={[styles.skeletonLine, styles.titleLine]} />
+       
+               {/* Ubicación y jornada */}
+               <View style={styles.skeletonSmallLines}>
+                 <View style={[styles.skeletonLine, styles.smallLine]} />
+                 <View style={[styles.skeletonLine, styles.smallLine]} />
+               </View>
+       
+               {/* Descripción corta */}
+               <View style={[styles.skeletonLine, styles.shortLine]} />
+               <View style={[styles.skeletonLine, styles.shortLine]} />
+       
+               {/* Botones de habilidades */}
+               <View style={styles.skillsContainer}>
+                 <View style={styles.skeletonButton} />
+                 <View style={styles.skeletonButton} />
+                 <View style={styles.skeletonButton} />
+               </View>
+             </View>
+           </View>
       ) :
         offers.length < 1 ? (
           <DefaultCard onRefresh={fetchOffers} />)
@@ -177,13 +231,16 @@ export default function OfferScreen() {
                     province,
                     workDay,
                     dateOffer,
+                    logoURL,
+                    workModality,
+                    companyName
                   },
                   index,
                 ) => {
                   let longitud = description.length;
-                  let fin = 131;
-                  if (longitud > 131) {
-                    fin = (longitud - 131) * -1;
+                  let fin = 332;
+                  if (longitud > 332) {
+                    fin = (longitud - 332) * -1;
                   }
                   let descriptionShort = description.slice(0, fin);
                   const isFirst = index === 0;
@@ -194,13 +251,16 @@ export default function OfferScreen() {
                       title={title}
                       requiredAbilities={requiredAbilities}
                       desiredAbilities={desiredAbilities}
-                      description={description}
+                      description={description}s
                       descriptionShort={
-                        description.length > 131 ? descriptionShort : null
+                        description.length > 332 ? descriptionShort : null
                       }
                       province={province}
                       workDay={workDay}
                       dateOffer={dateOffer}
+                      logoURL={logoURL}
+                      workModality={workModality}
+                      companyName={companyName}
                       source={source}
                       swipe={swipe}
                       tiltSign={tiltSign}
