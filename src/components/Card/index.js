@@ -124,7 +124,7 @@ export default function Card({
                 </View>
               </View>
               <View style={styles.descriptionContainer}>
-                <Text style={styles.description}>{descriptionShort + '...' || description}</Text>
+                <Text style={styles.description}>{descriptionShort  ? descriptionShort + '...' : description}</Text>
                 {descriptionShort && (
                   <TouchableOpacity onPress={() => setExpand(true)} style={styles.expandButton}>
                     <Text style={styles.expandButtonText}>Ver más</Text>

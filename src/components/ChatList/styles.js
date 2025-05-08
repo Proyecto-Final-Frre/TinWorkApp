@@ -97,10 +97,7 @@ export const styles = StyleSheet.create({
   },
   emptyMessageContainer: {
     flex: 1,
-    padding: 30,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 20,
   },
   emptyMessage: {
     fontSize: 18,
