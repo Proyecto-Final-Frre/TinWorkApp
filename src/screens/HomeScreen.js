@@ -69,7 +69,7 @@ const getTabIcon = (route, color, focused) => {
 export default function HomeScreen() {
   return (
     <Tab.Navigator
-      initialRouteName="Offer" // 👈 Esta línea
+      initialRouteName="Offer" 
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, focused }) => getTabIcon(route, color, focused),
         tabBarStyle: {

@@ -6,10 +6,11 @@ import { styles } from './style';
 import { ACTION_OFFSET, CARD } from '../../utils/constants';
 import { findByAbilities, update } from '../../services/OfferService';
 import { findUserAuthenticated } from '../../../AuthService';
-import { create, findByUid, updateUser } from '../../services/UserService';
-import { FormSubmitButton } from '../../components';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import {  findByUid, updateUser } from '../../services/UserService';
+import { showMessage } from 'react-native-flash-message';
 import DefaultCard from '../../components/DefaultCard';
+import { useFocusEffect } from '@react-navigation/core';
+
 export default function OfferScreen() {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,9 +70,13 @@ export default function OfferScreen() {
 
 
 
-  useEffect(() => {
-    getAbilitiesByUidUser();
-  }, []);
+ 
+
+  useFocusEffect(
+    useCallback(() => {
+      getAbilitiesByUidUser();
+    }, [])
+  );
 
   useEffect(() => {
     if (userAuth && (!offers.length || offers.length < 1)) {
@@ -120,6 +125,8 @@ export default function OfferScreen() {
     swipe.setValue({ x: 0, y: 0 });
   }, [swipe]);
 
+  
+
   const handleChoice = useCallback(
     direction => {
       handleDirection(direction);
@@ -140,6 +147,7 @@ export default function OfferScreen() {
     }
   };
 
+  
   useEffect(() => {
     if (interested !== undefined) {
       if (offers.length > 0) {
@@ -149,22 +157,31 @@ export default function OfferScreen() {
         } else {
           addNotInterested(offer);
         }
+  
       }
+  
+      setInterested(undefined); 
     }
   }, [interested]);
 
+ 
+
   const addInterested = offer => {
-
-    const userUpdate = {
-      uid: userAuth.uid,
-      interestingOffers: userAuth.interestingOffers,
+    const updatedUser = {
+      ...userAuth,
+      interestingOffers: [...(userAuth.interestingOffers || []), offer.id],
     };
-
-    updateUser(userUpdate);
-    // validar que userAuth despues lleve: descripcion, image y location
-    update(offer, userAuth);
-    setInterested(undefined);
+  
+    setUserAuth(updatedUser);
+  
+    updateUser({
+      uid: updatedUser.uid,
+      interestingOffers: updatedUser.interestingOffers,
+    });
+  
+    update(offer, updatedUser);
   };
+  
 
   const addNotInterested = offer => {
     userAuth.uninterestingOffers.push(offer.id);
@@ -173,7 +190,6 @@ export default function OfferScreen() {
       uninterestingOffers: userAuth.uninterestingOffers,
     };
     updateUser(userUpdate);
-    setInterested(undefined);
   };
 
   
