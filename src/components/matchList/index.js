@@ -47,7 +47,7 @@ const MatchList = () => {
 
   const dataOffer = (dateOffer) => {
     if (!dateOffer?.seconds) return 'Sin fecha';
-  
+
     const date = new Date(dateOffer.seconds * 1000 + Math.floor(dateOffer.nanoseconds / 1000000));
     return formatDistance(date, new Date(), { locale: esLocale });
   };
@@ -62,17 +62,17 @@ const MatchList = () => {
 
       {loading ? (
         <View style={styles.skeletonContainer}>
-        {[...Array(6)].map((_, index) => (
-          <View style={styles.skeletonMatch} key={index}>
-            <View style={styles.skeletonImage} />
-            <View style={styles.skeletonDetails}>
-              <View style={styles.skeletonLine} />
-              <View style={[styles.skeletonLine, styles.shortLine]} />
-              <View style={[styles.skeletonLine, styles.chatLine]} /> 
+          {[...Array(6)].map((_, index) => (
+            <View style={styles.skeletonMatch} key={index}>
+              <View style={styles.skeletonImage} />
+              <View style={styles.skeletonDetails}>
+                <View style={styles.skeletonLine} />
+                <View style={[styles.skeletonLine, styles.shortLine]} />
+                <View style={[styles.skeletonLine, styles.chatLine]} />
+              </View>
             </View>
-          </View>
-        ))}
-      </View>
+          ))}
+        </View>
       ) : matchs.length === 0 ? (
         <View style={styles.emptyMessageContainer}>
           <Image
@@ -86,7 +86,6 @@ const MatchList = () => {
         matchs.map((match, index) => (
 
           <View style={styles.matchContainer} key={`${match.id}-${index}`}>
-             {console.log("🚀 ~ MatchList ~ match:", match.dateOffer/*.toDate()*/)}
             <Image
               style={styles.img}
               source={match?.logoURL ? { uri: match.logoURL } : offerMaletin}
@@ -95,39 +94,35 @@ const MatchList = () => {
             <View style={styles.detailContainer}>
               <Text style={styles.company}>{match.companyName}</Text>
               <Text style={styles.jobTitle}>{match.title}</Text>
+              <View style={styles.separator} />
 
               <View style={styles.row}>
-                <View style={styles.iconText}>
-                  <Icon name="location-pin" size={15} color="red" />
-                  <Text style={styles.textSpec}>
-                    {match.province}, {match.country}
-                  </Text>
+                {/* Columna izquierda */}
+                <View style={styles.columnLeft}>
+                  <View style={styles.rowItem}>
+                    <Icon name="location-pin" size={15} color="red" />
+                    <Text style={styles.textSpec}>{match.province}, {match.country}</Text>
+                  </View>
+                  <View style={styles.rowItem}>
+                    <Icon name="calendar" size={15} color="#007bff" />
+                    <Text style={styles.textSpec}>Hace {dataOffer(match?.dateOffer)}</Text>
+                  </View>
                 </View>
 
-                <View style={styles.iconText}>
-                  <Text style={styles.textSpec}>💼 {match.workDay}</Text>
-                </View>
-              </View>
-
-              <View style={styles.row}>
-                <View style={styles.iconText}>
-                  <Text style={styles.textSpec}>📅 Hace {dataOffer(match?.dateOffer)}</Text>
-                </View>
-
-                <View style={styles.iconText}>
-                  <Text style={styles.textSpec}>💼 {match.workModality}</Text>
+                {/* Columna derecha */}
+                <View style={[styles.columnRight/*,{marginLeft:}*/]}>
+                  <View style={styles.rowItem}>
+                    <Text style={styles.textSpec}>💼 {match.workDay}</Text>
+                  </View>
+                  <View style={styles.rowItem}>
+                    <Text style={styles.textSpec}>💼 {match.workModality}</Text>
+                  </View>
                 </View>
               </View>
             </View>
           </View>
         ))}
-
-
-
-
-
     </ScrollView>
-    // </View>
   );
 };
 
