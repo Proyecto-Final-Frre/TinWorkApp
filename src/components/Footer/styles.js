@@ -4,7 +4,7 @@ import { hp, wp } from '../../utils/constants';
 export const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom:'0.5%',
+    bottom:hp(1.5),
     width: wp(50),
     flexDirection: 'row',
     alignItems: 'center',
