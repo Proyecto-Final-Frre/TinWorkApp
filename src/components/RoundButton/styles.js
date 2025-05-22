@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import { hp,wp } from '../../utils/constants';
-const CIRCLE_SIZE = hp(10); // podés ajustar a gusto
+const CIRCLE_SIZE = hp(9); 
 
 export const styles = StyleSheet.create({
   container: {

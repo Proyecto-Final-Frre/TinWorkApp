@@ -49,7 +49,6 @@ export default function Registro({navigation}) {
         navigation.navigate('Habilidades');
       }
     } catch (error) {
-      console.log("🚀 ~ registerUser ~ error:", error)
       showMessage({
         message:
           error.code === 'auth/email-already-in-use'
