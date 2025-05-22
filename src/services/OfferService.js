@@ -41,3 +41,13 @@ export const findByAbilities = (
       return offers;
     });
 };
+
+export const findOfferByUid = async (offerUid) => {
+  try {
+    const doc = await firestore().collection('Offers').doc(offerUid).get();
+    return doc.exists ? { uid: doc.id, ...doc.data() } : null;
+  } catch (error) {
+    console.error('Error al buscar oferta:', error);
+    return null;
+  }
+};
