@@ -81,7 +81,6 @@ export default function Profile({ navigation }) {
 
 
   useEffect(() => {
-    console.log("🚀 ~ Profile ~ userAuth:", userAuth?.abilities)
     if (userAuth?.imageProfile) {
       setImage({ uri: userAuth?.imageProfile });
     } 

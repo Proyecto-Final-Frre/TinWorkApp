@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
     fontSize: FONT_SIZE.xl,
     color: colors.tinworkBlack,
     flexWrap: 'wrap', 
-    // width:screenWidth * 0.5,
   },
   subtitle:{
     fontFamily: FUENTES.LIGHT,
@@ -40,6 +39,7 @@ export const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     marginBottom: 10,
+    color:colors.tinworkBlack
   },
   selectedLocationContainer: {
     padding: 14,
