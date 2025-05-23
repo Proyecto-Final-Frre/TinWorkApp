@@ -18,8 +18,11 @@ const Chat = ({route}) => {
 
   const handleSubmit = () => {
     if (message && user) {
-      /*user.uid corresponde al id del chat que es el uid del candidato*/
-      createMessage(message, user.uid,user.uid, user.name);
+      const chatId = user.uid < route.params.recrutier.uid
+  ? `${user.uid}_${route.params.recrutier.uid}`
+  : `${route.params.recrutier.uid}_${user.uid}`;
+
+  createMessage(message, chatId, user.uid, user.name);
       setMessage('');  // Limpiar el campo del mensaje
     }
     Keyboard.dismiss()
@@ -37,7 +40,11 @@ const Chat = ({route}) => {
     
     useEffect(() => {
       if (user?.uid) { // Asegúrate de que el candidato está seleccionado
-        const unsubscribe = listenForMessages(user.uid, setMessages); // Escuchar mensajes del chat de este candidato
+          const chatId = user.uid < route.params.recrutier.uid
+      ? `${user.uid}_${route.params.recrutier.uid}`
+      : `${route.params.recrutier.uid}_${user.uid}`;
+
+    const unsubscribe = listenForMessages(chatId, setMessages);
     
         return () => {
           unsubscribe(); // Limpia la suscripción cuando se cierra la modal o cambia de candidato
