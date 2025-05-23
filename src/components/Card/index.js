@@ -115,10 +115,10 @@ export default function Card({
                   </View>
                 </View>
                 <View style={styles.column}>
-                  <View style={styles.infoItem}>                  
+                  <View style={[styles.infoItem,{marginLeft:'15%'}]}>                  
                     <Text style={styles.infoText}>📅 {`Hace ${dataOffer.replace("alrededor de ", "")}`}</Text>
                   </View>
-                  <View style={[styles.infoItem]}>                
+                  <View style={[styles.infoItem,{marginLeft:'15%'}]}>                
                     <Text style={styles.infoText}>💼 {workModality}</Text>
                   </View>
                 </View>
@@ -178,10 +178,10 @@ export default function Card({
                 </View>
               </View>
               <View style={styles.column}>
-                <View style={styles.infoItem}>                
+               <View style={[styles.infoItem,{marginLeft:'15%'}]}>             
                   <Text style={styles.infoText}>📅 {`Hace ${dataOffer.replace("alrededor de ", "")}`}</Text>
                 </View>
-                <View style={[styles.infoItem]}>             
+                 <View style={[styles.infoItem,{marginLeft:'15%'}]}>             
                   <Text style={styles.infoText}>💼 {workModality}</Text>
                 </View>
               </View>

@@ -128,6 +128,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 8,      
     alignItems: 'center', 
+    padding:"1%"
   },
   infoText: {
     fontSize: 14,
@@ -135,8 +136,8 @@ export const styles = StyleSheet.create({
     marginLeft: 4,    
   },
   descriptionContainer: {
-    marginTop: 12,
-    marginBottom:12,
+    marginTop: 6,
+    marginBottom:2,
     backgroundColor:"#EAF4FF"
   },
   description: {
